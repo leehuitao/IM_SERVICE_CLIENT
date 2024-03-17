@@ -21,17 +21,17 @@ void GetUserHeadImageDataHandle::HandleMessage(NewTcpProtocolPtr msg)
     }
     FileBody body;
     body = PacketProcess::parseHeadImagePack(msg.get()->data,msg.get()->header.MethodType);
-    LhtFileManager::openHeadFile(body.UserId,body.FileName);
-    auto file = LhtFileManager::getFilePtr(body.UserId,body.FileName);
+    LhtFileManager::openHeadFile(body.UserId,HEAD_IMAGE_PATH +body.FileName);
+    auto file = LhtFileManager::getFilePtr(body.UserId,HEAD_IMAGE_PATH + body.FileName);
 
     file->seek(body.FileSeek);
     file->write(msg.get()->data.mid(msg.get()->header.MethodType,body.CurrentSize));
     if(file->size() >= body.TotalSize){
         file->close();
         //设置头像路径
-        AppCache::Instance()->m_headImagePath[body.UserId] = "./" + body.FileName;
+        AppCache::Instance()->m_headImagePath[body.UserId] = HEAD_IMAGE_PATH + body.FileName;
         //更新头像
-        GlobalCenter::getInstance()->slotUpdateUserHeadImage(body.UserId,"./" + body.FileName);
+        GlobalCenter::getInstance()->slotUpdateUserHeadImage(body.UserId,HEAD_IMAGE_PATH + body.FileName);
     }
 }
 

@@ -10,7 +10,8 @@ Sqlite::Sqlite(QObject *parent) : QObject(parent)
 void Sqlite::initDB()
 {
     m_database = QSqlDatabase::addDatabase("QSQLITE");
-    m_database.setDatabaseName("user.db");
+    auto dbName = APP_RUNNING_PATH + "user.db";
+    m_database.setDatabaseName(dbName);
     m_database.open();
     if(m_database.lastError().type() != QSqlError::NoError){
         qDebug()<<"QSqlError = "<<m_database.lastError();

@@ -16,7 +16,7 @@
 #include <QCoreApplication>
 #include "sql/db_define.h"
 #include "Network/LhtTcpClient/Handle/lht_file_manager.h"
-#define APP_RUNNING_PATH QCoreApplication::applicationDirPath()
+#define APP_RUNNING_PATH QCoreApplication::applicationDirPath() + "/"
 #define HEAD_IMAGE_PATH APP_RUNNING_PATH+"/headImage/"
 
 #define     HeaderSize 12

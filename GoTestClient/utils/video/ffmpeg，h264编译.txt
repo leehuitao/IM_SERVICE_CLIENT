@@ -1,0 +1,30 @@
+MSYS 2.0 地址：  https://www.msys2.org/
+
+git config --global https.proxy 192.168.10.9:7890
+
+git config --global https.proxy 192.168.10.9:7890
+
+git config --global --unset http.proxy
+
+git config --global --unset https.proxy
+
+git clone https://github.com/m-ab-s/media-autobuild_suite.git 自动下载工具
+
+总体教程在https://blog.csdn.net/zhying719/article/details/122076424
+
+x264 地址: https://www.videolan.org/developers/x264.html
+
+x265 地址:  https://www.videolan.org/developers/x264.html
+
+ffmpeg地址: https://ffmpeg.org/download.html
+
+
+x264 编译没问题  
+在ffmpeg编译时 需要将 x264.pc  拷贝到 /usr/lib/pkgconfig 下   
+先在命令行进入 /usr/lib/pkgconfig    
+cd  /usr/lib/pkgconfig
+然后使用cp -rf   "windows下 x264.pc路径"  ./
+
+不然会在ffbuild/config.log 中提示  x264.pc 找不到
+然后按照 build 来编译就可以
+

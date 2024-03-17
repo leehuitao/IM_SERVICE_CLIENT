@@ -1,0 +1,14 @@
+prefix=./install
+exec_prefix=${prefix}
+libdir=./install/lib
+includedir=./install/include
+
+Name: libavdevice
+Description: FFmpeg device handling library
+Version: 59.6.100
+Requires: 
+Requires.private: libavfilter >= 8.40.100, libswscale >= 6.6.100, libpostproc >= 56.5.100, libavformat >= 59.25.100, libavcodec >= 59.33.100, libswresample >= 4.6.100, libavutil >= 57.27.100
+Conflicts:
+Libs: -L${libdir}  -lavdevice 
+Libs.private: psapi.lib ole32.lib strmiids.lib uuid.lib oleaut32.lib shlwapi.lib gdi32.lib vfw32.lib -libpath:/c/SDL2-2.0.22/lib/x64 sdl2.lib
+Cflags: -I${includedir}

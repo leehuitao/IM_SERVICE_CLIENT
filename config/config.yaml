@@ -1,0 +1,51 @@
+app:
+  name: "IM_Server"
+  mode: "dev"
+  webPort: 8089
+  tcpPort: 12345
+  version: "1.0"
+  listenIp : "192.168.31.34"
+log:
+  level: "debug"
+  filename: "./log/WebServer.log"
+  max_size: 200
+  max_age: 30
+  max_backups: 7
+
+zapLog:
+  level: "debug"
+  filename: "./log/TcpServer.log"
+  max_size: 200
+  max_age: 30
+  max_backups: 7
+
+mysql:
+  host: "127.0.0.1"
+  port: 3306
+  user: "root"
+  password: "test"
+  dbname: "test"
+  max_open_conn: 20
+  max_Idle_conn: 10
+
+redis:
+  host: "127.0.0.1"
+  port: 6379
+  password: ""
+  db: 0
+  pool_size: 100
+
+fileServer:
+  host: "192.168.31.34"
+  port: 6667
+  weight: 1
+
+mongoConfig:
+  host: "127.0.0.1"
+  port: 27017
+  databaseName: "test"
+  collectionName: "test_collection"
+
+mqttConfig:
+   host: "192.168.31.34"
+   port: 1883

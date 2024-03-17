@@ -1,0 +1,1533 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : 127.0.0.1
+ Source Server Type    : MySQL
+ Source Server Version : 50143
+ Source Host           : localhost:3306
+ Source Schema         : test
+
+ Target Server Type    : MySQL
+ Target Server Version : 50143
+ File Encoding         : 65001
+
+ Date: 12/01/2024 11:23:19
+*/
+
+SET NAMES utf8;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for dept_info
+-- ----------------------------
+DROP TABLE IF EXISTS `dept_info`;
+CREATE TABLE `dept_info`  (
+  `DeptName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `DeptID` int(11) NULL DEFAULT NULL,
+  `ParentDeptID` int(11) NULL DEFAULT NULL,
+  `Level` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of dept_info
+-- ----------------------------
+INSERT INTO `dept_info` VALUES ('部门1', 1, 0, '1');
+INSERT INTO `dept_info` VALUES ('部门3', 3, 1, '2');
+INSERT INTO `dept_info` VALUES ('部门4', 4, 1, '2');
+INSERT INTO `dept_info` VALUES ('部门5', 5, 2, '2');
+INSERT INTO `dept_info` VALUES ('部门2', 2, 0, '1');
+
+-- ----------------------------
+-- Table structure for group_members
+-- ----------------------------
+DROP TABLE IF EXISTS `group_members`;
+CREATE TABLE `group_members`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '群组成员ID',
+  `group_id` int(11) NULL DEFAULT NULL COMMENT '群组ID',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '用户ID',
+  `joined_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '加入时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `group_id`(`group_id`) USING BTREE,
+  INDEX `user_id`(`user_id`) USING BTREE,
+  CONSTRAINT `group_members_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `group_members_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of group_members
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for group_messages
+-- ----------------------------
+DROP TABLE IF EXISTS `group_messages`;
+CREATE TABLE `group_messages`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '消息ID',
+  `group_id` int(11) NULL DEFAULT NULL COMMENT '群组ID',
+  `group_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '群组',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '发送者用户ID',
+  `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发送者用户',
+  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '消息内容',
+  `sent_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发送时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `group_id`(`group_id`) USING BTREE,
+  INDEX `user_id`(`user_id`) USING BTREE,
+  CONSTRAINT `group_messages_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `group_messages_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of group_messages
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for groups
+-- ----------------------------
+DROP TABLE IF EXISTS `groups`;
+CREATE TABLE `groups`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '群组ID',
+  `group_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '群名称',
+  `announcement` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '群公告内容',
+  `created_at` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_id` int(11) NULL DEFAULT NULL COMMENT '创建者ID',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `creator_id`(`creator_id`) USING BTREE,
+  CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of groups
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for login_logs
+-- ----------------------------
+DROP TABLE IF EXISTS `login_logs`;
+CREATE TABLE `login_logs`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '日志ID',
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '用户ID',
+  `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户',
+  `login_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录时间',
+  `ip_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录IP地址',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `user_id`(`user_id`) USING BTREE,
+  CONSTRAINT `login_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1285 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of login_logs
+-- ----------------------------
+INSERT INTO `login_logs` VALUES (1, 88880000, '管理员', '2023-08-30 09:51:44', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (2, 88880000, '管理员', '2023-08-30 09:54:37', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (3, 88880003, '章学勇', '2023-08-30 11:28:40', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (4, 88880000, '管理员', '2023-08-30 11:30:15', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (5, 88880000, '管理员', '2023-08-30 14:44:47', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (6, 88880003, '章学勇', '2023-08-30 15:07:55', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (7, 88880003, '章学勇', '2023-08-30 15:09:35', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (8, 88880003, '章学勇', '2023-08-30 15:10:58', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (9, 88880003, '章学勇', '2023-08-30 15:12:06', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (10, 88880003, '章学勇', '2023-08-30 15:13:27', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (11, 88880003, '章学勇', '2023-08-30 15:13:43', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (12, 88880003, '章学勇', '2023-08-30 15:36:13', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (13, 88880003, '章学勇', '2023-08-30 15:38:00', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (14, 88880003, '章学勇', '2023-08-30 15:44:51', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (15, 88880003, '章学勇', '2023-08-30 15:45:05', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (16, 88880003, '章学勇', '2023-08-30 15:47:59', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (17, 88880003, '章学勇', '2023-08-30 15:49:23', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (18, 88880003, '章学勇', '2023-08-30 15:50:45', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (19, 88880000, '管理员', '2023-08-30 15:51:27', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (20, 88880003, '章学勇', '2023-08-30 15:52:29', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (21, 88880003, '章学勇', '2023-08-30 15:53:55', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (22, 88880003, '章学勇', '2023-08-30 15:54:47', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (23, 88880003, '章学勇', '2023-08-30 15:55:36', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (24, 88880003, '章学勇', '2023-08-30 16:03:46', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (25, 88880000, '管理员', '2023-08-30 16:04:07', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (26, 88880000, '管理员', '2023-08-30 16:09:57', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (27, 88880003, '章学勇', '2023-08-30 16:10:07', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (28, 88880003, '章学勇', '2023-08-30 16:11:13', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (29, 88880003, '章学勇', '2023-08-30 16:16:09', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (30, 88880003, '章学勇', '2023-08-30 16:24:48', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (31, 88880003, '章学勇', '2023-08-30 16:25:18', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (32, 88880003, '章学勇', '2023-08-30 16:37:16', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (33, 88880000, '管理员', '2023-08-30 16:42:39', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (34, 88880003, '章学勇', '2023-08-30 16:42:54', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (35, 88880003, '章学勇', '2023-08-30 16:43:41', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (36, 88880000, '管理员', '2023-08-30 16:45:03', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (37, 88880003, '章学勇', '2023-08-30 16:45:04', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (38, 88880003, '章学勇', '2023-08-30 16:46:49', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (39, 88880003, '章学勇', '2023-08-30 16:51:35', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (40, 88880000, '管理员', '2023-08-30 16:52:35', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (41, 88880003, '章学勇', '2023-08-30 16:52:41', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (42, 88880003, '章学勇', '2023-08-30 16:55:57', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (43, 88880000, '管理员', '2023-08-30 16:56:10', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (44, 88880000, '管理员', '2023-08-30 16:56:44', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (45, 88880000, '管理员', '2023-08-30 17:00:03', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (46, 88880003, '章学勇', '2023-08-30 17:00:44', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (47, 88880000, '管理员', '2023-08-30 17:01:01', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (48, 88880003, '章学勇', '2023-08-30 17:03:20', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (49, 88880000, '管理员', '2023-08-30 17:07:38', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (50, 88880003, '章学勇', '2023-08-30 17:07:42', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (51, 88880000, '管理员', '2023-08-30 17:10:48', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (52, 88880003, '章学勇', '2023-08-30 17:10:51', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (53, 88880000, '管理员', '2023-08-30 17:15:28', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (54, 88880003, '章学勇', '2023-08-30 17:15:32', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (55, 88880003, '章学勇', '2023-08-30 17:28:59', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (56, 88880003, '章学勇', '2023-08-30 17:39:42', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (57, 88880000, '管理员', '2023-08-30 17:40:07', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (58, 88880003, '章学勇', '2023-08-30 17:40:23', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (59, 88880003, '章学勇', '2023-08-30 17:41:42', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (60, 88880003, '章学勇', '2023-08-30 17:49:23', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (61, 88880000, '管理员', '2023-08-30 17:49:38', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (62, 88880003, '章学勇', '2023-08-30 17:50:42', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (63, 88880003, '章学勇', '2023-08-30 17:53:15', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (64, 88880003, '章学勇', '2023-08-30 17:54:39', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (65, 88880000, '管理员', '2023-08-30 17:57:57', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (66, 88880003, '章学勇', '2023-08-30 17:57:57', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (67, 88880000, '管理员', '2023-08-30 17:58:07', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (68, 88880003, '章学勇', '2023-08-30 17:58:08', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (69, 88880000, '管理员', '2023-08-30 18:01:47', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (70, 88880003, '章学勇', '2023-08-30 18:01:50', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (71, 88880003, '章学勇', '2023-08-30 18:03:32', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (72, 88880003, '章学勇', '2023-08-30 18:04:28', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (73, 88880003, '章学勇', '2023-08-30 18:06:30', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (74, 88880000, '管理员', '2023-08-31 09:24:44', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (75, 88880003, '章学勇', '2023-08-31 09:24:55', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (76, 88880000, '管理员', '2023-08-31 09:27:58', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (77, 88880003, '章学勇', '2023-08-31 09:28:43', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (78, 88880000, '管理员', '2023-08-31 09:31:01', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (79, 88880003, '章学勇', '2023-08-31 09:31:10', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (80, 88880003, '章学勇', '2023-08-31 09:35:56', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (81, 88880003, '章学勇', '2023-08-31 09:39:18', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (82, 88880003, '章学勇', '2023-08-31 09:41:44', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (83, 88880003, '章学勇', '2023-08-31 09:44:19', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (84, 88880003, '章学勇', '2023-08-31 09:47:30', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (85, 88880003, '章学勇', '2023-08-31 09:48:02', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (86, 88880000, '管理员', '2023-08-31 09:48:08', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (87, 88880003, '章学勇', '2023-08-31 09:50:02', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (88, 88880003, '章学勇', '2023-08-31 09:51:10', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (89, 88880000, '管理员', '2023-08-31 10:01:21', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (90, 88880003, '章学勇', '2023-08-31 10:01:40', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (91, 88880003, '章学勇', '2023-08-31 10:08:23', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (92, 88880000, '管理员', '2023-08-31 10:08:58', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (93, 88880003, '章学勇', '2023-08-31 10:09:07', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (94, 88880000, '管理员', '2023-08-31 10:09:44', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (95, 88880003, '章学勇', '2023-08-31 10:09:46', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (96, 88880000, '管理员', '2023-08-31 10:10:46', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (97, 88880003, '章学勇', '2023-08-31 10:10:51', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (98, 88880000, '管理员', '2023-08-31 10:11:42', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (99, 88880003, '章学勇', '2023-08-31 10:11:45', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (100, 88880000, '管理员', '2023-08-31 10:12:58', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (101, 88880003, '章学勇', '2023-08-31 10:13:06', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (102, 88880000, '管理员', '2023-08-31 10:15:52', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (103, 88880003, '章学勇', '2023-08-31 10:15:59', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (104, 88880003, '章学勇', '2023-08-31 10:17:52', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (105, 88880000, '管理员', '2023-08-31 10:17:57', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (106, 88880000, '管理员', '2023-08-31 10:20:26', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (107, 88880003, '章学勇', '2023-08-31 10:22:07', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (108, 88880000, '管理员', '2023-08-31 10:23:52', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (109, 88880003, '章学勇', '2023-08-31 10:24:32', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (110, 88880003, '章学勇', '2023-08-31 10:25:56', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (111, 88880000, '管理员', '2023-08-31 10:26:01', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (112, 88880003, '章学勇', '2023-08-31 10:27:13', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (113, 88880003, '章学勇', '2023-08-31 10:28:50', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (114, 88880000, '管理员', '2023-08-31 10:29:08', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (115, 88880003, '章学勇', '2023-08-31 10:30:23', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (116, 88880000, '管理员', '2023-08-31 10:32:29', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (117, 88880003, '章学勇', '2023-08-31 10:32:32', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (118, 88880003, '章学勇', '2023-08-31 10:34:30', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (119, 88880000, '管理员', '2023-08-31 10:34:30', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (120, 88880003, '章学勇', '2023-08-31 10:35:32', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (121, 88880003, '章学勇', '2023-08-31 10:36:18', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (122, 88880000, '管理员', '2023-08-31 10:36:19', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (123, 88880003, '章学勇', '2023-08-31 10:37:37', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (124, 88880000, '管理员', '2023-08-31 10:38:40', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (125, 88880003, '章学勇', '2023-08-31 10:38:42', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (126, 88880003, '章学勇', '2023-08-31 10:39:33', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (127, 88880003, '章学勇', '2023-08-31 10:40:12', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (128, 88880003, '章学勇', '2023-08-31 10:40:40', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (129, 88880003, '章学勇', '2023-08-31 10:42:37', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (130, 88880000, '管理员', '2023-08-31 10:44:31', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (131, 88880003, '章学勇', '2023-08-31 10:44:34', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (132, 88880000, '管理员', '2023-08-31 10:46:29', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (133, 88880003, '章学勇', '2023-08-31 10:46:40', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (134, 88880000, '管理员', '2023-08-31 10:54:52', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (135, 88880003, '章学勇', '2023-08-31 10:54:53', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (136, 88880003, '章学勇', '2023-08-31 10:56:45', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (137, 88880000, '管理员', '2023-08-31 10:56:49', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (138, 88880003, '章学勇', '2023-08-31 10:57:42', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (139, 88880000, '管理员', '2023-08-31 10:58:45', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (140, 88880003, '章学勇', '2023-08-31 10:58:50', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (141, 88880003, '章学勇', '2023-08-31 11:00:54', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (142, 88880000, '管理员', '2023-08-31 11:00:58', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (143, 88880000, '管理员', '2023-08-31 11:02:11', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (144, 88880003, '章学勇', '2023-08-31 11:02:34', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (145, 88880000, '管理员', '2023-08-31 11:08:56', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (146, 88880003, '章学勇', '2023-08-31 11:08:57', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (147, 88880000, '管理员', '2023-08-31 11:11:36', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (148, 88880003, '章学勇', '2023-08-31 11:11:38', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (149, 88880003, '章学勇', '2023-08-31 11:15:04', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (150, 88880000, '管理员', '2023-08-31 11:18:17', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (151, 88880003, '章学勇', '2023-08-31 11:18:22', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (152, 88880003, '章学勇', '2023-08-31 11:19:22', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (153, 88880000, '管理员', '2023-08-31 11:19:33', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (154, 88880000, '管理员', '2023-08-31 11:20:11', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (155, 88880003, '章学勇', '2023-08-31 11:20:15', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (156, 88880000, '管理员', '2023-08-31 11:21:51', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (157, 88880003, '章学勇', '2023-08-31 11:22:05', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (158, 88880000, '管理员', '2023-08-31 11:23:26', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (159, 88880003, '章学勇', '2023-08-31 11:23:49', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (160, 88880000, '管理员', '2023-08-31 11:24:34', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (161, 88880003, '章学勇', '2023-08-31 11:24:41', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (162, 88880003, '章学勇', '2023-08-31 11:25:01', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (163, 88880000, '管理员', '2023-08-31 11:25:54', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (164, 88880000, '管理员', '2023-08-31 11:26:43', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (165, 88880003, '章学勇', '2023-08-31 11:26:47', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (166, 88880000, '管理员', '2023-08-31 11:28:24', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (167, 88880003, '章学勇', '2023-08-31 11:28:28', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (168, 88880003, '章学勇', '2023-08-31 11:32:07', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (169, 88880000, '管理员', '2023-08-31 11:32:33', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (170, 88880000, '管理员', '2023-08-31 11:33:09', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (171, 88880003, '章学勇', '2023-08-31 11:33:22', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (172, 88880000, '管理员', '2023-08-31 11:33:23', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (173, 88880003, '章学勇', '2023-08-31 11:33:49', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (174, 88880003, '章学勇', '2023-08-31 12:13:09', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (175, 88880000, '管理员', '2023-08-31 12:15:38', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (176, 88880003, '章学勇', '2023-08-31 12:16:09', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (177, 88880000, '管理员', '2023-08-31 12:17:16', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (178, 88880003, '章学勇', '2023-08-31 12:17:17', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (179, 88880003, '章学勇', '2023-08-31 12:20:01', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (180, 88880003, '章学勇', '2023-08-31 12:21:51', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (181, 88880000, '管理员', '2023-08-31 12:24:18', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (182, 88880003, '章学勇', '2023-08-31 12:24:28', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (183, 88880003, '章学勇', '2023-08-31 12:25:11', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (184, 88880000, '管理员', '2023-08-31 12:25:12', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (185, 88880003, '章学勇', '2023-08-31 12:26:53', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (186, 88880003, '章学勇', '2023-08-31 12:27:41', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (187, 88880003, '章学勇', '2023-08-31 12:28:50', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (188, 88880003, '章学勇', '2023-08-31 12:31:10', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (189, 88880003, '章学勇', '2023-08-31 12:33:10', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (190, 88880003, '章学勇', '2023-08-31 12:34:07', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (191, 88880003, '章学勇', '2023-08-31 13:36:39', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (192, 88880003, '章学勇', '2023-08-31 13:37:15', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (193, 88880003, '章学勇', '2023-08-31 13:38:23', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (194, 88880003, '章学勇', '2023-08-31 13:38:52', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (195, 88880000, '管理员', '2023-08-31 13:39:03', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (196, 88880003, '章学勇', '2023-08-31 13:39:12', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (197, 88880003, '章学勇', '2023-08-31 13:39:40', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (198, 88880000, '管理员', '2023-08-31 13:40:13', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (199, 88880000, '管理员', '2023-08-31 13:48:32', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (200, 88880003, '章学勇', '2023-08-31 13:48:34', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (201, 88880003, '章学勇', '2023-08-31 13:49:06', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (202, 88880003, '章学勇', '2023-08-31 13:50:20', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (203, 88880000, '管理员', '2023-08-31 13:54:29', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (204, 88880003, '章学勇', '2023-08-31 13:54:31', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (205, 88880003, '章学勇', '2023-08-31 13:54:56', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (206, 88880003, '章学勇', '2023-08-31 13:57:59', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (207, 88880003, '章学勇', '2023-08-31 14:00:43', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (208, 88880003, '章学勇', '2023-08-31 14:01:39', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (209, 88880003, '章学勇', '2023-08-31 14:03:56', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (210, 88880003, '章学勇', '2023-08-31 14:07:30', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (211, 88880000, '管理员', '2023-08-31 14:09:24', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (212, 88880003, '章学勇', '2023-08-31 14:14:25', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (213, 88880000, '管理员', '2023-08-31 14:14:51', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (214, 88880000, '管理员', '2023-08-31 14:17:16', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (215, 88880003, '章学勇', '2023-08-31 14:17:19', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (216, 88880000, '管理员', '2023-08-31 14:18:37', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (217, 88880003, '章学勇', '2023-08-31 14:18:43', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (218, 88880003, '章学勇', '2023-08-31 14:21:48', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (219, 88880003, '章学勇', '2023-08-31 14:22:46', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (220, 88880000, '管理员', '2023-08-31 14:24:09', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (221, 88880003, '章学勇', '2023-08-31 14:24:10', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (222, 88880003, '章学勇', '2023-08-31 14:26:38', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (223, 88880003, '章学勇', '2023-08-31 14:27:05', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (224, 88880003, '章学勇', '2023-08-31 14:28:20', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (225, 88880003, '章学勇', '2023-08-31 14:29:26', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (226, 88880000, '管理员', '2023-08-31 14:32:35', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (227, 88880003, '章学勇', '2023-08-31 14:32:54', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (228, 88880000, '管理员', '2023-08-31 14:41:12', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (229, 88880003, '章学勇', '2023-08-31 14:41:43', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (230, 88880000, '管理员', '2023-08-31 14:41:47', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (231, 88880003, '章学勇', '2023-08-31 14:44:20', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (232, 88880000, '管理员', '2023-08-31 14:44:33', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (233, 88880003, '章学勇', '2023-08-31 14:45:31', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (234, 88880000, '管理员', '2023-08-31 14:45:34', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (235, 88880003, '章学勇', '2023-08-31 14:46:32', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (236, 88880000, '管理员', '2023-08-31 14:46:37', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (237, 88880003, '章学勇', '2023-08-31 14:47:37', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (238, 88880003, '章学勇', '2023-08-31 15:00:02', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (239, 88880003, '章学勇', '2023-08-31 15:01:47', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (240, 88880000, '管理员', '2023-08-31 15:08:18', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (241, 88880003, '章学勇', '2023-08-31 15:11:43', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (242, 88880000, '管理员', '2023-08-31 15:19:50', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (243, 88880003, '章学勇', '2023-08-31 15:19:52', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (244, 88880003, '章学勇', '2023-08-31 15:22:06', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (245, 88880000, '管理员', '2023-08-31 15:22:18', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (246, 88880003, '章学勇', '2023-08-31 15:22:31', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (247, 88880003, '章学勇', '2023-08-31 15:32:09', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (248, 88880000, '管理员', '2023-08-31 15:32:36', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (249, 88880000, '管理员', '2023-08-31 15:34:32', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (250, 88880003, '章学勇', '2023-08-31 15:34:38', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (251, 88880003, '章学勇', '2023-08-31 15:42:12', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (252, 88880000, '管理员', '2023-08-31 15:42:12', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (253, 88880000, '管理员', '2023-08-31 15:42:32', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (254, 88880003, '章学勇', '2023-08-31 15:42:45', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (255, 88880000, '管理员', '2023-08-31 15:43:53', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (256, 88880003, '章学勇', '2023-08-31 15:43:58', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (257, 88880000, '管理员', '2023-08-31 15:50:57', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (258, 88880003, '章学勇', '2023-08-31 15:51:12', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (259, 88880000, '管理员', '2023-08-31 15:55:36', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (260, 88880003, '章学勇', '2023-08-31 15:55:42', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (261, 88880000, '管理员', '2023-08-31 15:58:54', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (262, 88880003, '章学勇', '2023-08-31 15:58:59', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (263, 88880000, '管理员', '2023-08-31 16:02:10', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (264, 88880003, '章学勇', '2023-08-31 16:02:12', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (265, 88880000, '管理员', '2023-08-31 16:04:32', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (266, 88880003, '章学勇', '2023-08-31 16:04:35', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (267, 88880003, '章学勇', '2023-08-31 16:05:14', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (268, 88880003, '章学勇', '2023-08-31 16:05:45', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (269, 88880000, '管理员', '2023-08-31 16:13:47', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (270, 88880003, '章学勇', '2023-08-31 16:13:51', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (271, 88880003, '章学勇', '2023-08-31 16:34:27', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (272, 88880000, '管理员', '2023-08-31 16:34:30', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (273, 88880003, '章学勇', '2023-08-31 16:38:04', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (274, 88880000, '管理员', '2023-08-31 16:38:18', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (275, 88880003, '章学勇', '2023-08-31 16:48:21', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (276, 88880000, '管理员', '2023-08-31 16:48:24', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (277, 88880000, '管理员', '2023-08-31 16:53:01', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (278, 88880000, '管理员', '2023-08-31 17:41:23', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (279, 88880003, '章学勇', '2023-08-31 17:42:04', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (280, 88880003, '章学勇', '2023-08-31 17:43:38', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (281, 88880003, '章学勇', '2023-08-31 17:44:29', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (282, 88880003, '章学勇', '2023-08-31 17:44:55', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (283, 88880003, '章学勇', '2023-08-31 17:49:10', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (284, 88880000, '管理员', '2023-08-31 17:51:35', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (285, 88880003, '章学勇', '2023-08-31 17:54:41', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (286, 88880003, '章学勇', '2023-08-31 17:56:43', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (287, 88880000, '管理员', '2023-09-01 14:49:44', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (288, 88880000, '管理员', '2023-09-01 14:51:06', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (289, 88880000, '管理员', '2023-09-01 14:54:30', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (290, 88880000, '管理员', '2023-09-01 14:55:30', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (291, 88880000, '管理员', '2023-09-01 15:02:59', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (292, 88880000, '管理员', '2023-09-01 15:08:21', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (293, 88880000, '管理员', '2023-09-01 15:10:35', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (294, 88880000, '管理员', '2023-09-01 15:11:00', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (295, 88880000, '管理员', '2023-09-01 15:11:33', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (296, 88880000, '管理员', '2023-09-01 15:14:17', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (297, 88880000, '管理员', '2023-09-01 15:16:02', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (298, 88880000, '管理员', '2023-09-01 15:19:26', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (299, 88880000, '管理员', '2023-09-01 15:20:40', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (300, 88880000, '管理员', '2023-09-01 15:23:38', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (301, 88880000, '管理员', '2023-09-01 15:25:02', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (302, 88880000, '管理员', '2023-09-01 15:36:21', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (303, 88880000, '管理员', '2023-09-01 15:37:37', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (304, 88880000, '管理员', '2023-09-01 15:38:36', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (305, 88880000, '管理员', '2023-09-01 15:40:20', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (306, 88880000, '管理员', '2023-09-01 15:40:37', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (307, 88880000, '管理员', '2023-09-01 15:41:02', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (308, 88880000, '管理员', '2023-09-01 15:42:05', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (309, 88880000, '管理员', '2023-09-01 15:44:38', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (310, 88880000, '管理员', '2023-09-01 15:49:37', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (311, 88880000, '管理员', '2023-09-01 15:50:18', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (312, 88880000, '管理员', '2023-09-01 15:52:52', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (313, 88880000, '管理员', '2023-09-01 15:54:18', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (314, 88880000, '管理员', '2023-09-01 15:58:17', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (315, 88880000, '管理员', '2023-09-01 15:59:23', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (316, 88880000, '管理员', '2023-09-01 15:59:59', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (317, 88880000, '管理员', '2023-09-01 16:00:10', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (318, 88880000, '管理员', '2023-09-01 16:03:44', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (319, 88880000, '管理员', '2023-09-01 16:03:59', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (320, 88880000, '管理员', '2023-09-01 16:06:00', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (321, 88880000, '管理员', '2023-09-01 16:10:00', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (322, 88880000, '管理员', '2023-09-01 16:11:44', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (323, 88880000, '管理员', '2023-09-01 16:13:16', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (324, 88880000, '管理员', '2023-09-01 16:13:54', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (325, 88880000, '管理员', '2023-09-01 16:16:29', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (326, 88880000, '管理员', '2023-09-01 16:18:43', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (327, 88880000, '管理员', '2023-09-01 16:22:14', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (328, 88880000, '管理员', '2023-09-01 16:23:31', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (329, 88880000, '管理员', '2023-09-01 16:24:06', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (330, 88880000, '管理员', '2023-09-01 16:26:25', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (331, 88880000, '管理员', '2023-09-01 16:42:31', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (332, 88880000, '管理员', '2023-09-01 16:42:49', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (333, 88880000, '管理员', '2023-09-01 16:43:20', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (334, 88880000, '管理员', '2023-09-01 16:43:56', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (335, 88880000, '管理员', '2023-09-01 16:47:31', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (336, 88880000, '管理员', '2023-09-01 16:48:19', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (337, 88880000, '管理员', '2023-09-01 16:49:37', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (338, 88880000, '管理员', '2023-09-01 16:50:34', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (339, 88880000, '管理员', '2023-09-01 16:58:18', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (340, 88880000, '管理员', '2023-09-01 16:58:41', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (341, 88880000, '管理员', '2023-09-01 16:59:27', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (342, 88880000, '管理员', '2023-09-01 17:01:07', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (343, 88880000, '管理员', '2023-09-01 17:02:07', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (344, 88880000, '管理员', '2023-09-01 17:04:05', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (345, 88880000, '管理员', '2023-09-01 17:04:44', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (346, 88880000, '管理员', '2023-09-01 17:05:03', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (347, 88880000, '管理员', '2023-09-01 17:05:44', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (348, 88880000, '管理员', '2023-09-01 17:07:21', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (349, 88880000, '管理员', '2023-09-01 17:09:08', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (350, 88880000, '管理员', '2023-09-01 17:10:20', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (351, 88880000, '管理员', '2023-09-01 17:10:32', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (352, 88880000, '管理员', '2023-09-01 17:12:10', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (353, 88880000, '管理员', '2023-09-01 17:12:46', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (354, 88880000, '管理员', '2023-09-03 13:00:39', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (355, 88880000, '管理员', '2023-09-03 13:21:48', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (356, 88880000, '管理员', '2023-09-03 14:16:58', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (357, 88880000, '管理员', '2023-09-03 15:26:12', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (358, 88880000, '管理员', '2023-09-03 16:41:53', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (359, 88880000, '管理员', '2023-09-03 16:52:18', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (360, 88880000, '管理员', '2023-09-03 16:54:26', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (361, 88880000, '管理员', '2023-09-03 16:59:58', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (362, 88880000, '管理员', '2023-09-03 17:03:09', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (363, 88880000, '管理员', '2023-09-03 17:05:30', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (364, 88880000, '管理员', '2023-09-03 17:06:49', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (365, 88880000, '管理员', '2023-09-03 17:07:01', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (366, 88880000, '管理员', '2023-09-03 17:07:54', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (367, 88880000, '管理员', '2023-09-03 17:09:01', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (368, 88880000, '管理员', '2023-09-03 17:11:12', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (369, 88880000, '管理员', '2023-09-03 17:11:21', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (370, 88880000, '管理员', '2023-09-03 17:11:58', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (371, 88880000, '管理员', '2023-09-04 09:04:50', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (372, 88880000, '管理员', '2023-09-04 09:07:24', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (373, 88880000, '管理员', '2023-09-04 09:08:31', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (374, 88880000, '管理员', '2023-09-04 09:08:47', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (375, 88880000, '管理员', '2023-09-04 09:24:10', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (376, 88880000, '管理员', '2023-09-04 09:26:33', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (377, 88880000, '管理员', '2023-09-04 09:27:17', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (378, 88880000, '管理员', '2023-09-04 09:27:40', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (379, 88880000, '管理员', '2023-09-04 09:29:28', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (380, 88880000, '管理员', '2023-09-04 09:30:32', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (381, 88880000, '管理员', '2023-09-04 09:32:19', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (382, 88880003, '章学勇', '2023-09-04 09:37:03', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (383, 88880000, '管理员', '2023-09-04 09:39:56', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (384, 88880003, '章学勇', '2023-09-04 09:40:10', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (385, 88880000, '管理员', '2023-09-04 09:40:31', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (386, 88880003, '章学勇', '2023-09-04 09:40:43', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (387, 88880000, '管理员', '2023-09-04 09:43:08', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (388, 88880003, '章学勇', '2023-09-04 09:45:00', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (389, 88880000, '管理员', '2023-09-04 09:45:10', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (390, 88880003, '章学勇', '2023-09-04 09:45:54', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (391, 88880003, '章学勇', '2023-09-04 09:49:12', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (392, 88880003, '章学勇', '2023-09-04 09:49:45', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (393, 88880003, '章学勇', '2023-09-04 09:51:22', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (394, 88880003, '章学勇', '2023-09-04 09:52:25', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (395, 88880003, '章学勇', '2023-09-04 09:56:01', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (396, 88880003, '章学勇', '2023-09-04 09:56:51', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (397, 88880000, '管理员', '2023-09-04 10:05:55', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (398, 88880003, '章学勇', '2023-09-04 10:06:23', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (399, 88880000, '管理员', '2023-09-04 10:06:31', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (400, 88880000, '管理员', '2023-09-04 10:08:26', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (401, 88880003, '章学勇', '2023-09-04 10:10:49', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (402, 88880003, '章学勇', '2023-09-04 10:11:23', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (403, 88880003, '章学勇', '2023-09-04 10:12:45', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (404, 88880000, '管理员', '2023-09-04 10:14:12', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (405, 88880000, '管理员', '2023-09-04 10:14:31', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (406, 88880000, '管理员', '2023-09-04 10:15:12', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (407, 88880003, '章学勇', '2023-09-04 10:15:49', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (408, 88880000, '管理员', '2023-09-04 10:16:41', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (409, 88880000, '管理员', '2023-09-04 10:18:03', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (410, 88880003, '章学勇', '2023-09-04 10:18:49', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (411, 88880000, '管理员', '2023-09-04 10:25:09', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (412, 88880000, '管理员', '2023-09-04 10:28:39', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (413, 88880003, '章学勇', '2023-09-04 10:31:31', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (414, 88880003, '章学勇', '2023-09-04 10:39:21', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (415, 88880000, '管理员', '2023-09-04 10:39:44', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (416, 88880003, '章学勇', '2023-09-04 10:39:55', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (417, 88880000, '管理员', '2023-09-04 10:40:41', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (418, 88880003, '章学勇', '2023-09-04 10:44:41', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (419, 88880003, '章学勇', '2023-09-04 10:45:57', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (420, 88880003, '章学勇', '2023-09-04 10:46:04', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (421, 88880003, '章学勇', '2023-09-04 10:47:02', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (422, 88880003, '章学勇', '2023-09-04 10:48:34', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (423, 88880000, '管理员', '2023-09-04 10:48:44', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (424, 88880000, '管理员', '2023-09-04 10:49:42', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (425, 88880003, '章学勇', '2023-09-04 10:49:53', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (426, 88880000, '管理员', '2023-09-04 10:56:03', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (427, 88880003, '章学勇', '2023-09-04 10:56:10', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (428, 88880003, '章学勇', '2023-09-04 11:00:01', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (429, 88880000, '管理员', '2023-09-04 12:54:47', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (430, 88880000, '管理员', '2023-09-04 12:55:05', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (431, 88880000, '管理员', '2023-09-04 12:55:06', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (432, 88880000, '管理员', '2023-09-04 12:55:40', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (433, 88880000, '管理员', '2023-09-04 13:00:26', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (434, 88880000, '管理员', '2023-09-04 19:44:23', '172.16.33.1');
+INSERT INTO `login_logs` VALUES (435, 88880003, '章学勇', '2023-09-06 17:06:02', '172.16.33.2');
+INSERT INTO `login_logs` VALUES (436, 88880000, '管理员', '2023-09-13 17:27:44', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (437, 88880003, '章学勇', '2023-09-13 17:28:28', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (438, 88880000, '管理员', '2023-09-13 17:29:26', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (439, 88880000, '管理员', '2023-09-13 17:32:13', '192.168.0.117');
+INSERT INTO `login_logs` VALUES (440, 88880003, '章学勇', '2023-09-13 17:33:04', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (441, 88880003, '章学勇', '2023-09-13 17:33:16', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (442, 88880003, '章学勇', '2023-09-13 17:33:28', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (443, 88880003, '章学勇', '2023-09-13 17:37:20', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (444, 88880003, '章学勇', '2023-09-13 17:37:54', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (445, 88880003, '章学勇', '2023-09-13 17:38:14', '192.168.0.108');
+INSERT INTO `login_logs` VALUES (446, 88880003, '章学勇', '2023-09-13 17:39:24', '192.168.1.21');
+INSERT INTO `login_logs` VALUES (447, 88880000, '管理员', '2023-09-13 17:39:47', '192.168.1.30');
+INSERT INTO `login_logs` VALUES (448, 88880003, '章学勇', '2023-09-13 17:39:57', '192.168.1.21');
+INSERT INTO `login_logs` VALUES (449, 88880003, '章学勇', '2023-09-14 16:56:50', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (450, 88880000, '管理员', '2023-09-14 17:01:30', '172.16.10.111');
+INSERT INTO `login_logs` VALUES (451, 88880003, '章学勇', '2023-09-14 17:02:55', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (452, 88880000, '管理员', '2023-09-14 17:03:03', '172.16.10.111');
+INSERT INTO `login_logs` VALUES (453, 88880000, '管理员', '2023-09-14 17:06:49', '172.16.10.111');
+INSERT INTO `login_logs` VALUES (454, 88880003, '章学勇', '2023-09-14 17:06:52', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (455, 88880003, '章学勇', '2023-09-14 17:08:23', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (456, 88880003, '章学勇', '2023-09-14 17:08:24', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (457, 88880003, '章学勇', '2023-09-14 17:08:25', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (458, 88880003, '章学勇', '2023-09-14 17:08:26', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (459, 88880003, '章学勇', '2023-09-14 17:08:27', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (460, 88880003, '章学勇', '2023-09-14 17:08:28', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (461, 88880003, '章学勇', '2023-09-14 17:08:28', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (462, 88880003, '章学勇', '2023-09-14 17:08:29', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (463, 88880003, '章学勇', '2023-09-14 17:08:30', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (464, 88880003, '章学勇', '2023-09-14 17:08:31', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (465, 88880003, '章学勇', '2023-09-14 17:08:32', '172.16.10.112');
+INSERT INTO `login_logs` VALUES (466, 88880000, '管理员', '2023-09-14 17:10:22', '172.16.10.111');
+INSERT INTO `login_logs` VALUES (467, 88880000, '管理员', '2023-09-19 16:36:04', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (468, 88880000, '管理员', '2023-09-21 15:59:06', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (469, 88880000, '管理员', '2023-09-21 15:59:30', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (470, 88880003, '章学勇', '2023-09-21 16:07:25', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (471, 88880000, '管理员', '2023-09-21 16:07:40', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (472, 88880000, '管理员', '2023-09-21 16:08:10', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (473, 88880003, '章学勇', '2023-09-21 16:10:19', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (474, 88880000, '管理员', '2023-09-21 16:10:33', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (475, 88880003, '章学勇', '2023-09-21 16:10:50', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (476, 88880005, '甄业鑫', '2023-09-21 16:11:35', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (477, 88880000, '管理员', '2023-10-07 14:01:46', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (478, 88880000, '管理员', '2023-10-07 14:02:04', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (479, 88880000, '管理员', '2023-10-07 14:03:45', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (480, 88880000, '管理员', '2023-10-07 14:10:30', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (481, 88880000, '管理员', '2023-10-07 14:10:41', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (482, 88880000, '管理员', '2023-10-07 14:18:09', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (483, 88880000, '管理员', '2023-10-07 14:22:48', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (484, 88880001, '王科雷', '2023-10-07 14:23:27', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (485, 88880000, '管理员', '2023-10-07 14:23:46', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (486, 88880001, '王科雷', '2023-10-07 14:32:15', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (487, 88880001, '王科雷', '2023-10-07 14:33:10', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (488, 88880001, '王科雷', '2023-10-07 14:34:07', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (489, 88880001, '王科雷', '2023-10-07 14:39:51', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (490, 88880000, '管理员', '2023-10-07 14:49:25', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (491, 88880001, '王科雷', '2023-10-07 14:49:54', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (492, 88880001, '王科雷', '2023-10-07 14:59:22', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (493, 88880001, '王科雷', '2023-10-07 15:01:15', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (494, 88880001, '王科雷', '2023-10-07 15:03:58', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (495, 88880000, '管理员', '2023-10-07 15:08:02', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (496, 88880001, '王科雷', '2023-10-07 15:08:28', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (497, 88880000, '管理员', '2023-10-07 15:08:32', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (498, 88880001, '王科雷', '2023-10-07 15:12:48', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (499, 88880000, '管理员', '2023-10-07 15:13:04', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (500, 88880000, '管理员', '2023-10-07 15:13:43', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (501, 88880001, '王科雷', '2023-10-07 15:13:50', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (502, 88880000, '管理员', '2023-10-07 15:15:10', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (503, 88880000, '管理员', '2023-10-07 15:18:01', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (504, 88880001, '王科雷', '2023-10-07 15:18:03', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (505, 88880000, '管理员', '2023-10-07 15:31:01', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (506, 88880001, '王科雷', '2023-10-07 15:31:35', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (507, 88880000, '管理员', '2023-10-07 15:35:25', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (508, 88880001, '王科雷', '2023-10-07 15:35:41', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (509, 88880001, '王科雷', '2023-10-07 15:53:22', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (510, 88880000, '管理员', '2023-10-07 15:54:42', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (511, 88880000, '管理员', '2023-10-07 15:59:24', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (512, 88880001, '王科雷', '2023-10-07 15:59:56', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (513, 88880001, '王科雷', '2023-10-07 16:04:03', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (514, 88880001, '王科雷', '2023-10-07 16:06:20', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (515, 88880001, '王科雷', '2023-10-07 16:08:29', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (516, 88880001, '王科雷', '2023-10-07 16:11:34', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (517, 88880001, '王科雷', '2023-10-07 16:12:27', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (518, 88880000, '管理员', '2023-10-07 16:19:50', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (519, 88880000, '管理员', '2023-10-07 16:20:57', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (520, 88880001, '王科雷', '2023-10-07 16:28:06', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (521, 88880001, '王科雷', '2023-10-07 16:28:06', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (522, 88880001, '王科雷', '2023-10-07 16:28:15', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (523, 88880001, '王科雷', '2023-10-07 16:39:50', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (524, 88880000, '管理员', '2023-10-07 16:40:33', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (525, 88880001, '王科雷', '2023-10-07 16:40:43', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (526, 88880001, '王科雷', '2023-10-07 16:41:17', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (527, 88880001, '王科雷', '2023-10-07 16:42:43', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (528, 88880001, '王科雷', '2023-10-07 16:44:33', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (529, 88880001, '王科雷', '2023-10-07 16:44:51', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (530, 88880001, '王科雷', '2023-10-07 16:46:51', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (531, 88880000, '管理员', '2023-10-08 14:19:04', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (532, 88880001, '王科雷', '2023-10-08 14:20:58', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (533, 88880000, '管理员', '2023-10-08 14:20:58', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (534, 88880001, '王科雷', '2023-10-08 14:23:20', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (535, 88880001, '王科雷', '2023-10-08 14:26:53', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (536, 88880001, '王科雷', '2023-10-08 14:28:29', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (537, 88880001, '王科雷', '2023-10-08 14:30:09', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (538, 88880001, '王科雷', '2023-10-08 14:35:57', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (539, 88880001, '王科雷', '2023-10-08 14:47:05', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (540, 88880001, '王科雷', '2023-10-08 14:49:47', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (541, 88880001, '王科雷', '2023-10-08 14:51:36', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (542, 88880001, '王科雷', '2023-10-08 14:58:40', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (543, 88880001, '王科雷', '2023-10-08 15:00:00', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (544, 88880001, '王科雷', '2023-10-08 15:01:52', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (545, 88880001, '王科雷', '2023-10-08 15:03:41', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (546, 88880001, '王科雷', '2023-10-08 15:09:07', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (547, 88880001, '王科雷', '2023-10-08 15:09:45', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (548, 88880001, '王科雷', '2023-10-08 15:10:31', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (549, 88880001, '王科雷', '2023-10-08 15:12:58', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (550, 88880001, '王科雷', '2023-10-08 15:25:13', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (551, 88880001, '王科雷', '2023-10-08 15:27:19', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (552, 88880001, '王科雷', '2023-10-08 15:28:27', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (553, 88880001, '王科雷', '2023-10-08 15:31:24', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (554, 88880001, '王科雷', '2023-10-08 15:32:54', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (555, 88880001, '王科雷', '2023-10-08 15:34:50', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (556, 88880001, '王科雷', '2023-10-08 15:37:35', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (557, 88880001, '王科雷', '2023-10-08 15:39:25', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (558, 88880001, '王科雷', '2023-10-08 15:43:18', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (559, 88880001, '王科雷', '2023-10-08 15:47:06', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (560, 88880001, '王科雷', '2023-10-08 15:53:06', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (561, 88880001, '王科雷', '2023-10-08 16:04:40', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (562, 88880001, '王科雷', '2023-10-08 16:04:59', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (563, 88880000, '管理员', '2023-10-08 16:05:13', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (564, 88880001, '王科雷', '2023-10-08 16:12:06', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (565, 88880001, '王科雷', '2023-10-08 16:14:43', '192.168.1.152');
+INSERT INTO `login_logs` VALUES (566, 88880000, '管理员', '2023-10-11 11:15:36', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (567, 88880000, '管理员', '2023-10-11 11:16:22', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (568, 88880000, '管理员', '2023-10-11 15:28:50', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (569, 88880000, '管理员', '2023-10-11 15:42:59', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (570, 88880000, '管理员', '2023-10-11 15:57:33', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (571, 88880000, '管理员', '2023-10-11 16:24:34', '192.168.1.177');
+INSERT INTO `login_logs` VALUES (572, 88880000, '管理员', '2023-10-12 09:37:41', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (573, 88880000, '管理员', '2023-10-12 09:38:27', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (574, 88880000, '管理员', '2023-10-12 09:43:44', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (575, 88880000, '管理员', '2023-10-16 09:25:34', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (576, 88880000, '管理员', '2023-10-16 09:34:01', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (577, 88880000, '管理员', '2023-10-16 09:34:48', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (578, 88880000, '管理员', '2023-10-16 10:38:15', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (579, 88880000, '管理员', '2023-10-16 11:04:51', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (580, 88880002, '李惠涛', '2023-10-16 11:05:03', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (581, 88880002, '李惠涛', '2023-10-16 11:06:05', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (582, 88880000, '管理员', '2023-10-16 11:06:18', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (583, 88880000, '管理员', '2023-10-16 13:52:44', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (584, 88880000, '管理员', '2023-10-16 13:53:40', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (585, 88880000, '管理员', '2023-10-16 15:02:49', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (586, 88880000, '管理员', '2023-10-16 15:03:40', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (587, 88880000, '管理员', '2023-10-16 15:06:18', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (588, 88880000, '管理员', '2023-10-16 15:15:02', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (589, 88880000, '管理员', '2023-10-16 16:10:32', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (590, 88880000, '管理员', '2023-10-16 16:14:14', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (591, 88880000, '管理员', '2023-10-16 16:16:46', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (592, 88880000, '管理员', '2023-10-16 16:22:05', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (593, 88880000, '管理员', '2023-10-16 16:22:49', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (594, 88880000, '管理员', '2023-10-16 16:24:28', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (595, 88880000, '管理员', '2023-10-16 16:40:47', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (596, 88880000, '管理员', '2023-10-16 16:41:54', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (597, 88880000, '管理员', '2023-10-16 16:43:49', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (598, 88880000, '管理员', '2023-10-16 16:44:52', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (599, 88880000, '管理员', '2023-10-16 16:46:11', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (600, 88880000, '管理员', '2023-10-16 16:50:27', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (601, 88880000, '管理员', '2023-10-16 16:51:03', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (602, 88880000, '管理员', '2023-10-16 16:55:12', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (603, 88880000, '管理员', '2023-10-16 16:57:19', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (604, 88880000, '管理员', '2023-10-16 17:20:01', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (605, 88880000, '管理员', '2023-10-16 17:24:50', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (606, 88880000, '管理员', '2023-10-16 18:00:29', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (607, 88880000, '管理员', '2023-10-17 09:22:21', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (608, 88880000, '管理员', '2023-10-17 09:34:55', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (609, 88880000, '管理员', '2023-10-17 09:55:26', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (610, 88880000, '管理员', '2023-10-17 09:59:16', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (611, 88880000, '管理员', '2023-10-17 10:05:17', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (612, 88880000, '管理员', '2023-10-17 10:05:53', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (613, 88880000, '管理员', '2023-10-17 10:10:05', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (614, 88880000, '管理员', '2023-10-17 10:10:45', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (615, 88880000, '管理员', '2023-10-17 10:31:16', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (616, 88880000, '管理员', '2023-10-17 10:47:38', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (617, 88880000, '管理员', '2023-10-17 10:49:32', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (618, 88880000, '管理员', '2023-10-17 10:51:45', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (619, 88880000, '管理员', '2023-10-17 10:53:12', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (620, 88880000, '管理员', '2023-10-17 10:54:09', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (621, 88880000, '管理员', '2023-10-17 10:54:50', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (622, 88880000, '管理员', '2023-10-17 14:18:21', '127.0.0.1');
+INSERT INTO `login_logs` VALUES (623, 88880000, '管理员', '2023-10-17 14:21:40', '192.168.0.111');
+INSERT INTO `login_logs` VALUES (624, 88880001, '王科雷', '2023-10-17 14:25:45', '192.168.0.222');
+INSERT INTO `login_logs` VALUES (625, 88880001, '王科雷', '2023-10-17 14:32:46', '192.168.0.222');
+INSERT INTO `login_logs` VALUES (626, 88880001, '王科雷', '2023-10-17 15:04:03', '192.168.0.222');
+INSERT INTO `login_logs` VALUES (627, 88880001, '王科雷', '2023-10-17 15:06:09', '192.168.0.222');
+INSERT INTO `login_logs` VALUES (628, 88880000, '管理员', '2023-10-17 15:06:25', '192.168.0.111');
+INSERT INTO `login_logs` VALUES (629, 88880001, '王科雷', '2023-10-17 15:14:35', '192.168.0.222');
+INSERT INTO `login_logs` VALUES (630, 88880001, '王科雷', '2023-10-17 15:15:25', '192.168.0.222');
+INSERT INTO `login_logs` VALUES (631, 88880001, '王科雷', '2023-10-17 15:15:44', '192.168.0.222');
+INSERT INTO `login_logs` VALUES (632, 88880000, '管理员', '2023-10-17 15:20:27', '192.168.0.111');
+INSERT INTO `login_logs` VALUES (633, 88880001, '王科雷', '2023-10-17 15:22:45', '192.168.0.222');
+INSERT INTO `login_logs` VALUES (634, 88880001, '王科雷', '2023-10-17 15:26:28', '192.168.0.222');
+INSERT INTO `login_logs` VALUES (635, 88880000, '管理员', '2023-10-17 15:38:58', '192.168.0.111');
+INSERT INTO `login_logs` VALUES (636, 88880000, '管理员', '2023-10-17 15:47:40', '192.168.0.111');
+INSERT INTO `login_logs` VALUES (637, 88880001, '王科雷', '2023-10-17 16:30:32', '192.168.0.222');
+INSERT INTO `login_logs` VALUES (638, 88880001, '王科雷', '2023-10-17 16:34:03', '192.168.0.222');
+INSERT INTO `login_logs` VALUES (639, 88880000, '管理员', '2023-11-07 10:38:46', '192.168.1.11');
+INSERT INTO `login_logs` VALUES (640, 88880000, '管理员', '2023-11-07 11:24:12', '192.168.1.11');
+INSERT INTO `login_logs` VALUES (641, 88880000, '管理员', '2023-11-07 14:40:04', '192.168.0.111');
+INSERT INTO `login_logs` VALUES (642, 88880000, '管理员', '2023-11-16 15:13:43', '192.168.0.111');
+INSERT INTO `login_logs` VALUES (643, 88880000, '管理员', '2024-01-04 14:44:53', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (644, 88880000, '管理员', '2024-01-04 14:53:03', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (645, 88880000, '管理员', '2024-01-04 14:55:00', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (646, 88880002, '李惠涛', '2024-01-04 15:10:12', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (647, 88880000, '管理员', '2024-01-04 15:10:40', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (648, 88880002, '李惠涛', '2024-01-04 15:12:03', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (649, 88880000, '管理员', '2024-01-04 15:12:17', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (650, 88880000, '管理员', '2024-01-04 15:23:48', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (651, 88880002, '李惠涛', '2024-01-04 15:28:54', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (652, 88880000, '管理员', '2024-01-04 15:29:05', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (653, 88880000, '管理员', '2024-01-04 16:01:21', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (654, 88880002, '李惠涛', '2024-01-04 16:01:22', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (655, 88880000, '管理员', '2024-01-04 16:01:49', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (656, 88880000, '管理员', '2024-01-04 16:29:05', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (657, 88880000, '管理员', '2024-01-04 16:31:45', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (658, 88880000, '管理员', '2024-01-08 17:09:34', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (659, 88880000, '管理员', '2024-01-08 17:15:06', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (660, 88880000, '管理员', '2024-01-08 17:17:35', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (661, 88880000, '管理员', '2024-01-08 17:20:53', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (662, 88880000, '管理员', '2024-01-08 17:21:33', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (663, 88880000, '管理员', '2024-01-08 17:24:00', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (664, 88880000, '管理员', '2024-01-08 17:30:39', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (665, 88880000, '管理员', '2024-01-08 17:31:06', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (666, 88880000, '管理员', '2024-01-08 17:35:47', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (667, 88880000, '管理员', '2024-01-08 17:36:07', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (668, 88880000, '管理员', '2024-01-08 17:37:00', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (669, 88880000, '管理员', '2024-01-08 17:38:54', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (670, 88880000, '管理员', '2024-01-08 17:39:38', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (671, 88880000, '管理员', '2024-01-08 20:46:27', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (672, 88880000, '管理员', '2024-01-08 20:47:29', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (673, 88880000, '管理员', '2024-01-08 20:52:12', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (674, 88880000, '管理员', '2024-01-08 20:52:28', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (675, 88880000, '管理员', '2024-01-08 20:53:49', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (676, 88880000, '管理员', '2024-01-08 20:55:00', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (677, 88880000, '管理员', '2024-01-08 20:59:58', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (678, 88880000, '管理员', '2024-01-08 21:04:39', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (679, 88880000, '管理员', '2024-01-08 21:15:39', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (680, 88880000, '管理员', '2024-01-08 21:17:50', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (681, 88880000, '管理员', '2024-01-08 21:18:19', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (682, 88880000, '管理员', '2024-01-08 21:20:21', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (683, 88880000, '管理员', '2024-01-08 21:21:12', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (684, 88880000, '管理员', '2024-01-08 21:26:19', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (685, 88880000, '管理员', '2024-01-08 21:27:33', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (686, 88880000, '管理员', '2024-01-08 21:29:21', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (687, 88880000, '管理员', '2024-01-08 23:11:03', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (688, 88880000, '管理员', '2024-01-08 23:11:43', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (689, 88880000, '管理员', '2024-01-08 23:13:16', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (690, 88880000, '管理员', '2024-01-08 23:14:22', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (691, 88880000, '管理员', '2024-01-08 23:14:56', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (692, 88880000, '管理员', '2024-01-08 23:15:37', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (693, 88880000, '管理员', '2024-01-08 23:17:00', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (694, 88880000, '管理员', '2024-01-08 23:38:27', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (695, 88880000, '管理员', '2024-01-08 23:49:11', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (696, 88880000, '管理员', '2024-01-08 23:50:19', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (697, 88880000, '管理员', '2024-01-08 23:50:43', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (698, 88880000, '管理员', '2024-01-08 23:51:25', '192.168.31.34');
+INSERT INTO `login_logs` VALUES (699, 88880000, '管理员', '2024-01-09 09:04:14', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (700, 88880000, '管理员', '2024-01-09 09:07:58', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (701, 88880000, '管理员', '2024-01-09 09:37:22', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (702, 88880000, '管理员', '2024-01-09 09:37:44', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (703, 88880000, '管理员', '2024-01-09 09:52:53', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (704, 88880000, '管理员', '2024-01-09 09:54:47', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (705, 88880000, '管理员', '2024-01-09 09:55:53', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (706, 88880000, '管理员', '2024-01-09 09:57:42', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (707, 88880000, '管理员', '2024-01-09 09:59:09', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (708, 88880000, '管理员', '2024-01-09 10:02:03', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (709, 88880000, '管理员', '2024-01-09 10:02:55', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (710, 88880000, '管理员', '2024-01-09 10:08:21', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (711, 88880000, '管理员', '2024-01-09 10:12:09', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (712, 88880000, '管理员', '2024-01-09 10:13:41', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (713, 88880000, '管理员', '2024-01-09 10:15:03', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (714, 88880000, '管理员', '2024-01-09 10:16:24', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (715, 88880000, '管理员', '2024-01-09 10:18:15', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (716, 88880000, '管理员', '2024-01-09 10:18:58', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (717, 88880000, '管理员', '2024-01-09 10:20:06', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (718, 88880000, '管理员', '2024-01-09 10:39:35', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (719, 88880000, '管理员', '2024-01-09 10:41:06', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (720, 88880000, '管理员', '2024-01-09 10:42:03', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (721, 88880000, '管理员', '2024-01-09 10:44:48', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (722, 88880000, '管理员', '2024-01-09 10:46:24', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (723, 88880000, '管理员', '2024-01-09 10:49:40', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (724, 88880000, '管理员', '2024-01-09 10:53:13', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (725, 88880000, '管理员', '2024-01-09 10:55:12', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (726, 88880000, '管理员', '2024-01-09 10:57:45', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (727, 88880000, '管理员', '2024-01-09 10:58:55', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (728, 88880000, '管理员', '2024-01-09 11:17:13', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (729, 88880000, '管理员', '2024-01-09 11:18:19', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (730, 88880000, '管理员', '2024-01-09 11:29:57', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (731, 88880000, '管理员', '2024-01-09 13:58:35', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (732, 88880000, '管理员', '2024-01-09 14:03:52', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (733, 88880000, '管理员', '2024-01-09 14:05:24', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (734, 88880000, '管理员', '2024-01-09 14:08:16', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (735, 88880000, '管理员', '2024-01-09 14:14:12', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (736, 88880000, '管理员', '2024-01-09 14:26:13', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (737, 88880000, '管理员', '2024-01-09 14:27:28', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (738, 88880000, '管理员', '2024-01-09 14:29:45', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (739, 88880000, '管理员', '2024-01-09 14:30:50', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (740, 88880000, '管理员', '2024-01-09 14:31:50', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (741, 88880000, '管理员', '2024-01-09 14:32:14', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (742, 88880000, '管理员', '2024-01-09 14:33:37', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (743, 88880000, '管理员', '2024-01-09 14:34:43', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (744, 88880000, '管理员', '2024-01-09 14:35:34', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (745, 88880000, '管理员', '2024-01-09 14:37:48', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (746, 88880000, '管理员', '2024-01-09 14:38:59', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (747, 88880000, '管理员', '2024-01-09 14:39:51', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (748, 88880000, '管理员', '2024-01-09 14:41:01', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (749, 88880000, '管理员', '2024-01-09 14:43:00', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (750, 88880000, '管理员', '2024-01-09 14:44:12', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (751, 88880000, '管理员', '2024-01-09 14:44:42', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (752, 88880000, '管理员', '2024-01-09 14:46:39', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (753, 88880000, '管理员', '2024-01-09 14:47:04', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (754, 88880000, '管理员', '2024-01-09 14:47:48', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (755, 88880000, '管理员', '2024-01-09 14:48:11', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (756, 88880003, '章学勇', '2024-01-09 15:02:26', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (757, 88880003, '章学勇', '2024-01-09 15:03:38', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (758, 88880003, '章学勇', '2024-01-09 15:03:59', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (759, 88880003, '章学勇', '2024-01-09 15:05:26', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (760, 88880000, '管理员', '2024-01-09 15:08:14', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (761, 88880000, '管理员', '2024-01-09 15:12:36', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (762, 88880000, '管理员', '2024-01-09 15:14:14', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (763, 88880000, '管理员', '2024-01-09 15:16:06', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (764, 88880000, '管理员', '2024-01-09 15:17:04', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (765, 88880000, '管理员', '2024-01-09 15:20:22', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (766, 88880000, '管理员', '2024-01-09 15:21:46', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (767, 88880003, '章学勇', '2024-01-09 15:21:58', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (768, 88880000, '管理员', '2024-01-09 15:22:37', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (769, 88880000, '管理员', '2024-01-09 15:23:31', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (770, 88880000, '管理员', '2024-01-09 15:24:30', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (771, 88880000, '管理员', '2024-01-09 15:25:03', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (772, 88880000, '管理员', '2024-01-09 15:26:22', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (773, 88880003, '章学勇', '2024-01-09 15:29:39', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (774, 88880003, '章学勇', '2024-01-09 15:31:10', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (775, 88880003, '章学勇', '2024-01-09 15:31:41', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (776, 88880003, '章学勇', '2024-01-09 15:32:25', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (777, 88880003, '章学勇', '2024-01-09 15:35:59', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (778, 88880003, '章学勇', '2024-01-09 15:36:49', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (779, 88880000, '管理员', '2024-01-09 15:36:53', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (780, 88880000, '管理员', '2024-01-09 15:37:58', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (781, 88880000, '管理员', '2024-01-09 15:38:33', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (782, 88880000, '管理员', '2024-01-09 15:39:36', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (783, 88880003, '章学勇', '2024-01-09 15:39:56', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (784, 88880000, '管理员', '2024-01-09 15:41:30', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (785, 88880003, '章学勇', '2024-01-09 15:42:44', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (786, 88880003, '章学勇', '2024-01-09 15:43:52', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (787, 88880000, '管理员', '2024-01-09 15:45:03', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (788, 88880000, '管理员', '2024-01-09 15:47:00', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (789, 88880003, '章学勇', '2024-01-09 15:47:43', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (790, 88880003, '章学勇', '2024-01-09 15:49:06', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (791, 88880000, '管理员', '2024-01-09 15:49:25', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (792, 88880003, '章学勇', '2024-01-09 15:50:22', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (793, 88880000, '管理员', '2024-01-09 15:50:37', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (794, 88880003, '章学勇', '2024-01-09 15:51:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (795, 88880003, '章学勇', '2024-01-09 15:52:24', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (796, 88880000, '管理员', '2024-01-09 15:54:39', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (797, 88880000, '管理员', '2024-01-09 15:55:41', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (798, 88880000, '管理员', '2024-01-09 15:55:59', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (799, 88880000, '管理员', '2024-01-09 15:56:17', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (800, 88880000, '管理员', '2024-01-09 15:56:58', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (801, 88880000, '管理员', '2024-01-09 15:58:01', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (802, 88880000, '管理员', '2024-01-09 15:59:05', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (803, 88880003, '章学勇', '2024-01-09 15:59:10', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (804, 88880003, '章学勇', '2024-01-09 15:59:54', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (805, 88880000, '管理员', '2024-01-09 16:02:05', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (806, 88880003, '章学勇', '2024-01-09 16:02:15', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (807, 88880000, '管理员', '2024-01-09 16:03:10', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (808, 88880003, '章学勇', '2024-01-09 16:03:13', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (809, 88880000, '管理员', '2024-01-09 16:04:26', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (810, 88880003, '章学勇', '2024-01-09 16:04:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (811, 88880003, '章学勇', '2024-01-09 16:05:58', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (812, 88880003, '章学勇', '2024-01-09 16:06:59', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (813, 88880000, '管理员', '2024-01-09 16:07:08', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (814, 88880003, '章学勇', '2024-01-09 16:07:39', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (815, 88880000, '管理员', '2024-01-09 16:08:16', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (816, 88880003, '章学勇', '2024-01-09 16:08:21', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (817, 88880000, '管理员', '2024-01-09 16:09:12', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (818, 88880000, '管理员', '2024-01-09 16:09:29', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (819, 88880003, '章学勇', '2024-01-09 16:09:32', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (820, 88880003, '章学勇', '2024-01-09 16:10:24', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (821, 88880000, '管理员', '2024-01-09 16:11:08', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (822, 88880003, '章学勇', '2024-01-09 16:11:20', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (823, 88880000, '管理员', '2024-01-09 16:11:25', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (824, 88880003, '章学勇', '2024-01-09 16:12:12', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (825, 88880003, '章学勇', '2024-01-09 16:13:45', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (826, 88880000, '管理员', '2024-01-09 16:13:48', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (827, 88880000, '管理员', '2024-01-09 16:14:27', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (828, 88880003, '章学勇', '2024-01-09 16:14:37', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (829, 88880000, '管理员', '2024-01-09 16:14:43', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (830, 88880003, '章学勇', '2024-01-09 16:14:55', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (831, 88880000, '管理员', '2024-01-09 16:15:19', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (832, 88880000, '管理员', '2024-01-09 16:15:59', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (833, 88880000, '管理员', '2024-01-09 16:16:40', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (834, 88880003, '章学勇', '2024-01-09 16:16:45', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (835, 88880000, '管理员', '2024-01-09 16:16:54', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (836, 88880003, '章学勇', '2024-01-09 16:19:29', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (837, 88880000, '管理员', '2024-01-09 16:20:52', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (838, 88880003, '章学勇', '2024-01-09 16:21:10', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (839, 88880003, '章学勇', '2024-01-09 16:22:54', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (840, 88880000, '管理员', '2024-01-09 16:23:16', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (841, 88880003, '章学勇', '2024-01-09 16:24:23', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (842, 88880000, '管理员', '2024-01-09 16:25:33', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (843, 88880003, '章学勇', '2024-01-09 16:25:38', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (844, 88880000, '管理员', '2024-01-09 16:28:11', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (845, 88880000, '管理员', '2024-01-09 16:29:35', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (846, 88880003, '章学勇', '2024-01-09 16:30:16', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (847, 88880000, '管理员', '2024-01-09 16:30:39', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (848, 88880003, '章学勇', '2024-01-09 16:30:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (849, 88880003, '章学勇', '2024-01-09 16:32:16', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (850, 88880003, '章学勇', '2024-01-09 16:32:50', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (851, 88880000, '管理员', '2024-01-09 16:33:58', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (852, 88880003, '章学勇', '2024-01-09 16:34:39', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (853, 88880000, '管理员', '2024-01-09 16:35:23', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (854, 88880003, '章学勇', '2024-01-09 16:41:53', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (855, 88880003, '章学勇', '2024-01-09 16:42:26', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (856, 88880003, '章学勇', '2024-01-09 16:48:55', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (857, 88880003, '章学勇', '2024-01-09 16:49:17', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (858, 88880000, '管理员', '2024-01-09 17:18:53', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (859, 88880000, '管理员', '2024-01-09 17:22:50', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (860, 88880000, '管理员', '2024-01-09 17:25:10', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (861, 88880000, '管理员', '2024-01-09 17:27:36', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (862, 88880000, '管理员', '2024-01-09 17:31:48', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (863, 88880000, '管理员', '2024-01-09 17:34:02', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (864, 88880000, '管理员', '2024-01-09 17:39:11', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (865, 88880000, '管理员', '2024-01-09 17:40:10', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (866, 88880000, '管理员', '2024-01-09 17:41:08', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (867, 88880000, '管理员', '2024-01-09 17:41:56', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (868, 88880000, '管理员', '2024-01-09 17:43:08', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (869, 88880000, '管理员', '2024-01-09 17:43:58', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (870, 88880000, '管理员', '2024-01-09 17:47:45', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (871, 88880000, '管理员', '2024-01-09 17:48:27', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (872, 88880000, '管理员', '2024-01-09 17:51:49', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (873, 88880000, '管理员', '2024-01-09 17:54:17', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (874, 88880000, '管理员', '2024-01-09 17:54:52', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (875, 88880000, '管理员', '2024-01-09 17:55:42', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (876, 88880000, '管理员', '2024-01-09 17:56:28', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (877, 88880000, '管理员', '2024-01-09 17:57:46', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (878, 88880000, '管理员', '2024-01-09 17:58:08', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (879, 88880000, '管理员', '2024-01-09 18:01:48', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (880, 88880000, '管理员', '2024-01-09 18:03:34', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (881, 88880000, '管理员', '2024-01-09 18:04:09', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (882, 88880000, '管理员', '2024-01-09 18:04:28', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (883, 88880000, '管理员', '2024-01-09 18:05:21', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (884, 88880000, '管理员', '2024-01-09 18:05:48', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (885, 88880000, '管理员', '2024-01-09 18:09:57', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (886, 88880000, '管理员', '2024-01-09 18:10:44', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (887, 88880000, '管理员', '2024-01-09 18:13:46', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (888, 88880000, '管理员', '2024-01-10 09:01:32', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (889, 88880003, '章学勇', '2024-01-10 09:28:04', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (890, 88880003, '章学勇', '2024-01-10 09:29:46', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (891, 88880003, '章学勇', '2024-01-10 09:30:19', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (892, 88880003, '章学勇', '2024-01-10 09:32:36', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (893, 88880000, '管理员', '2024-01-10 09:33:39', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (894, 88880003, '章学勇', '2024-01-10 09:33:43', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (895, 88880003, '章学勇', '2024-01-10 09:34:21', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (896, 88880003, '章学勇', '2024-01-10 09:35:21', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (897, 88880003, '章学勇', '2024-01-10 09:36:08', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (898, 88880003, '章学勇', '2024-01-10 09:36:33', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (899, 88880000, '管理员', '2024-01-10 09:38:35', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (900, 88880003, '章学勇', '2024-01-10 09:52:38', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (901, 88880003, '章学勇', '2024-01-10 09:53:34', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (902, 88880003, '章学勇', '2024-01-10 09:54:15', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (903, 88880003, '章学勇', '2024-01-10 09:56:11', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (904, 88880000, '管理员', '2024-01-10 09:56:19', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (905, 88880003, '章学勇', '2024-01-10 09:58:43', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (906, 88880003, '章学勇', '2024-01-10 10:00:36', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (907, 88880003, '章学勇', '2024-01-10 10:01:54', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (908, 88880003, '章学勇', '2024-01-10 10:02:58', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (909, 88880003, '章学勇', '2024-01-10 10:03:36', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (910, 88880003, '章学勇', '2024-01-10 10:05:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (911, 88880003, '章学勇', '2024-01-10 10:07:28', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (912, 88880003, '章学勇', '2024-01-10 10:11:37', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (913, 88880003, '章学勇', '2024-01-10 10:14:20', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (914, 88880003, '章学勇', '2024-01-10 10:17:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (915, 88880003, '章学勇', '2024-01-10 10:18:57', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (916, 88880003, '章学勇', '2024-01-10 10:19:27', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (917, 88880003, '章学勇', '2024-01-10 10:20:17', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (918, 88880003, '章学勇', '2024-01-10 10:21:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (919, 88880003, '章学勇', '2024-01-10 10:23:12', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (920, 88880003, '章学勇', '2024-01-10 10:25:42', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (921, 88880003, '章学勇', '2024-01-10 10:28:59', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (922, 88880003, '章学勇', '2024-01-10 10:29:57', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (923, 88880003, '章学勇', '2024-01-10 10:31:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (924, 88880003, '章学勇', '2024-01-10 10:32:19', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (925, 88880003, '章学勇', '2024-01-10 10:39:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (926, 88880003, '章学勇', '2024-01-10 10:48:24', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (927, 88880003, '章学勇', '2024-01-10 10:50:53', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (928, 88880003, '章学勇', '2024-01-10 10:50:53', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (929, 88880003, '章学勇', '2024-01-10 10:50:54', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (930, 88880003, '章学勇', '2024-01-10 10:50:56', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (931, 88880003, '章学勇', '2024-01-10 10:50:57', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (932, 88880003, '章学勇', '2024-01-10 10:50:59', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (933, 88880003, '章学勇', '2024-01-10 10:51:03', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (934, 88880002, '李惠涛', '2024-01-10 10:56:13', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (935, 88880002, '李惠涛', '2024-01-10 10:56:19', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (936, 88880003, '章学勇', '2024-01-10 10:57:16', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (937, 88880000, '管理员', '2024-01-10 10:58:10', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (938, 88880000, '管理员', '2024-01-10 11:00:11', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (939, 88880003, '章学勇', '2024-01-10 11:01:54', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (940, 88880000, '管理员', '2024-01-10 11:02:38', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (941, 88880000, '管理员', '2024-01-10 11:03:58', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (942, 88880000, '管理员', '2024-01-10 11:04:06', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (943, 88880000, '管理员', '2024-01-10 11:07:32', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (944, 88880003, '章学勇', '2024-01-10 11:08:56', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (945, 88880003, '章学勇', '2024-01-10 11:09:11', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (946, 88880003, '章学勇', '2024-01-10 11:09:56', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (947, 88880003, '章学勇', '2024-01-10 11:10:03', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (948, 88880003, '章学勇', '2024-01-10 11:18:41', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (949, 88880003, '章学勇', '2024-01-10 11:18:43', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (950, 88880003, '章学勇', '2024-01-10 11:18:45', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (951, 88880003, '章学勇', '2024-01-10 11:18:46', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (952, 88880003, '章学勇', '2024-01-10 11:18:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (953, 88880003, '章学勇', '2024-01-10 11:18:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (954, 88880003, '章学勇', '2024-01-10 11:18:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (955, 88880003, '章学勇', '2024-01-10 11:18:51', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (956, 88880003, '章学勇', '2024-01-10 11:19:01', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (957, 88880003, '章学勇', '2024-01-10 11:19:04', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (958, 88880002, '李惠涛', '2024-01-10 11:19:22', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (959, 88880002, '李惠涛', '2024-01-10 11:20:04', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (960, 88880000, '管理员', '2024-01-10 11:20:04', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (961, 88880002, '李惠涛', '2024-01-10 11:20:05', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (962, 88880002, '李惠涛', '2024-01-10 11:20:05', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (963, 88880002, '李惠涛', '2024-01-10 11:20:06', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (964, 88880002, '李惠涛', '2024-01-10 11:20:08', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (965, 88880002, '李惠涛', '2024-01-10 11:20:09', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (966, 88880003, '章学勇', '2024-01-10 11:20:17', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (967, 88880005, '甄业鑫', '2024-01-10 11:20:41', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (968, 88880003, '章学勇', '2024-01-10 11:21:03', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (969, 88880003, '章学勇', '2024-01-10 11:21:07', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (970, 88880000, '管理员', '2024-01-10 11:24:51', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (971, 88880003, '章学勇', '2024-01-10 11:28:38', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (972, 88880003, '章学勇', '2024-01-10 11:28:40', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (973, 88880000, '管理员', '2024-01-10 11:31:35', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (974, 88880000, '管理员', '2024-01-10 13:44:07', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (975, 88880000, '管理员', '2024-01-10 13:45:04', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (976, 88880000, '管理员', '2024-01-10 13:45:12', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (977, 88880002, '李惠涛', '2024-01-10 13:45:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (978, 88880003, '章学勇', '2024-01-10 13:46:00', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (979, 88880000, '管理员', '2024-01-10 13:52:37', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (980, 88880000, '管理员', '2024-01-10 13:53:30', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (981, 88880000, '管理员', '2024-01-10 13:55:46', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (982, 88880002, '李惠涛', '2024-01-10 13:55:50', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (983, 88880000, '管理员', '2024-01-10 13:55:59', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (984, 88880003, '章学勇', '2024-01-10 13:56:12', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (985, 88880002, '李惠涛', '2024-01-10 13:56:23', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (986, 88880002, '李惠涛', '2024-01-10 13:56:32', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (987, 88880002, '李惠涛', '2024-01-10 13:56:34', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (988, 88880002, '李惠涛', '2024-01-10 13:56:37', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (989, 88880000, '管理员', '2024-01-10 13:56:56', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (990, 88880000, '管理员', '2024-01-10 14:00:33', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (991, 88880000, '管理员', '2024-01-10 14:02:25', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (992, 88880000, '管理员', '2024-01-10 14:02:25', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (993, 88880003, '章学勇', '2024-01-10 14:04:20', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (994, 88880003, '章学勇', '2024-01-10 14:05:03', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (995, 88880000, '管理员', '2024-01-10 14:06:12', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (996, 88880000, '管理员', '2024-01-10 14:07:07', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (997, 88880003, '章学勇', '2024-01-10 14:08:35', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (998, 88880000, '管理员', '2024-01-10 14:10:38', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (999, 88880003, '章学勇', '2024-01-10 14:12:06', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1000, 88880003, '章学勇', '2024-01-10 14:13:13', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1001, 88880003, '章学勇', '2024-01-10 14:13:15', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1002, 88880000, '管理员', '2024-01-10 14:13:56', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1003, 88880003, '章学勇', '2024-01-10 14:14:09', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1004, 88880000, '管理员', '2024-01-10 14:14:43', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1005, 88880003, '章学勇', '2024-01-10 14:14:55', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1006, 88880000, '管理员', '2024-01-10 14:15:43', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1007, 88880003, '章学勇', '2024-01-10 14:16:19', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1008, 88880003, '章学勇', '2024-01-10 14:16:20', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1009, 88880003, '章学勇', '2024-01-10 14:27:11', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1010, 88880003, '章学勇', '2024-01-10 14:31:45', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1011, 88880000, '管理员', '2024-01-10 14:32:03', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1012, 88880003, '章学勇', '2024-01-10 14:36:53', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1013, 88880002, '李惠涛', '2024-01-10 14:37:25', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1014, 88880002, '李惠涛', '2024-01-10 14:38:04', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1015, 88880003, '章学勇', '2024-01-10 14:39:18', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1016, 88880003, '章学勇', '2024-01-10 14:39:21', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1017, 88880003, '章学勇', '2024-01-10 14:39:22', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1018, 88880003, '章学勇', '2024-01-10 14:39:24', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1019, 88880003, '章学勇', '2024-01-10 14:39:25', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1020, 88880003, '章学勇', '2024-01-10 14:39:34', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1021, 88880000, '管理员', '2024-01-10 14:40:57', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1022, 88880002, '李惠涛', '2024-01-10 14:41:19', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1023, 88880003, '章学勇', '2024-01-10 14:41:29', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1024, 88880002, '李惠涛', '2024-01-10 14:41:46', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1025, 88880003, '章学勇', '2024-01-10 14:42:08', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1026, 88880000, '管理员', '2024-01-10 14:43:18', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1027, 88880000, '管理员', '2024-01-10 14:43:55', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1028, 88880000, '管理员', '2024-01-10 14:44:43', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1029, 88880003, '章学勇', '2024-01-10 14:45:10', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1030, 88880003, '章学勇', '2024-01-10 14:48:16', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1031, 88880003, '章学勇', '2024-01-10 14:48:33', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1032, 88880002, '李惠涛', '2024-01-10 14:49:32', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1033, 88880000, '管理员', '2024-01-10 15:07:08', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1034, 88880000, '管理员', '2024-01-10 15:07:32', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1035, 88880000, '管理员', '2024-01-10 15:10:19', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1036, 88880000, '管理员', '2024-01-10 15:13:18', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1037, 88880000, '管理员', '2024-01-10 15:17:20', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1038, 88880000, '管理员', '2024-01-10 15:18:49', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1039, 88880000, '管理员', '2024-01-10 15:33:16', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1040, 88880000, '管理员', '2024-01-10 15:34:11', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1041, 88880000, '管理员', '2024-01-10 15:39:51', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1042, 88880000, '管理员', '2024-01-10 15:40:52', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1043, 88880000, '管理员', '2024-01-10 15:41:21', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1044, 88880000, '管理员', '2024-01-10 15:41:43', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1045, 88880000, '管理员', '2024-01-10 15:47:11', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1046, 88880000, '管理员', '2024-01-10 15:49:46', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1047, 88880000, '管理员', '2024-01-10 16:02:31', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1048, 88880003, '章学勇', '2024-01-10 16:02:59', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1049, 88880002, '李惠涛', '2024-01-10 16:03:13', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1050, 88880000, '管理员', '2024-01-10 16:13:35', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1051, 88880000, '管理员', '2024-01-10 16:15:34', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1052, 88880000, '管理员', '2024-01-10 16:17:04', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1053, 88880003, '章学勇', '2024-01-10 16:18:54', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1054, 88880000, '管理员', '2024-01-10 16:19:21', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1055, 88880003, '章学勇', '2024-01-10 16:19:45', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1056, 88880005, '甄业鑫', '2024-01-10 16:22:37', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1057, 88880005, '甄业鑫', '2024-01-10 16:23:09', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1058, 88880003, '章学勇', '2024-01-10 16:23:27', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1059, 88880003, '章学勇', '2024-01-10 16:23:34', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1060, 88880003, '章学勇', '2024-01-10 16:23:35', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1061, 88880003, '章学勇', '2024-01-10 16:23:36', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1062, 88880003, '章学勇', '2024-01-10 16:23:37', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1063, 88880003, '章学勇', '2024-01-10 16:23:40', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1064, 88880003, '章学勇', '2024-01-10 16:23:41', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1065, 88880003, '章学勇', '2024-01-10 16:23:56', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1066, 88880003, '章学勇', '2024-01-10 16:23:59', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1067, 88880003, '章学勇', '2024-01-10 16:24:01', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1068, 88880003, '章学勇', '2024-01-10 16:24:03', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1069, 88880003, '章学勇', '2024-01-10 16:24:05', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1070, 88880002, '李惠涛', '2024-01-10 16:24:16', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1071, 88880002, '李惠涛', '2024-01-10 16:24:33', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1072, 88880003, '章学勇', '2024-01-10 16:25:20', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1073, 88880003, '章学勇', '2024-01-10 16:25:31', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1074, 88880003, '章学勇', '2024-01-10 16:25:36', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1075, 88880003, '章学勇', '2024-01-10 16:25:38', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1076, 88880000, '管理员', '2024-01-10 16:25:57', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1077, 88880000, '管理员', '2024-01-10 16:26:19', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1078, 88880000, '管理员', '2024-01-10 16:26:40', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1079, 88880003, '章学勇', '2024-01-10 16:26:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1080, 88880003, '章学勇', '2024-01-10 16:26:59', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1081, 88880003, '章学勇', '2024-01-10 16:28:00', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1082, 88880003, '章学勇', '2024-01-10 16:28:02', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1083, 88880003, '章学勇', '2024-01-10 16:28:41', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1084, 88880003, '章学勇', '2024-01-10 16:29:34', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1085, 88880000, '管理员', '2024-01-10 16:35:38', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1086, 88880003, '章学勇', '2024-01-10 16:38:09', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1087, 88880003, '章学勇', '2024-01-10 16:38:30', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1088, 88880003, '章学勇', '2024-01-10 16:38:32', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1089, 88880003, '章学勇', '2024-01-10 16:38:34', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1090, 88880003, '章学勇', '2024-01-10 16:38:35', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1091, 88880003, '章学勇', '2024-01-10 16:38:36', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1092, 88880003, '章学勇', '2024-01-10 16:38:37', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1093, 88880002, '李惠涛', '2024-01-10 16:41:01', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1094, 88880003, '章学勇', '2024-01-10 16:43:53', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1095, 88880003, '章学勇', '2024-01-10 16:44:27', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1096, 88880003, '章学勇', '2024-01-10 16:50:38', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1097, 88880003, '章学勇', '2024-01-10 16:51:08', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1098, 88880000, '管理员', '2024-01-10 16:51:15', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1099, 88880000, '管理员', '2024-01-10 16:56:08', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1100, 88880003, '章学勇', '2024-01-10 16:58:39', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1101, 88880003, '章学勇', '2024-01-10 17:00:04', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1102, 88880003, '章学勇', '2024-01-10 17:04:11', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1103, 88880002, '李惠涛', '2024-01-10 17:04:29', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1104, 88880003, '章学勇', '2024-01-10 17:06:02', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1105, 88880003, '章学勇', '2024-01-10 17:06:55', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1106, 88880003, '章学勇', '2024-01-10 17:07:25', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1107, 88880000, '管理员', '2024-01-10 17:07:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1108, 88880003, '章学勇', '2024-01-10 17:07:57', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1109, 88880003, '章学勇', '2024-01-10 17:08:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1110, 88880003, '章学勇', '2024-01-10 17:09:17', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1111, 88880003, '章学勇', '2024-01-10 17:10:07', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1112, 88880002, '李惠涛', '2024-01-10 17:11:26', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1113, 88880002, '李惠涛', '2024-01-10 17:13:34', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1114, 88880000, '管理员', '2024-01-10 17:13:35', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1115, 88880002, '李惠涛', '2024-01-10 17:39:16', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1116, 88880003, '章学勇', '2024-01-10 17:39:44', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1117, 88880000, '管理员', '2024-01-10 17:40:39', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1118, 88880003, '章学勇', '2024-01-10 17:46:24', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1119, 88880002, '李惠涛', '2024-01-10 17:46:34', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1120, 88880002, '李惠涛', '2024-01-10 17:46:36', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1121, 88880000, '管理员', '2024-01-10 17:46:36', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1122, 88880002, '李惠涛', '2024-01-10 17:49:12', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1123, 88880003, '章学勇', '2024-01-10 17:49:18', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1124, 88880002, '李惠涛', '2024-01-10 17:49:38', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1125, 88880002, '李惠涛', '2024-01-10 17:49:46', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1126, 88880000, '管理员', '2024-01-10 17:49:48', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1127, 88880002, '李惠涛', '2024-01-10 17:50:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1128, 88880003, '章学勇', '2024-01-10 17:50:55', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1129, 88880000, '管理员', '2024-01-10 17:51:45', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1130, 88880002, '李惠涛', '2024-01-10 17:51:50', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1131, 88880003, '章学勇', '2024-01-10 17:55:28', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1132, 88880000, '管理员', '2024-01-10 17:58:25', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1133, 88880003, '章学勇', '2024-01-10 17:58:38', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1134, 88880000, '管理员', '2024-01-10 17:59:05', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1135, 88880003, '章学勇', '2024-01-10 18:04:54', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1136, 88880003, '章学勇', '2024-01-11 09:15:31', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1137, 88880003, '章学勇', '2024-01-11 09:15:32', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1138, 88880002, '李惠涛', '2024-01-11 09:15:51', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1139, 88880003, '章学勇', '2024-01-11 09:18:45', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1140, 88880002, '李惠涛', '2024-01-11 09:18:51', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1141, 88880000, '管理员', '2024-01-11 09:27:23', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1142, 88880002, '李惠涛', '2024-01-11 09:33:14', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1143, 88880002, '李惠涛', '2024-01-11 09:40:58', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1144, 88880000, '管理员', '2024-01-11 09:41:01', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1145, 88880003, '章学勇', '2024-01-11 09:45:11', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1146, 88880003, '章学勇', '2024-01-11 09:45:57', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1147, 88880003, '章学勇', '2024-01-11 09:46:32', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1148, 88880003, '章学勇', '2024-01-11 09:47:18', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1149, 88880003, '章学勇', '2024-01-11 09:48:03', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1150, 88880000, '管理员', '2024-01-11 09:48:08', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1151, 88880003, '章学勇', '2024-01-11 09:48:34', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1152, 88880003, '章学勇', '2024-01-11 09:49:04', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1153, 88880003, '章学勇', '2024-01-11 09:49:26', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1154, 88880000, '管理员', '2024-01-11 09:49:59', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1155, 88880003, '章学勇', '2024-01-11 09:50:01', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1156, 88880003, '章学勇', '2024-01-11 09:50:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1157, 88880003, '章学勇', '2024-01-11 09:51:55', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1158, 88880003, '章学勇', '2024-01-11 09:52:23', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1159, 88880003, '章学勇', '2024-01-11 09:52:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1160, 88880003, '章学勇', '2024-01-11 09:53:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1161, 88880003, '章学勇', '2024-01-11 09:54:57', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1162, 88880003, '章学勇', '2024-01-11 09:55:27', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1163, 88880003, '章学勇', '2024-01-11 09:55:41', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1164, 88880005, '甄业鑫', '2024-01-11 09:56:29', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1165, 88880003, '章学勇', '2024-01-11 09:57:25', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1166, 88880003, '章学勇', '2024-01-11 09:57:50', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1167, 88880003, '章学勇', '2024-01-11 09:58:06', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1168, 88880003, '章学勇', '2024-01-11 09:59:29', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1169, 88880003, '章学勇', '2024-01-11 10:00:14', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1170, 88880003, '章学勇', '2024-01-11 10:04:26', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1171, 88880003, '章学勇', '2024-01-11 10:05:00', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1172, 88880003, '章学勇', '2024-01-11 10:07:07', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1173, 88880000, '管理员', '2024-01-11 10:12:53', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1174, 88880002, '李惠涛', '2024-01-11 10:13:03', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1175, 88880003, '章学勇', '2024-01-11 10:13:17', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1176, 88880003, '章学勇', '2024-01-11 10:16:14', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1177, 88880003, '章学勇', '2024-01-11 10:19:01', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1178, 88880000, '管理员', '2024-01-11 10:19:01', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1179, 88880002, '李惠涛', '2024-01-11 10:19:03', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1180, 88880003, '章学勇', '2024-01-11 10:21:13', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1181, 88880003, '章学勇', '2024-01-11 10:23:50', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1182, 88880003, '章学勇', '2024-01-11 10:25:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1183, 88880003, '章学勇', '2024-01-11 10:27:02', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1184, 88880000, '管理员', '2024-01-11 10:28:34', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1185, 88880003, '章学勇', '2024-01-11 10:33:28', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1186, 88880003, '章学勇', '2024-01-11 10:35:24', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1187, 88880003, '章学勇', '2024-01-11 10:37:09', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1188, 88880003, '章学勇', '2024-01-11 10:38:03', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1189, 88880000, '管理员', '2024-01-11 10:44:32', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1190, 88880002, '李惠涛', '2024-01-11 10:44:47', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1191, 88880000, '管理员', '2024-01-11 10:52:47', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1192, 88880002, '李惠涛', '2024-01-11 10:52:50', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1193, 88880002, '李惠涛', '2024-01-11 11:16:46', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1194, 88880000, '管理员', '2024-01-11 11:16:48', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1195, 88880002, '李惠涛', '2024-01-11 11:18:45', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1196, 88880000, '管理员', '2024-01-11 11:18:47', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1197, 88880000, '管理员', '2024-01-11 14:07:25', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1198, 88880003, '章学勇', '2024-01-11 14:08:43', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1199, 88880003, '章学勇', '2024-01-11 14:08:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1200, 88880003, '章学勇', '2024-01-11 14:08:59', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1201, 88880000, '管理员', '2024-01-11 14:13:12', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1202, 88880000, '管理员', '2024-01-11 14:14:10', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1203, 88880003, '章学勇', '2024-01-11 14:14:31', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1204, 88880003, '章学勇', '2024-01-11 14:16:58', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1205, 88880000, '管理员', '2024-01-11 14:19:52', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1206, 88880003, '章学勇', '2024-01-11 14:20:26', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1207, 88880003, '章学勇', '2024-01-11 14:23:38', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1208, 88880003, '章学勇', '2024-01-11 14:26:00', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1209, 88880003, '章学勇', '2024-01-11 14:29:55', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1210, 88880002, '李惠涛', '2024-01-11 14:35:05', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1211, 88880000, '管理员', '2024-01-11 14:37:24', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1212, 88880003, '章学勇', '2024-01-11 15:13:44', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1213, 88880003, '章学勇', '2024-01-11 15:14:34', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1214, 88880003, '章学勇', '2024-01-11 15:15:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1215, 88880003, '章学勇', '2024-01-11 15:17:46', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1216, 88880000, '管理员', '2024-01-11 15:20:33', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1217, 88880002, '李惠涛', '2024-01-11 15:20:39', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1218, 88880000, '管理员', '2024-01-11 15:25:31', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1219, 88880002, '李惠涛', '2024-01-11 15:26:28', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1220, 88880000, '管理员', '2024-01-11 15:29:17', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1221, 88880000, '管理员', '2024-01-11 15:33:20', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1222, 88880002, '李惠涛', '2024-01-11 15:34:03', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1223, 88880003, '章学勇', '2024-01-11 15:34:34', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1224, 88880002, '李惠涛', '2024-01-11 15:35:33', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1225, 88880000, '管理员', '2024-01-11 15:35:43', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1226, 88880003, '章学勇', '2024-01-11 15:35:44', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1227, 88880003, '章学勇', '2024-01-11 15:36:36', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1228, 88880003, '章学勇', '2024-01-11 15:39:01', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1229, 88880003, '章学勇', '2024-01-11 15:40:39', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1230, 88880003, '章学勇', '2024-01-11 15:42:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1231, 88880003, '章学勇', '2024-01-11 15:43:18', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1232, 88880003, '章学勇', '2024-01-11 15:45:16', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1233, 88880000, '管理员', '2024-01-11 15:45:55', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1234, 88880003, '章学勇', '2024-01-11 15:46:05', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1235, 88880002, '李惠涛', '2024-01-11 15:46:19', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1236, 88880000, '管理员', '2024-01-11 15:46:22', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1237, 88880000, '管理员', '2024-01-11 15:46:50', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1238, 88880003, '章学勇', '2024-01-11 15:47:28', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1239, 88880003, '章学勇', '2024-01-11 15:49:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1240, 88880003, '章学勇', '2024-01-11 15:50:51', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1241, 88880003, '章学勇', '2024-01-11 15:51:46', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1242, 88880000, '管理员', '2024-01-11 15:53:14', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1243, 88880000, '管理员', '2024-01-11 15:53:49', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1244, 88880003, '章学勇', '2024-01-11 16:01:12', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1245, 88880005, '甄业鑫', '2024-01-11 16:01:34', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1246, 88880003, '章学勇', '2024-01-11 16:02:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1247, 88880003, '章学勇', '2024-01-11 16:04:06', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1248, 88880003, '章学勇', '2024-01-11 16:04:26', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1249, 88880000, '管理员', '2024-01-11 16:07:11', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1250, 88880003, '章学勇', '2024-01-11 16:07:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1251, 88880003, '章学勇', '2024-01-11 16:09:22', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1252, 88880003, '章学勇', '2024-01-11 16:10:22', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1253, 88880003, '章学勇', '2024-01-11 16:11:48', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1254, 88880003, '章学勇', '2024-01-11 16:12:44', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1255, 88880003, '章学勇', '2024-01-11 16:15:06', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1256, 88880003, '章学勇', '2024-01-11 16:15:56', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1257, 88880003, '章学勇', '2024-01-11 16:17:06', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1258, 88880003, '章学勇', '2024-01-11 16:17:35', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1259, 88880003, '章学勇', '2024-01-11 16:18:20', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1260, 88880003, '章学勇', '2024-01-11 16:20:23', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1261, 88880003, '章学勇', '2024-01-11 16:21:13', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1262, 88880005, '甄业鑫', '2024-01-11 16:22:32', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1263, 88880003, '章学勇', '2024-01-11 16:23:34', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1264, 88880003, '章学勇', '2024-01-11 16:29:32', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1265, 88880002, '李惠涛', '2024-01-11 16:33:35', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1266, 88880003, '章学勇', '2024-01-11 16:33:38', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1267, 88880003, '章学勇', '2024-01-11 16:41:20', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1268, 88880005, '甄业鑫', '2024-01-11 16:41:42', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1269, 88880003, '章学勇', '2024-01-11 16:42:19', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1270, 88880002, '李惠涛', '2024-01-11 16:48:21', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1271, 88880000, '管理员', '2024-01-12 10:34:09', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1272, 88880003, '章学勇', '2024-01-12 10:35:46', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1273, 88880000, '管理员', '2024-01-12 10:42:00', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1274, 88880003, '章学勇', '2024-01-12 10:46:23', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1275, 88880003, '章学勇', '2024-01-12 10:49:08', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1276, 88880003, '章学勇', '2024-01-12 10:49:10', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1277, 88880003, '章学勇', '2024-01-12 10:49:59', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1278, 88880003, '章学勇', '2024-01-12 11:05:47', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1279, 88880005, '甄业鑫', '2024-01-12 11:12:08', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1280, 88880005, '甄业鑫', '2024-01-12 11:12:14', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1281, 88880005, '甄业鑫', '2024-01-12 11:12:16', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1282, 88880000, '管理员', '2024-01-12 11:12:20', '192.168.0.100');
+INSERT INTO `login_logs` VALUES (1283, 88880003, '章学勇', '2024-01-12 11:15:04', '192.168.0.104');
+INSERT INTO `login_logs` VALUES (1284, 88880003, '章学勇', '2024-01-12 11:16:16', '192.168.0.104');
+
+-- ----------------------------
+-- Table structure for menu_list
+-- ----------------------------
+DROP TABLE IF EXISTS `menu_list`;
+CREATE TABLE `menu_list`  (
+  `Id` int(11) NOT NULL,
+  `ParentId` int(11) NULL DEFAULT NULL,
+  `UpdateTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `CreateTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `MenuType` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `MenuName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `MenuCode` int(11) NULL DEFAULT NULL,
+  `Path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `Icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `Order` int(11) NULL DEFAULT NULL,
+  `Component` int(11) NULL DEFAULT NULL,
+  `Children` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of menu_list
+-- ----------------------------
+INSERT INTO `menu_list` VALUES (111, 0, '2023-11-16 12:00:00 111', '2023-11-16 12:00:00 111', '1', '用户管理', NULL, 'user', 'user', 1, NULL, NULL);
+INSERT INTO `menu_list` VALUES (222, 0, '2023-11-16 12:00:00 111', '2023-11-16 12:00:00 111', '1', '群里管理', NULL, 'group', 'ChatLineRound', 1, NULL, NULL);
+INSERT INTO `menu_list` VALUES (333, 0, '2023-11-16 12:00:00 111', '2023-11-16 12:00:00 111', '1', '系统设置', NULL, 'system', 'Tools', 1, NULL, NULL);
+INSERT INTO `menu_list` VALUES (1111, 111, '2023-11-16 12:00:00 111', '2023-11-16 12:00:00 111', '1', '用户列表', NULL, '/user/userList', NULL, 1, NULL, NULL);
+INSERT INTO `menu_list` VALUES (1112, 111, '2023-11-16 12:00:00 111', '2023-11-16 12:00:00 111', '1', '用户管理', NULL, '/user/userManager', NULL, 1, NULL, NULL);
+INSERT INTO `menu_list` VALUES (2221, 222, '2023-11-16 12:00:00 111', '2023-11-16 12:00:00 111', '1', '群组列表', NULL, '/group/groupList', NULL, 1, NULL, NULL);
+INSERT INTO `menu_list` VALUES (2222, 222, '2023-11-16 12:00:00 111', '2023-11-16 12:00:00 111', '1', '群组管理', NULL, '/group/groupManager', NULL, 1, NULL, NULL);
+INSERT INTO `menu_list` VALUES (3331, 333, '2023-11-16 12:00:00 111', '2023-11-16 12:00:00 111', '1', '背景', NULL, '/system/systemSetting', NULL, 1, NULL, NULL);
+INSERT INTO `menu_list` VALUES (3332, 333, '2023-11-16 12:00:00 111', '2023-11-16 12:00:00 111', '1', '关于', NULL, '/system/about', NULL, 1, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for personal_chat_messages
+-- ----------------------------
+DROP TABLE IF EXISTS `personal_chat_messages`;
+CREATE TABLE `personal_chat_messages`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '唯一标识ID',
+  `msg_id` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '消息ID',
+  `sender_id` int(11) NULL DEFAULT NULL COMMENT '发送者用户ID',
+  `sender_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发送者用户',
+  `receiver_id` int(11) NULL DEFAULT NULL COMMENT '接收者用户ID',
+  `receiver_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '接收者用户',
+  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '消息内容',
+  `send_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发送时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `sender_id`(`sender_id`) USING BTREE,
+  INDEX `receiver_id`(`receiver_id`) USING BTREE,
+  INDEX `msg_id`(`msg_id`) USING BTREE,
+  CONSTRAINT `personal_chat_messages_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `personal_chat_messages_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of personal_chat_messages
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for userinfo
+-- ----------------------------
+DROP TABLE IF EXISTS `userinfo`;
+CREATE TABLE `userinfo`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `UserName` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `UserLoginName` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `PassWord` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `Notice` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `MacAddress` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `LoginTime` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `ParentDeptID` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of userinfo
+-- ----------------------------
+INSERT INTO `userinfo` VALUES (1, 'ceshi1', 'ceshi1', '123456', '1', 'dddddd', '1', 1);
+INSERT INTO `userinfo` VALUES (2, 'ceshi2', 'ceshi2', '123456', '1', 'dddddd', '1', 2);
+INSERT INTO `userinfo` VALUES (3, 'ceshi3', 'ceshi3', '123456', '1', 'dddddd', '1', 1);
+INSERT INTO `userinfo` VALUES (4, 'ceshi4', 'ceshi4', '123456', '1', 'dddddd', '1', 3);
+INSERT INTO `userinfo` VALUES (5, 'ceshi5', 'ceshi5', '123456', '1', 'dddddd', '1', 4);
+INSERT INTO `userinfo` VALUES (6, 'ceshi6', 'ceshi6', '123456', '1', 'dddddd', '1', 2);
+INSERT INTO `userinfo` VALUES (7, 'ceshi7', 'ceshi7', '123456', '1', 'dddddd', '1', 5);
+INSERT INTO `userinfo` VALUES (8, 'ceshi8', 'ceshi8', '123456', '1', 'dddddd', '1', 1);
+INSERT INTO `userinfo` VALUES (9, 'ceshi9', 'ceshi9', '123456', '1', 'dddddd', '1', 1);
+INSERT INTO `userinfo` VALUES (10, 'ceshi10', 'ceshi10', '123456', '1', 'dddddd', '1', 1);
+INSERT INTO `userinfo` VALUES (11, 'test', 'test', 'test', '1', 'dddddd', '1', 1);
+INSERT INTO `userinfo` VALUES (12, 'test1', 'test1', 'test1', '1', 'dddddd', '1', 1);
+
+-- ----------------------------
+-- Table structure for users
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
+  `login_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登录名',
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
+  `last_login` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '上次登录时间',
+  `dept_id` int(11) NULL DEFAULT NULL COMMENT '群组ID',
+  `permission_level` int(11) NULL DEFAULT NULL COMMENT '权限等级',
+  `created_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+  `creator_id` int(11) NULL DEFAULT NULL COMMENT '创建者ID',
+  `phone_number` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
+  `email` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `head_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像地址',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `id`(`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 88880013 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
+INSERT INTO `users` VALUES (88880000, '管理员', 'admin', '123', '0', 1, 1, '2023:8:25-15:19:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880001, '王科雷', 'wkl', '123', '0', 1, 1, '2023:8:23-16:37:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880002, '李惠涛', 'lht', '123', '0', 1, 1, '2023:8:23-16:37:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880003, '章学勇', 'zxy', '123', '0', 2, 1, '2023:8:23-16:37:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880004, '吴展浩', 'wzh', '123', '0', 2, 1, '2023:8:23-16:37:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880005, '甄业鑫', 'zyx', '123', '0', 3, 1, '2023:8:23-16:37:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880006, '王永明', 'wym', '123', '0', 4, 1, '2023:8:23-16:37:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880007, '朱薛', 'zx', '123', '0', 5, 1, '2023:8:23-16:37:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880008, '孙磊', 'sl', '123', '0', 1, 1, '2023:8:24-15:19:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880009, '陈鹏杰', 'cpj', '123', '0', 1, 1, '2023:8:24-15:19:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880010, '李欢', 'lh', '123', '0', 1, 1, '2023:8:24-15:19:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880011, '赵伟', 'zw', '123', '0', 1, 1, '2023:8:24-15:19:00', 1, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (88880012, '味丰源', 'wfy', '123', '0', 1, 1, '2023:8:24-15:19:00', 1, NULL, NULL, NULL);
+
+SET FOREIGN_KEY_CHECKS = 1;

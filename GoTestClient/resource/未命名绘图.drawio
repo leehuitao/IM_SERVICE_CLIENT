@@ -1,0 +1,215 @@
+<mxfile host="app.diagrams.net" modified="2024-03-18T04:28:03.722Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="5Tam_aOfLL31HOx9qnb_" version="24.0.7" type="github">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="1687" dy="868" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="glpAk6ASByuYAt4vFVGX-0" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-1" target="glpAk6ASByuYAt4vFVGX-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-1" value="创建群组" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="80" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-2" value="Yes" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-4" target="glpAk6ASByuYAt4vFVGX-8">
+          <mxGeometry y="20" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-4" target="glpAk6ASByuYAt4vFVGX-5">
+          <mxGeometry y="10" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-4" value="获取群组名和&lt;div&gt;自动邀请的成员&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;shadow=0;fontFamily=Helvetica;fontSize=12;align=center;strokeWidth=1;spacing=6;spacingTop=-4;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="150" y="170" width="140" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-5" value="插入mysql数据库，创建mongo对应的聊天记录表，群组名称为群组ID&lt;div&gt;群组group_table包括名称，公告，创建者&lt;/div&gt;&lt;div&gt;数据库（mysql:&lt;span style=&quot;background-color: initial;&quot;&gt;group_table，group_users_table,group_files_table,group_msg_table&lt;/span&gt;&lt;/div&gt;&lt;div&gt;Mongo:&lt;span style=&quot;background-color: initial;&quot;&gt;group_notice_table）&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="480" y="180" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-6" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-8" target="glpAk6ASByuYAt4vFVGX-9">
+          <mxGeometry x="0.3429" y="20" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-7" value="Text" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="glpAk6ASByuYAt4vFVGX-6">
+          <mxGeometry x="0.2857" y="-3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-8" value="返回创建成功" style="rhombus;whiteSpace=wrap;html=1;shadow=0;fontFamily=Helvetica;fontSize=12;align=center;strokeWidth=1;spacing=6;spacingTop=-4;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="170" y="340" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-9" value="通知被邀请的人员" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="490" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-10" value="邀请用户" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="590" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-11" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-10" target="glpAk6ASByuYAt4vFVGX-12">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="350" y="450" as="sourcePoint" />
+            <mxPoint x="430" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-12" value="通知被邀请人" style="rhombus;whiteSpace=wrap;html=1;shadow=0;fontFamily=Helvetica;fontSize=12;align=center;strokeWidth=1;spacing=6;spacingTop=-4;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="170" y="710" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-13" value="同意" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-12">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="230" y="300" as="sourcePoint" />
+            <mxPoint x="220" y="860" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-14" value="拒绝&lt;div&gt;&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-12">
+          <mxGeometry y="20" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="230" y="800" as="sourcePoint" />
+            <mxPoint x="360" y="750" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-15" value="数据库入表" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="860" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-16" value="通知所有群里的成员" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="960" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-17" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-15" target="glpAk6ASByuYAt4vFVGX-16">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="230" y="800" as="sourcePoint" />
+            <mxPoint x="230" y="870" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-18" value="通知邀请人拒绝" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="360" y="730" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-19" value="发送消息" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="130" y="1280" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-20" value="写入mongo、mysql" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="130" y="1350" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-21" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-19" target="glpAk6ASByuYAt4vFVGX-20">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="200" y="1140" as="sourcePoint" />
+            <mxPoint x="200" y="1200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-22" value="通知所有在线的群成员" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="120" y="1440" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-23" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-20" target="glpAk6ASByuYAt4vFVGX-22">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="80" y="1380" as="sourcePoint" />
+            <mxPoint x="140" y="1380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-24" value="客户端获取消息" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="120" y="1530" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-25" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-22" target="glpAk6ASByuYAt4vFVGX-24">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="200" y="1400" as="sourcePoint" />
+            <mxPoint x="200" y="1450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-26" value="下载共享文件" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="624" y="1350" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-27" value="获取文件服务地址" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="624" y="1420" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-28" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-26" target="glpAk6ASByuYAt4vFVGX-27">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="694" y="1210" as="sourcePoint" />
+            <mxPoint x="694" y="1270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-29" value="下载文件" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="614" y="1492" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-30" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-27" target="glpAk6ASByuYAt4vFVGX-29">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="574" y="1450" as="sourcePoint" />
+            <mxPoint x="634" y="1450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-31" value="通知所有在线的群成员" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="614" y="1570" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-32" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-29" target="glpAk6ASByuYAt4vFVGX-31">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="694" y="1470" as="sourcePoint" />
+            <mxPoint x="694" y="1520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-33" value="上传共享文件" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="424" y="1350" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-34" value="获取文件服务地址" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="424" y="1420" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-35" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-33" target="glpAk6ASByuYAt4vFVGX-34">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="494" y="1210" as="sourcePoint" />
+            <mxPoint x="494" y="1270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-36" value="上传文件到服务器" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="414" y="1492" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-37" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-34" target="glpAk6ASByuYAt4vFVGX-36">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="374" y="1450" as="sourcePoint" />
+            <mxPoint x="434" y="1450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-38" value="通知所有在线的群成员" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="414" y="1570" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-39" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-36" target="glpAk6ASByuYAt4vFVGX-38">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="494" y="1470" as="sourcePoint" />
+            <mxPoint x="494" y="1520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-40" value="退出群" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="624" y="740" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-41" value="发送退出的指令" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="624" y="810" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-42" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-40" target="glpAk6ASByuYAt4vFVGX-41">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="694" y="600" as="sourcePoint" />
+            <mxPoint x="694" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-43" value="" style="rounded=0;html=1;jettySize=auto;orthogonalLoop=1;fontSize=11;endArrow=block;endFill=0;endSize=8;strokeWidth=1;shadow=0;labelBackgroundColor=none;edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="glpAk6ASByuYAt4vFVGX-41" target="glpAk6ASByuYAt4vFVGX-44">
+          <mxGeometry x="-0.4475" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="574" y="840" as="sourcePoint" />
+            <mxPoint x="684" y="950" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-44" value="通知所有在线的群成员" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="614" y="880" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="glpAk6ASByuYAt4vFVGX-45" value="群组指令分为两种&lt;div&gt;1.只需要在线人员接收的，例如：人员进群、离开、文件上传成功&lt;/div&gt;&lt;div&gt;2.所有人员都需要的&amp;nbsp; 例如：聊天消息&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="380" y="40" width="320" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

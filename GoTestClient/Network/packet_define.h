@@ -172,6 +172,14 @@ static QString createUuid(){
 
 }
 
+struct GroupStruct{
+    QString groupID     ;
+    QString groupName   ;
+    QString announcement;
+    QString createdAt   ;
+    QString creatorID   ;
+};
+
 struct GroupBody {
     QString         MsgId         ;
     int             UserId        ;

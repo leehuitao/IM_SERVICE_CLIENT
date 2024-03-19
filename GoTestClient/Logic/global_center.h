@@ -78,6 +78,8 @@ public:
     void showAudioUI(MsgBody qbody);
     //---------------------- 群组相关------------------------
     void createGroup(GroupBody body);
+
+    void slotGetGroups();
 private:
     static GlobalCenter* _instance;
     explicit GlobalCenter(QObject *parent = nullptr);
@@ -194,6 +196,8 @@ signals:
     void signStopVideo();
 
     void signCreateGroup(GroupBody body);
+
+    void signRecvGroups(QList<GroupStruct>);
 public slots:
 
     void slotLoginStatus(int status,QString str);
@@ -227,6 +231,8 @@ public slots:
     void slotGetOrg(QJsonDocument json);
 
     void slotGetUserOrg(QJsonDocument json);
+
+    void slotRecvGroups(QList<GroupStruct>);
 
     void slotRecvFileProgress(FileBody body);
 

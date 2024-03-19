@@ -10,6 +10,7 @@ HEADERS += \
     $$PWD/LhtTcpClient/Handle/handle/get_offline_msg_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_online_user_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_org_handle.h \
+    $$PWD/LhtTcpClient/Handle/handle/get_user_groups_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_user_head_image_data_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_user_org_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_video_mqtt_addr_handle.h \

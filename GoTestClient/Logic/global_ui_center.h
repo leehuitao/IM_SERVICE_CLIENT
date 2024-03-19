@@ -83,6 +83,7 @@ public slots:
     void groupListWidgetItemClicked(QString groupId);
     void groupDoubleClicked(const QModelIndex &index);
     void groupClicked(const QModelIndex &index);
+    void slotRecvGroups(QList<GroupStruct>);
     //----------------文件相关----------------
     void slotRecvFileProgress(FileBody bodyf);
     void slotSendFileProgress(FileBody bodyf);

@@ -42,12 +42,24 @@ func databaseInit() {
 func InsertLht(sql string) error {
 	rows, _ := dbPool.Query(sql)
 	if rows != nil {
-		err := rows.Close()
-		if err != nil {
-			return err
-		} //释放连接
+		//err := rows.Close()
+		//if err != nil {
+		//	return err
+		//} //释放连接
 	}
 	return nil
+}
+
+func GetGroups(sql string) *sql.Rows {
+	rows, _ := dbPool.Query(sql)
+	return rows
+	//if rows != nil {
+	//	err := rows.Close()
+	//	if err != nil {
+	//		return nil
+	//	} //释放连接
+	//}
+	//return rows
 }
 
 // Insert 外部调用函数

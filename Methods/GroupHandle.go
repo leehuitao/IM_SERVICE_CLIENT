@@ -3,6 +3,7 @@ package Methods
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 	"testserver/DBIO/MysqlManager"
@@ -54,7 +55,7 @@ func CreateGroup(pack *PackManager.Pack, client *TcpClient) (requestPack *PackMa
 	pack.Body, _ = json.Marshal(groupBody)
 	pack.Header.Method = PackManager.GroupInviteMember
 	data := createSendBuffer(*pack)
-	for it := range intArray {
+	for _, it := range intArray {
 		if it >= 88880000 {
 			queryStr = fmt.Sprintf(MysqlManager.AddGroupMemberQuery, uuid, it)
 			err = MysqlManager.InsertLht(queryStr)
@@ -157,7 +158,6 @@ func GroupInviteMember(pack *PackManager.Pack, client *TcpClient) (requestPack *
 		}
 	}
 	//返回包
-	pack.Body, _ = json.Marshal(groupBody)
 	if client.conn != nil {
 		client.conn.Write(data) //response
 	}
@@ -178,17 +178,53 @@ func GroupSetAdmin(pack *PackManager.Pack, client *TcpClient) (requestPack *Pack
 	return pack
 }
 
+type Group struct {
+	GroupID      string `json:"group_id"`
+	GroupName    string `json:"group_name"`
+	Announcement string `json:"announcement"`
+	CreatedAt    string `json:"created_at"`
+	CreatorID    string `json:"creator_id"`
+}
+
 // GetUserGroupList 获取群组列表
 func GetUserGroupList(pack *PackManager.Pack, client *TcpClient) (requestPack *PackManager.Pack) {
-	loginBody := PackManager.GroupBody{}
-	if err := json.Unmarshal(pack.Body, &loginBody); err != nil {
+	groupBody := PackManager.GroupBody{}
+	if err := json.Unmarshal(pack.Body, &groupBody); err != nil {
 		return nil
 	}
-	status := GlobalCache.GlobalUserLoginStatus.CheckUserIsOnline(loginBody.UserId)
+	status := GlobalCache.GlobalUserLoginStatus.CheckUserIsOnline(groupBody.UserId)
 	if !status {
 		return nil
 	}
+	queryStr := fmt.Sprintf(MysqlManager.GetGroupsQuery, groupBody.UserId)
+	rows := MysqlManager.GetGroups(queryStr)
+	var groups []Group
+	for rows.Next() {
+		var g Group
 
+		if err := rows.Scan(&g.GroupID, &g.GroupName, &g.Announcement, &g.CreatedAt, &g.CreatorID); err != nil {
+			log.Fatal(err)
+		}
+
+		groups = append(groups, g)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	// 序列化groups切片为JSON
+	jsonGroups, err := json.Marshal(groups)
+	if err != nil {
+		log.Fatal(err)
+	}
+	groupBody.Msg = string(jsonGroups)
+	//返回包
+	pack.Body, _ = json.Marshal(groupBody)
+	data := createSendBuffer(*pack)
+	if client.conn != nil {
+		client.conn.Write(data) //response
+	}
 	return pack
 }
 

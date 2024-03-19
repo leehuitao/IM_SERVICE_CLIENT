@@ -67,6 +67,7 @@ void GlobalUiCenter::initUi()
     connect(GlobalCenter::getInstance(),&GlobalCenter::signRemoteImageReadReady,this,&GlobalUiCenter::slotRemoteImageReadReady,Qt::QueuedConnection);
     connect(GlobalCenter::getInstance(),&GlobalCenter::signCloseFile,this,&GlobalUiCenter::slotCloseFile,Qt::QueuedConnection);
     connect(GlobalCenter::getInstance(),&GlobalCenter::signCreateGroup,this,&GlobalUiCenter::slotCreateGroup,Qt::QueuedConnection);
+    connect(GlobalCenter::getInstance(),&GlobalCenter::signRecvGroups,this,&GlobalUiCenter::slotRecvGroups,Qt::QueuedConnection);
 
     GlobalCenter::getInstance()->initConnection();
 
@@ -314,6 +315,7 @@ void GlobalUiCenter::groupListWidgetItemClicked(QListWidgetItem *item)
 
 void GlobalUiCenter::groupListWidgetItemClicked(QString groupId)
 {
+    m_currentChatType = 2;
     // 隐藏所有的聊天界面
     for (int i = m_messageInterface->count() - 1; i >= 0; --i) {
         auto item = m_messageInterface->itemAt(i);
@@ -365,6 +367,18 @@ void GlobalUiCenter::groupDoubleClicked(const QModelIndex &index)
 
 void GlobalUiCenter::groupClicked(const QModelIndex &index)
 {
+
+}
+
+void GlobalUiCenter::slotRecvGroups(QList<GroupStruct> g)
+{
+    GroupBody body;
+    for(auto it : g){
+        body.GroupId = it.groupID;
+        body.GroupName = it.groupName;
+        body.GroupInfo = it.announcement;
+        m_groupWidget->slotAddNewGroup(body);
+    }
 
 }
 
@@ -554,6 +568,8 @@ void GlobalUiCenter::slotGetUserOrg(QJsonDocument json)
 
     m_groupWidget->setCurrentOrgDept(m_orgMainWidget->getCurrentOrgDept());
     m_groupWidget->setCurrentOrgUser(m_orgMainWidget->getCurrentOrgUser());
+    //继续获取本人的所有群组
+    GlobalCenter::getInstance()->slotGetGroups();
 }
 
 void GlobalUiCenter::getMsg(QString msgid)

@@ -34,6 +34,7 @@
 #include "handle/upload_user_head_image_handle.h"
 #include "handle/group_invatation_handle.h"
 #include "handle/create_group_handle.h"
+#include "handle/get_user_groups_handle.h"
 HandlerManager * HandlerManager::g_instance = new HandlerManager;
 
 HandlerManager::HandlerManager(QObject *parent) : QObject(parent)
@@ -126,6 +127,7 @@ void HandlerManager::initGroupMethod()
 {
     InitHandler<CreateGroupHandle>(CreateGroup);
     InitHandler<GroupInvitationHandle>(GroupInviteMember);
+    InitHandler<GetUserGroupsHandle>(GetUserGroupList);
 }
 
 void HandlerManager::initSendFileMethod()

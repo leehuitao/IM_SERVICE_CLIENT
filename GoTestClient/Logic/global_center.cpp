@@ -8,17 +8,17 @@ GlobalCenter* GlobalCenter::_instance = new  GlobalCenter;
 
 void GlobalCenter::initTcp(QString ip, int port)
 {
-//    if(m_loginStatus == 0){
-        LoginBody body;
-        body.UserLoginName   = AppCache::Instance()->m_userLoginName;
-        body.PassWord       = AppCache::Instance()->m_passWord;
-        body.LoginTime      = getCurrentTimeSeconds();
-        body.MacAddress     = getHostMacAddress();
-        body.Notice         = 0;
-        signLogin(ip,port,body);
-//    }else{
+    //    if(m_loginStatus == 0){
+    LoginBody body;
+    body.UserLoginName   = AppCache::Instance()->m_userLoginName;
+    body.PassWord       = AppCache::Instance()->m_passWord;
+    body.LoginTime      = getCurrentTimeSeconds();
+    body.MacAddress     = getHostMacAddress();
+    body.Notice         = 0;
+    signLogin(ip,port,body);
+    //    }else{
 
-//    }
+    //    }
 }
 
 void GlobalCenter::setCurrentUser(int userId, QString userName)
@@ -255,6 +255,11 @@ void GlobalCenter::slotGetUserOrg(QJsonDocument json)
     signGetUserOrg(json);
 }
 
+void GlobalCenter::slotRecvGroups(QList<GroupStruct> g)
+{
+    signRecvGroups(g);
+}
+
 void GlobalCenter::slotRecvFileProgress(FileBody body)
 {
     signRecvFileProgress(body);
@@ -282,7 +287,7 @@ void GlobalCenter::slotFileCmd(QString path, bool type, int cmd)
         signSendFileData(FileCancelPack,body);
         //关闭文件列表
         signCloseFile(body);
-//        m_fileClient->
+        //        m_fileClient->
 
     }
     else
@@ -754,4 +759,11 @@ void GlobalCenter::showAudioUI(MsgBody qbody)
 void GlobalCenter::createGroup(GroupBody body)
 {
     signSendGroupMsg(body,CreateGroup);
+}
+
+void GlobalCenter::slotGetGroups()
+{
+    GroupBody body;
+    body.UserId = AppCache::Instance()->m_userId;
+    signSendGroupMsg(body,GetUserGroupList);
 }

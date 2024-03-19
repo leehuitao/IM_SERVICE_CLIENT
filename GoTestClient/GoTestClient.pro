@@ -42,6 +42,7 @@ SOURCES += \
     Gui/ChatUi/send_text_edit.cpp \
     Gui/ChatUi/video_widget.cpp \
     Gui/ChatUi/voice_widget.cpp \
+    Gui/GroupUi/create_group_dialog.cpp \
     Gui/GroupUi/group_main_widget.cpp \
     Gui/HeadUi/head_dialog.cpp \
     Gui/HeadUi/head_widget.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     Gui/ChatUi/send_text_edit.h \
     Gui/ChatUi/video_widget.h \
     Gui/ChatUi/voice_widget.h \
+    Gui/GroupUi/create_group_dialog.h \
     Gui/GroupUi/group_main_widget.h \
     Gui/HeadUi/head_dialog.h \
     Gui/HeadUi/head_widget.h \
@@ -107,6 +109,7 @@ FORMS += \
     Gui/ChatUi/msg_widget_item.ui \
     Gui/ChatUi/video_widget.ui \
     Gui/ChatUi/voice_widget.ui \
+    Gui/GroupUi/create_group_dialog.ui \
     Gui/GroupUi/group_main_widget.ui \
     Gui/HeadUi/head_dialog.ui \
     Gui/HeadUi/head_widget.ui \

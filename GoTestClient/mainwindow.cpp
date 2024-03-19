@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
     GlobalUiCenter::getInstance()->setHistoricalUserList(ui->msg_listWidget);
     GlobalUiCenter::getInstance()->setFileGridLayout(ui->gridLayout);
     GlobalUiCenter::getInstance()->setStackedWidget(ui->stackedWidget);
+    GlobalUiCenter::getInstance()->setGroupWidget(ui->group_widget);
     GlobalUiCenter::getInstance()->initUi();
 
     this->setMinimumWidth(1080);
@@ -162,7 +163,7 @@ void MainWindow::on_header_btn_clicked()
 void MainWindow::on_group_btn_clicked()
 {
 
-    ui->stackedWidget->setCurrentIndex(3);
+    ui->stackedWidget->setCurrentIndex(2);
 }
 
 void MainWindow::on_set_btn_clicked()

@@ -36,6 +36,13 @@ struct DeptStruct{
     int         ParentDeptId ;
     int         Level        ;
 };
+
+struct GroupInvitationStruct{
+    QString     GroupName;
+    QString     GroupInfo;
+    QList<int>  users;
+};
+
 class AppCache: public QObject
 {
 public:

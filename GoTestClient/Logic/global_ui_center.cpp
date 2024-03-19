@@ -428,6 +428,9 @@ void GlobalUiCenter::slotGetUserOrg(QJsonDocument json)
     m_orgMainWidget->slotGetUserOrg(json);
     getUserHeader(AppCache::Instance()->m_userId,AppCache::Instance()->m_userLoginName);
     drawHistoryLastMsg();
+
+    m_groupWidget->setCurrentOrgDept(m_orgMainWidget->getCurrentOrgDept());
+    m_groupWidget->setCurrentOrgUser(m_orgMainWidget->getCurrentOrgUser());
 }
 
 void GlobalUiCenter::getMsg(QString msgid)

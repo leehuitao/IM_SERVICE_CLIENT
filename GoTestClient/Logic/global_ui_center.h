@@ -11,6 +11,7 @@
 #include "Gui/HeadUi/head_widget.h"
 #include "Gui/OrgUi/org_main_widget.h"
 #include "Gui/HeadUi/head_widget.h"
+#include "Gui/GroupUi/group_main_widget.h"
 #include <QLayout>
 
 class GlobalUiCenter : public QObject
@@ -45,6 +46,9 @@ public:
     void setStackedWidget(QStackedWidget * ptr){
         m_stackedWidget =   ptr;
     }
+    void setGroupWidget(GroupMainWidget * ptr){
+        m_groupWidget =   ptr;
+    }
     void initUi();
 public slots:
     //----------------音视频相关----------------
@@ -72,6 +76,8 @@ public slots:
     void shakeWindow();
     void on_sendmsg_btn_clicked();
     void slotHasImag();
+    // ----------------群组相关----------------
+
     //----------------文件相关----------------
     void slotRecvFileProgress(FileBody bodyf);
     void slotSendFileProgress(FileBody bodyf);
@@ -118,6 +124,7 @@ private:
     VideoWidget*        m_videoWidget       = nullptr;
     InviteWidget*       m_inviteWidget      = nullptr;
     SettingDialog       *m_setDialog        = nullptr;
+    GroupMainWidget     *m_groupWidget      = nullptr;
     Sqlite              m_sql;
     QMap<int,FileWidget*>           m_fileWidgets;
 };

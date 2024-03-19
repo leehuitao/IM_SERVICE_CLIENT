@@ -39,6 +39,14 @@ public:
     QList<int> getAllUserIdList(){
         return m_userId2UiPointer.keys();
     }
+
+    QMap<int,QList<DeptStruct>> getCurrentOrgDept(){
+        return m_deptListMap;
+    }
+
+    QMap<int,QList<GlobalUserInfo>> getCurrentOrgUser(){
+        return m_userListMap;
+    }
 protected slots:
     void slotClicked(const QModelIndex &index);
 

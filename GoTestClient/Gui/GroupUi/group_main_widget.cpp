@@ -17,3 +17,14 @@ void GroupMainWidget::init()
 {
 
 }
+
+void GroupMainWidget::on_create_group_btn_clicked()
+{
+    CreateGroupDialog diaog;
+    diaog.setCurrentOrgDept(m_deptListMap);
+    diaog.setCurrentOrgUser(m_userListMap);
+    diaog.init();
+    if(diaog.exec()){
+        auto ret = diaog.getInvitationUsers();
+    }
+}

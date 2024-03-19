@@ -37,7 +37,7 @@ protected:
 
     void parseMsg(const QString & msg);
     void addAnimation(const QString& url, const QString& fileName);
-
+    virtual void focusOutEvent(QFocusEvent *e) override;
 public slots:
     void subAnimate(int);
 

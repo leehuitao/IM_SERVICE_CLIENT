@@ -10,7 +10,8 @@ MessageInterface::MessageInterface(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->listWidget->setStyleSheet("QListWidget::item:selected { background-color: transparent; }"
-                                  "QListWidget::item:hover { background-color: transparent; }");
+                                  "QListWidget::item:hover { background-color: transparent; }"
+                                  "QListWidget::item:focus {outline: none;}");
     initDB();
     this->setMinimumWidth(300);
 

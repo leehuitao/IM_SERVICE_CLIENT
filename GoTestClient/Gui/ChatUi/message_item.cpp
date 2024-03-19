@@ -12,7 +12,7 @@ MessageItem::MessageItem(QWidget *parent): QTextEdit(parent)
     // 设置背景为透明，以便自定义绘制
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_OpaquePaintEvent, false);
-
+    // 获取 MessageItem 中的 QTextEdit
 }
 
 void MessageItem::initMsg(const MsgBody &msg)
@@ -122,7 +122,7 @@ void MessageItem::parseMsg(const QString &source)
             int emjEndPos = temp.indexOf(EmjEnd);
             if (emjEndPos != -1) {
                 QString emjText = temp.mid(10 , emjEndPos - 10); // 获取emj名
-//                qDebug()<<"emjText = "<<emjText;
+                //                qDebug()<<"emjText = "<<emjText;
                 // 在这里处理表情文本 emjText
                 i += emjText.size() + 10 + 7; // Move i to the position after the "%$emjend"
                 // 将图像插入到文本编辑框
@@ -189,6 +189,27 @@ void MessageItem::addAnimation(const QString& url, const QString& fileName)
     //绑定帧切换信号槽
     connect(movie, SIGNAL(frameChanged(int)), this, SLOT(subAnimate(int)));
     movie->start();
+}
+
+void MessageItem::focusOutEvent(QFocusEvent *e)
+{
+    if (e->lostFocus()) {
+        // 将光标移动到文本末尾
+        QTextCursor cursor = this->textCursor();
+        cursor.movePosition(QTextCursor::End);
+        cursor.clearSelection(); // 清除选中文本
+        this->setTextCursor(cursor);
+
+        // 设置文本编辑器为只读状态
+        this->setReadOnly(true);
+
+        // 更新编辑器外观
+        this->viewport()->update();
+    }
+//    moveCursor(QTextCursor::End);
+//    unsetCursor();
+//    this->setReadOnly(true); // 设置为只读以隐藏光标
+    update();
 }
 void MessageItem::subAnimate(int a)
 {

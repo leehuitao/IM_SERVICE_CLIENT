@@ -29,6 +29,18 @@ void MsgWidgetItem::setUserInfo(QString name, int userid, QString avatarPath)
     ui->avatar_lab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); // 设置QLabel的大小策略
 }
 
+void MsgWidgetItem::setUserInfo(QString name, QString userid, QString avatarPath)
+{
+    m_groupName = name;
+    m_groupid = userid;
+    ui->username_lab->setText(name);
+    m_avatarPath = avatarPath;
+    m_primitive = QPixmap(avatarPath);
+    ui->avatar_lab->setPixmap(m_primitive);
+    ui->avatar_lab->setScaledContents(true); // 设置以缩放内容以填充QLabel
+    ui->avatar_lab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); // 设置QLabel的大小策略
+}
+
 void MsgWidgetItem::setUserHead(QString avatarPath)
 {
     m_avatarPath = avatarPath;

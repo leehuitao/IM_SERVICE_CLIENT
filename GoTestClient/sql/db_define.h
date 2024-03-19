@@ -22,6 +22,9 @@
 
 #define SelectMsg "select * from HistoryMsg where (DstUserId = %1 and SendUserId = %2) or (DstUserId = %2 and SendUserId = %1) order by id DESC limit 20;"
 
+#define SelectGroupMsg "select * from HistoryGroupMsg where GroupId = '%1' order by id DESC limit 20;"
+
+
 #define SelectLastMsg "SELECT A.* "\
     "FROM HistoryMsg AS A "\
     "INNER JOIN ( "\

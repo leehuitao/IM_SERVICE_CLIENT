@@ -68,6 +68,7 @@ public:
     QString                 m_userHeadImagePath;
     QMap<int,QString>       m_headImagePath;
     QMap<int,LoginBody>     m_userInfos;
+    QMap<QString,GroupBody>     m_groupInfos;
     QString m_fileSavePath="D:/ceshi/";
 private:
     AppCache();

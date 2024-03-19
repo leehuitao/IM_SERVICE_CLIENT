@@ -23,7 +23,7 @@ void GroupInvitationHandle::HandleMessage(NewTcpProtocolPtr msg)
     GroupBody body;
     body = PacketProcess::parseGroupBodyPack(msg.get()->data);
     if(AppCache::Instance()->m_userId == body.UserId){
-
+        GlobalCenter::getInstance()->slotCreateGroup(body);
     }else{
 
     }

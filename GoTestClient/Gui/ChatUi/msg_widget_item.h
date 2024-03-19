@@ -17,6 +17,8 @@ public:
 
     void setUserInfo(QString name, int userid ,QString avatarPath);
 
+    void setUserInfo(QString name, QString userid ,QString avatarPath);
+
     void setUserHead(QString avatarPath);
 
     void updateMsgInfo(const QString &msg, const QString &time);
@@ -30,7 +32,12 @@ public:
     int getUserId(){
         return m_userid;
     }
-
+    QString getGroupId(){
+        return m_groupid;
+    }
+    QString getGroupName(){
+        return m_groupName;
+    }
     QString getUserName(){
         return m_userName;
     }
@@ -43,6 +50,8 @@ private:
 
     QString     m_userName;
     int         m_userid;
+    QString     m_groupid;
+    QString     m_groupName;
     QString     m_avatarPath;
     QString     m_lastMsg;
     QString     m_lastMsgTime;

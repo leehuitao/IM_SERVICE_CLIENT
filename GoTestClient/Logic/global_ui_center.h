@@ -78,6 +78,11 @@ public slots:
     void slotHasImag();
     // ----------------群组相关----------------
     void createGroup(GroupBody);
+    void slotCreateGroup(GroupBody);
+    void groupListWidgetItemClicked(QListWidgetItem *item);
+    void groupListWidgetItemClicked(QString groupId);
+    void groupDoubleClicked(const QModelIndex &index);
+    void groupClicked(const QModelIndex &index);
     //----------------文件相关----------------
     void slotRecvFileProgress(FileBody bodyf);
     void slotSendFileProgress(FileBody bodyf);
@@ -113,6 +118,7 @@ private:
     MessageInterface *  m_currentMessageInterface = nullptr;
     QVBoxLayout *       m_messageInterface  = nullptr;
     QMap<int,MessageInterface*> m_messageInterfaceMap;
+    QMap<QString,MessageInterface*> m_groupInterfaceMap;
     SendTextEdit *      m_sendTextEdit      = nullptr;
     OrgMainWidget *     m_orgMainWidget     = nullptr;
     HeadWidget *        m_headWidget        = nullptr;
@@ -127,6 +133,7 @@ private:
     GroupMainWidget     *m_groupWidget      = nullptr;
     Sqlite              m_sql;
     QMap<int,FileWidget*>           m_fileWidgets;
+    int                 m_currentChatType;
 };
 
 #endif // GLOBALUICENTER_H

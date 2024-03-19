@@ -34,6 +34,11 @@ func CreateGroup(pack *PackManager.Pack, client *TcpClient) (requestPack *PackMa
 	if err != nil {
 		LogService.Logger.Error(err.Error())
 	}
+	queryStr = fmt.Sprintf(MysqlManager.AddGroupMemberQuery, uuid, groupBody.UserId)
+	err = MysqlManager.InsertLht(queryStr)
+	if err != nil {
+		LogService.Logger.Error(err.Error())
+	}
 	//2.人员表
 	var intArray []int
 	strArray := strings.Split(groupBody.SendUserName, ",")

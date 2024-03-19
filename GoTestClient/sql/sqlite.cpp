@@ -79,6 +79,32 @@ HistoryMsgList Sqlite::selectHistoryMsg(int sendUserId,int recvUserId)
     return list;
 }
 
+HistoryMsgList Sqlite::selectHistoryMsg(QString groupId)
+{
+    QSqlQuery query;
+    QString str = QString(SelectGroupMsg).arg(groupId);
+    qDebug()<<str;
+    query.exec(str);
+    HistoryMsgList list;
+    while(query.next()){
+        HistoryMsgStruct msg;
+        msg.id = query.value(0).toInt();
+        msg.MsgId = query.value(1).toString();
+        msg.SendUserId = query.value(2).toInt();
+        msg.SendUserName = query.value(3).toString();
+        msg.RecvUserId = query.value(4).toInt();
+        msg.RecvUserName = query.value(5).toString();
+        msg.SendTime = query.value(6).toString();
+        msg.MsgType = query.value(7).toInt();
+        msg.Content = query.value(8).toString();
+        msg.MsgStatus = query.value(9).toInt();
+        list.insert(0,msg);
+        qDebug()<<msg.Content;
+    }
+    qDebug()<<query.lastError()<<"str = "<<str;
+    return list;
+}
+
 HistoryMsgList Sqlite::selectHistoryLastMsg()
 {
     QSqlQuery query;

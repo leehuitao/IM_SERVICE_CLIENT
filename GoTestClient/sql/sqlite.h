@@ -23,6 +23,8 @@ public:
 
     HistoryMsgList selectHistoryMsg(int sendUserId,int recvUserId);
 
+    HistoryMsgList selectHistoryMsg(QString groupId);
+
     HistoryMsgList selectHistoryLastMsg();
 signals:
 

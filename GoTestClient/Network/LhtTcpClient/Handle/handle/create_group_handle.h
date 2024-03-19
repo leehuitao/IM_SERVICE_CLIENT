@@ -24,7 +24,7 @@ void CreateGroupHandle::HandleMessage(NewTcpProtocolPtr msg)
     GroupBody body;
     body = PacketProcess::parseGroupBodyPack(msg.get()->data);
     if(AppCache::Instance()->m_userId == body.UserId){//创建的返回包
-
+        GlobalCenter::getInstance()->slotCreateGroup(body);
     }else{
 
     }

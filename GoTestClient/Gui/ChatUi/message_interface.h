@@ -48,6 +48,8 @@ public:
 
     void listWidgetItemClicked(int userId,QString userName);
 
+    void listWidgetItemClicked(QString groupId);
+
 //    void slotUpdateMsgStatus(const MsgBody& body);
 
     void initDB();

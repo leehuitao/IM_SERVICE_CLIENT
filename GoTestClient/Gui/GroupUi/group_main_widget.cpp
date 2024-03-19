@@ -6,6 +6,9 @@ GroupMainWidget::GroupMainWidget(QWidget *parent) :
     ui(new Ui::GroupMainWidget)
 {
     ui->setupUi(this);
+
+    connect(ui->group_listWidget, SIGNAL(clicked(QModelIndex)),this, SIGNAL(groupClicked(QModelIndex)));
+    connect(ui->group_listWidget, SIGNAL(doubleClicked(QModelIndex)),this, SIGNAL(groupDoubleClicked(QModelIndex)));
 }
 
 GroupMainWidget::~GroupMainWidget()
@@ -16,6 +19,26 @@ GroupMainWidget::~GroupMainWidget()
 void GroupMainWidget::init()
 {
 
+}
+
+void GroupMainWidget::slotAddNewGroup(GroupBody body)
+{
+    AppCache::Instance()->m_groupInfos[body.GroupId] = body;
+    QListWidgetItem *item = new QListWidgetItem();
+    item->setWhatsThis(body.GroupName);
+    item->setToolTip(body.GroupId);
+    item->setData(Qt::UserRole, body.GroupId);
+    ui->group_listWidget->insertItem(0,item);
+    auto w = new MsgWidgetItem;
+
+    m_userid2UserChat[body.GroupId] =  w;
+
+    w->setUserInfo(body.GroupName,body.GroupId,m_headImagePath);
+
+//    w->updateMsgInfo(body.Msg,body.SendTime);
+    item->setSizeHint(w->minimumSizeHint());
+    ui->group_listWidget->setItemWidget(item,w);
+    ui->group_listWidget->setCurrentItem(item);
 }
 
 void GroupMainWidget::on_create_group_btn_clicked()
@@ -38,4 +61,9 @@ void GroupMainWidget::on_create_group_btn_clicked()
         body.SendUserName = users;
         GlobalUiCenter::getInstance()->createGroup(body);
     }
+}
+
+void GroupMainWidget::on_group_listWidget_itemClicked(QListWidgetItem *item)
+{
+    GlobalUiCenter::getInstance()->groupListWidgetItemClicked(item);
 }

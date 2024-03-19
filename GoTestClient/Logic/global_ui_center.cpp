@@ -29,11 +29,15 @@ void GlobalUiCenter::initUi()
         }
     });
 
-    connect(this,&GlobalUiCenter::signUpdataUnread,m_historicalUserList,&HistoricalUserList::slotUpdataUnread);
+    connect(this,SIGNAL(signUpdataUnread(int,int)) ,m_historicalUserList,SLOT(slotUpdataUnread(int,int)));
     connect(m_historicalUserList,&HistoricalUserList::signCurrentUserListUpdate,this,&GlobalUiCenter::slotCurrentUserListUpdate);
 
     connect(m_orgMainWidget, SIGNAL(clicked(QModelIndex)),this, SLOT(clicked(QModelIndex)));
     connect(m_orgMainWidget, SIGNAL(doubleClicked(QModelIndex)),this, SLOT(doubleClicked(QModelIndex)));
+
+
+    connect(m_groupWidget, SIGNAL(groupClicked(QModelIndex)),this, SLOT(groupClicked(QModelIndex)));
+    connect(m_groupWidget, SIGNAL(groupDoubleClicked(QModelIndex)),this, SLOT(groupDoubleClicked(QModelIndex)));
 
     connect(ScreenWidget::Instance(),&ScreenWidget::signHasImag,this,&GlobalUiCenter::slotHasImag);
 
@@ -62,6 +66,7 @@ void GlobalUiCenter::initUi()
     connect(GlobalCenter::getInstance(),&GlobalCenter::signImageReadReady,      this,&GlobalUiCenter::slotImageReadReady,Qt::QueuedConnection);
     connect(GlobalCenter::getInstance(),&GlobalCenter::signRemoteImageReadReady,this,&GlobalUiCenter::slotRemoteImageReadReady,Qt::QueuedConnection);
     connect(GlobalCenter::getInstance(),&GlobalCenter::signCloseFile,this,&GlobalUiCenter::slotCloseFile,Qt::QueuedConnection);
+    connect(GlobalCenter::getInstance(),&GlobalCenter::signCreateGroup,this,&GlobalUiCenter::slotCreateGroup,Qt::QueuedConnection);
 
     GlobalCenter::getInstance()->initConnection();
 
@@ -120,20 +125,31 @@ void GlobalUiCenter::on_msg_listWidget_itemClicked(QListWidgetItem *item)
                 MsgWidgetItem *wid = qobject_cast<MsgWidgetItem*>(widgetItem);
                 auto currentChoiseUser = wid->getUserName();
                 auto currentChoiseUserId = wid->getUserId();
+                if(!currentChoiseUser.isEmpty()){
+                    m_currentChatType = 1;
+                    wid->clearUnread();
+                    wid->updateUnread(0);
+                    msgListWidgetItemClicked(currentChoiseUserId,currentChoiseUser);
+                    int after = GlobalCenter::getInstance()->currentUserId();
+                    if(m_fileWidgets[after]->getRemainderFileCount()>0)
+                    {
+                        m_fileWidgets[after]->show();
+                    }
+                }else{
+                    m_currentChatType = 2;
+                    auto currentChoiseGroupId = wid->getGroupId();
+                    auto currentChoiseGroupName = wid->getGroupName();
+                    wid->clearUnread();
+                    wid->updateUnread(0);
+                    groupListWidgetItemClicked(currentChoiseGroupId);
+                }
 
-                wid->clearUnread();
-                wid->updateUnread(0);
-                msgListWidgetItemClicked(currentChoiseUserId,currentChoiseUser);
             }
         }
     }
 
 //    m_currentMessageInterface->listWidgetItemClicked(item);
-    int after = GlobalCenter::getInstance()->currentUserId();
-    if(m_fileWidgets[after]->getRemainderFileCount()>0)
-    {
-        m_fileWidgets[after]->show();
-    }
+
 }
 
 void GlobalUiCenter::on_file_btn_clicked()
@@ -199,13 +215,24 @@ void GlobalUiCenter::on_sendmsg_btn_clicked()
         }
         if(it == " " || it.isEmpty())
             continue;
-        auto body = GlobalCenter::getInstance()->sendMsg(fMsg);
-        m_historicalUserList->updateMsgItemSort(GlobalCenter::getInstance()->currentUserId());
-        m_sql.insertHistoryMsg(body);
-        m_historicalUserList->updateMsgInfo(body.DstUserId,body.Msg,body.SendTime);
-        if(m_currentMessageInterface){
-            m_currentMessageInterface->addNewMsg(body);
+        if(m_currentChatType == 1){
+            auto body = GlobalCenter::getInstance()->sendMsg(fMsg);
+            m_historicalUserList->updateMsgItemSort(GlobalCenter::getInstance()->currentUserId());
+            m_sql.insertHistoryMsg(body);
+            m_historicalUserList->updateMsgInfo(body.DstUserId,body.Msg,body.SendTime);
+            if(m_currentMessageInterface){
+                m_currentMessageInterface->addNewMsg(body);
+            }
+        }else if(m_currentChatType == 2){
+            auto body = GlobalCenter::getInstance()->sendMsg(fMsg,0,SendGroupMsg);
+            m_historicalUserList->updateMsgItemSort(GlobalCenter::getInstance()->currentUserId());
+            m_sql.insertHistoryMsg(body);
+            m_historicalUserList->updateMsgInfo(body.DstUserId,body.Msg,body.SendTime);
+            if(m_currentMessageInterface){
+                m_currentMessageInterface->addNewMsg(body);
+            }
         }
+
 //        m_messageInterface->addNewMsg(body);
 
     }
@@ -248,6 +275,97 @@ void GlobalUiCenter::slotHasImag()
 void GlobalUiCenter::createGroup(GroupBody b)
 {
     GlobalCenter::getInstance()->createGroup(b);
+}
+
+void GlobalUiCenter::slotCreateGroup(GroupBody b)
+{
+    m_groupWidget->slotAddNewGroup(b);
+}
+
+void GlobalUiCenter::groupListWidgetItemClicked(QListWidgetItem *item)
+{
+    m_currentChatType = 2;
+    QString before = GlobalCenter::getInstance()->currentGroupId();
+
+    QListWidget *widget = item->listWidget();
+    if (widget) {
+        // 获取与QListWidgetItem关联的控件
+        QWidget *widgetItem = widget->itemWidget(item);
+        if (widgetItem) {
+            // 检查控件类型并执行相应操作
+            if (qobject_cast<MsgWidgetItem*>(widgetItem)) {
+                MsgWidgetItem *wid = qobject_cast<MsgWidgetItem*>(widgetItem);
+                auto currentChoiseGroup = wid->getGroupId();
+
+                wid->clearUnread();
+                wid->updateUnread(0);
+                groupListWidgetItemClicked(currentChoiseGroup);
+            }
+        }
+    }
+//文件相关的先不做，先做消息
+//    m_currentMessageInterface->listWidgetItemClicked(item);
+//    int after = GlobalCenter::getInstance()->currentUserId();
+//    if(m_fileWidgets[after]->getRemainderFileCount()>0)
+//    {
+//        m_fileWidgets[after]->show();
+    //    }
+}
+
+void GlobalUiCenter::groupListWidgetItemClicked(QString groupId)
+{
+    // 隐藏所有的聊天界面
+    for (int i = m_messageInterface->count() - 1; i >= 0; --i) {
+        auto item = m_messageInterface->itemAt(i);
+        if (item->widget()) { // 确保这是一个小部件
+            auto widget = item->widget();
+            if (qobject_cast<MessageInterface *>(widget)) {
+                widget->hide();
+            }
+        }
+    }
+
+    if(m_groupInterfaceMap.find(groupId) == m_groupInterfaceMap.end()){//只在第一次点击的时候 载入一次数据库数据
+        m_currentMessageInterface  = new MessageInterface();
+        m_groupInterfaceMap[groupId] = m_currentMessageInterface;
+        m_messageInterface->addWidget(m_currentMessageInterface);
+        m_groupInterfaceMap[groupId]->listWidgetItemClicked(groupId);
+
+
+    }else{
+        GlobalCenter::getInstance()->setCurrentGroupId(groupId);
+        m_currentMessageInterface = m_groupInterfaceMap[groupId];
+        m_currentMessageInterface->show();
+//        m_messageInterface->addWidget(m_currentMessageInterface);
+    }
+
+}
+
+void GlobalUiCenter::groupDoubleClicked(const QModelIndex &index)
+{
+    auto currentChoiseGroup = index.data(Qt::WhatsThisRole).toString();
+    auto currentChoiseGroupId = index.data(Qt::ToolTipRole).toString();
+    if(currentChoiseGroupId.isEmpty())
+        return;
+    AppCache::Instance()->m_msgSize = 0;
+    bool ret = m_historicalUserList->checkUserIsExists(currentChoiseGroupId);//判断是否已经存在了
+    if(!ret){
+        m_historicalUserList->addNewUser(currentChoiseGroupId,currentChoiseGroup);
+    }else{
+        m_historicalUserList->setCurrentGroup(currentChoiseGroupId);
+    }
+    groupListWidgetItemClicked(currentChoiseGroupId);
+
+    GlobalCenter::getInstance()->setCurrentGroupId(currentChoiseGroupId);
+
+    m_stackedWidget->setCurrentIndex(1);
+
+    m_historicalUserList->slotUpdataUnread(currentChoiseGroupId,0);
+}
+
+void GlobalUiCenter::groupClicked(const QModelIndex &index)
+{
+
 }
 
 void GlobalUiCenter::slotLoginStatus(int status, QString str)

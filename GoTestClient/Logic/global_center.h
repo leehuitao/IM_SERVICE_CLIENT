@@ -27,6 +27,8 @@ public:
 
     void setCurrentUserName( QString userName);
 
+    void setCurrentGroupId( QString groupId);
+
     void initConnection();
 
     QString getCurrentTimeSeconds();
@@ -42,12 +44,14 @@ public:
     int currentUserId(){
         return m_currentChoiseUserId;
     }
-
+    QString currentGroupId(){
+        return m_currentChoiseGroup;
+    }
     QString currentUserName(){
         return m_currentChoiseUser;
     }
     //----------------------Tcp相关------------------------
-    MsgBody sendMsg(QString msg,int msgType = 0);
+    MsgBody sendMsg(QString msg,int msgType = 0,int method = SendMsg);
 
     MsgBody sendAudioMsg(QString mqttServer,int msgType = NotifyAudioStart);
 
@@ -83,6 +87,7 @@ private:
     int             m_loginStatus = 0 ;
 
     QString         m_currentChoiseUser;
+    QString         m_currentChoiseGroup;
     //当前UI选中的用户ID
     int             m_currentChoiseUserId;
 
@@ -90,6 +95,8 @@ private:
     LhtFileClient   *   m_fileClient;
 
     QMap<QString,MsgBody>           m_md52msg;
+
+    QMap<QString,GroupBody>           m_md52groupMsg;
 
     QMap<int,QMap<QString,MsgBody>>           m_recvMd52msg;
     QList<int> m_allUserId;
@@ -185,6 +192,8 @@ signals:
     void signStopAudio();
 
     void signStopVideo();
+
+    void signCreateGroup(GroupBody body);
 public slots:
 
     void slotLoginStatus(int status,QString str);
@@ -208,6 +217,8 @@ public slots:
     void slotRecvFileCompelte(FileBody bodyf);
 
     void slotSendFileCompelte();
+
+    void slotCreateGroup(GroupBody body);
 
     void slotFileCancel(FileBody);
 

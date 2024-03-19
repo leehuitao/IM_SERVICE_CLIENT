@@ -257,3 +257,27 @@ void MessageInterface::listWidgetItemClicked(int userId, QString userName)
     }
 }
 
+void MessageInterface::listWidgetItemClicked(QString groupId)
+{
+    if(GlobalCenter::getInstance()->currentGroupId() == groupId)
+        return;
+    GlobalCenter::getInstance()->setCurrentGroupId(groupId);
+
+    auto list = m_sql.selectHistoryMsg(groupId);
+//    clear();
+    for(auto it : list){
+        MsgBody body(it);
+        if(body.MsgType == 0)
+            addNewMsg(body);
+        else
+            addNewFileMsg(body.Msg,body.MsgType == 1 ? 1 : 0);
+        if(body.MsgStatus == 1 && body.DstUserId == AppCache::Instance()->m_userId){//如果时未读消息
+            body.UserId = AppCache::Instance()->m_userId;
+            body.MsgStatus = 2;
+            updateMsgReadStatus(body.MsgId,body.MsgStatus);
+//            m_sql.updateMsgStatus(body.MsgId,body.MsgStatus);
+            GlobalCenter::getInstance()->signUpdateMsgStatus(body);
+        }
+    }
+}
+

@@ -14,6 +14,8 @@ public:
 
     static OnlineListBody  parseOnlineListBodyPack(QByteArray arr);
 
+    static GroupBody       parseGroupBodyPack(QByteArray arr);
+
     static SystemBody      parseSystemPack(QByteArray arr,int jsonSize = 0);
 
     static FileBody        parseFileDataPack(QByteArray arr,int jsonSize = 0);

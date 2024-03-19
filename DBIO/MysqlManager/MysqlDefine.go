@@ -36,4 +36,9 @@ const (
 	InsertMessageRecord = "INSERT INTO personal_chat_messages (`msg_id`,`sender_id`, `sender_name`, `receiver_id`, `receiver_name`, `content`, `send_time`) " +
 		"VALUES ( '%s',%d, '%s', %d, '%s', '%s', '%s');"
 	UpdateUserHeadImagePathQuery = "UPDATE users SET head_path = '%s' WHERE id = %d"
+
+	CreateNewGroupQuery = "INSERT INTO groups (`group_id`, `group_name`, `announcement`, `created_at`, `creator_id`)" +
+		"VALUES ('%s', '%s', '%s', '%s',%d)"
+
+	AddGroupMemberQuery = "INSERT INTO group_members (`group_id`, `user_id`) VALUES ('%s', %d)"
 )

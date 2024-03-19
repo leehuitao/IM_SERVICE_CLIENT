@@ -72,6 +72,8 @@ public:
     void showVideoUI(MsgBody qbody);
 
     void showAudioUI(MsgBody qbody);
+    //---------------------- 群组相关------------------------
+    void createGroup(GroupBody body);
 private:
     static GlobalCenter* _instance;
     explicit GlobalCenter(QObject *parent = nullptr);
@@ -161,6 +163,8 @@ signals:
     void signUpdateConnectFileServerState(FileBody body);
 
     void signSendFileData(int,FileBody);
+
+    void signSendGroupMsg(GroupBody body,int method,int methodType = 0);
 
     void signFileCancel(FileBody);
 

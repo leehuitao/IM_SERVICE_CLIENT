@@ -49,6 +49,18 @@
 #define     NotifyVideoAccpt            132
 #define     NotifyVideoStop             133
 
+#define     CreateGroup                 150
+#define 	DelGroup                    151
+#define 	UpdateGroup                 152
+#define 	GroupRemoveMember           153
+#define 	GroupInviteMember           154
+#define 	GroupSetAdmin               155
+#define 	GetUserGroupList            156
+#define 	GetGroupUserList            157
+#define 	SendGroupMsg                158
+#define 	GetGroupMsg                 159
+#define 	GetGroupOfflineNotify       160
+
 #define     OnlineUserList              200
 #define     UpdateOnlineUser            201
 
@@ -140,11 +152,11 @@ static bool copyFileToFolder(const QString &sourceFilePath, const QString &targe
     if (targetFile.exists()) {
         qDebug() << "目标文件夹中已存在同名文件。";
         return false;
-         //如果你想要覆盖它，取消下面代码的注释
-         if (!targetFile.remove()) {
-             qDebug() << "无法删除目标文件夹中的同名文件。";
-             return false;
-         }
+        //如果你想要覆盖它，取消下面代码的注释
+        if (!targetFile.remove()) {
+            qDebug() << "无法删除目标文件夹中的同名文件。";
+            return false;
+        }
     }
 
     // 进行复制操作
@@ -159,6 +171,19 @@ static bool copyFileToFolder(const QString &sourceFilePath, const QString &targe
 static QString createUuid(){
 
 }
+
+struct GroupBody {
+    QString         MsgId         ;
+    int             UserId        ;
+    int             SendUserId    ;
+    QString         SendUserName  ;//创建群组时将被邀请的人员ID放这里
+    QString         GroupId       ;
+    QString         GroupName     ;
+    QString         GroupInfo     ;
+    QString         SendTime      ;
+    int             MsgType = -1  ;
+    QString         Msg           ;
+};
 
 struct MsgBody  {
     MsgBody(){}
@@ -259,6 +284,26 @@ struct Pack  {
         Header.MethodType = methodType;
         Header.PackSize =HeaderSize +   Body.size();
     }
+    Pack(GroupBody body, int method ,int methodType){
+        QJsonObject json;//构建json对象json
+        json.insert("MsgId",body.MsgId);
+        json.insert("UserId",body.UserId);
+        json.insert("SendUserId", body.SendUserId);
+        json.insert("SendUserName", body.SendUserName);
+        json.insert("GroupId", body.GroupId);
+        json.insert("GroupName", body.GroupName);
+        json.insert("SendTime", body.SendTime);
+        json.insert("MsgType", body.MsgType);
+        json.insert("Msg", body.Msg);
+        json.insert("GroupInfo", body.GroupInfo);
+        QJsonDocument document;
+        document.setObject(json);
+        QByteArray byte_array = document.toJson(QJsonDocument::Compact);
+        Body = byte_array;
+        Header.Method = method;
+        Header.MethodType = methodType;
+        Header.PackSize =HeaderSize +   Body.size();
+    }
     Pack(FileBody body, int method ,int methodType,bool isData = 0){
         if( isData == 0){
             QJsonObject json;//构建json对象json
@@ -283,11 +328,11 @@ struct Pack  {
         }
         else{
             QDataStream packet(&Body,QIODevice::WriteOnly);
-//            QByteArray name(body.UserLoginName.toUtf8().data());
+            //            QByteArray name(body.UserLoginName.toUtf8().data());
             QByteArray md5(body.FileMD5.toUtf8().data());
             packet<<body.UserId;
             packet<<md5.size();
-//            Body +=  name;
+            //            Body +=  name;
             Body += md5;
             Body += body.FileData;
             Header.Method = method;
@@ -336,7 +381,7 @@ struct Pack  {
         QDataStream packet(&m_buffer,QIODevice::WriteOnly);
         packet<<Header.PackSize<<Header.Method<<Header.MethodType;
         m_buffer += Body;
-//        qDebug()<<"m_buffer size = "<<m_buffer.size()<<"Body size = "<<Body.size();
+        //        qDebug()<<"m_buffer size = "<<m_buffer.size()<<"Body size = "<<Body.size();
         return m_buffer;
     }
 };

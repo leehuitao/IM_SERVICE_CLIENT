@@ -1,6 +1,7 @@
 HEADERS += \
     $$PWD/LhtTcpClient/Handle/RegisterHandler.h \
     $$PWD/LhtTcpClient/Handle/handle/connect_file_server_success_handle.h \
+    $$PWD/LhtTcpClient/Handle/handle/create_group_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/download_chat_image_data_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_file_server_addr_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_mqtt_addr_handle.h \
@@ -12,6 +13,7 @@ HEADERS += \
     $$PWD/LhtTcpClient/Handle/handle/get_user_head_image_data_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_user_org_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_video_mqtt_addr_handle.h \
+    $$PWD/LhtTcpClient/Handle/handle/group_invatation_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/login_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/logout_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/meg_has_been_read_handle.h \

@@ -102,7 +102,7 @@ void CreateGroupDialog::addSelectedUser(int userId, QString userName)
 void CreateGroupDialog::on_buttonBox_accepted()
 {
     m_groupName = ui->group_name_line->text();
-    m_groupInfo = ui->introduction_textEdit->placeholderText();
+    m_groupInfo = ui->introduction_textEdit->toPlainText();
     m_invitationUsers.clear();
     // 假设model是之前创建的QStandardItemModel的实例
     for (int row = 0; row < m_selecetedUsersModel->rowCount(); ++row) {

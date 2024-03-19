@@ -116,6 +116,13 @@ void LhtTcpClient::slotDownloadChatImageData(FileBody body)
     m_socket->write(data);
 }
 
+void LhtTcpClient::slotSendGroupMsg(GroupBody body, int method, int methodType)
+{
+    Pack pack(body,method,0);
+    auto data = pack.toByte();
+    m_socket->write(data);
+}
+
 void LhtTcpClient::sendGetOrg(SystemBody body, int method, int methodType)
 {
     Pack pack(body,method,methodType);

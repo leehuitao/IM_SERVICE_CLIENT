@@ -14,6 +14,7 @@ void registerStruct(){
     qRegisterMetaType<MsgBody>("MsgBody");
     qRegisterMetaType<OnlineListBody>("OnlineListBody");
     qRegisterMetaType<SystemBody>("SystemBody");
+    qRegisterMetaType<GroupBody>("GroupBody");
 }
 
 int main(int argc, char *argv[])

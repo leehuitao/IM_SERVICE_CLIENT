@@ -77,7 +77,7 @@ public slots:
     void on_sendmsg_btn_clicked();
     void slotHasImag();
     // ----------------群组相关----------------
-
+    void createGroup(GroupBody);
     //----------------文件相关----------------
     void slotRecvFileProgress(FileBody bodyf);
     void slotSendFileProgress(FileBody bodyf);

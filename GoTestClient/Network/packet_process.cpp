@@ -70,6 +70,30 @@ OnlineListBody PacketProcess::parseOnlineListBodyPack(QByteArray arr)
     return onlineListBody;
 }
 
+GroupBody PacketProcess::parseGroupBodyPack(QByteArray arr)
+{
+    QJsonParseError jsonError;
+    QJsonDocument jsonDoc(QJsonDocument::fromJson(arr, &jsonError));
+    if(jsonError.error != QJsonParseError::NoError)
+    {
+        qDebug() << "json error!" << jsonError.errorString();
+        return GroupBody();
+    }
+    auto values = jsonDoc.object();
+    GroupBody  groupBody;
+    groupBody.MsgId           = values.value("MsgId").toString();
+    groupBody.UserId          = values.value("UserId").toInt();
+    groupBody.SendUserId      = values.value("SendUserId").toInt();
+    groupBody.SendUserName    = values.value("SendUserName").toString();
+    groupBody.GroupId         = values.value("GroupId").toString();
+    groupBody.GroupName       = values.value("GroupName").toString();
+    groupBody.GroupInfo       = values.value("GroupInfo").toString();
+    groupBody.SendTime        = values.value("SendTime").toString();
+    groupBody.MsgType         = values.value("MsgType").toInt();
+    groupBody.Msg             = values.value("Msg").toString();
+    return groupBody;
+}
+
 SystemBody PacketProcess::parseSystemPack(QByteArray arr,int jsonSize)
 {
     QJsonParseError jsonError;

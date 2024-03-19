@@ -33,8 +33,12 @@ private:
     void initRecvMethod();
     //初始化返回包统一接口
     void initResponseMethod();
-    //初始化文件接收
-    void initRecvFileMethod();
+    //初始化音视频
+    void initVideoMethod();
+    //初始化消息接收
+    void initMsgMethod();
+    //初始化群组接收
+    void initGroupMethod();
     //初始化文件发送
     void initSendFileMethod();
 };

@@ -38,6 +38,18 @@ func databaseInit() {
 
 }
 
+// 需要直接返回的
+func InsertLht(sql string) error {
+	rows, _ := dbPool.Query(sql)
+	if rows != nil {
+		err := rows.Close()
+		if err != nil {
+			return err
+		} //释放连接
+	}
+	return nil
+}
+
 // Insert 外部调用函数
 func Insert(sql string) {
 	MysqlChannel <- sql

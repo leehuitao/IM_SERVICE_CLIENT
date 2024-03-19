@@ -32,6 +32,8 @@
 #include "handle/upload_chat_image_handle.h"
 #include "handle/upload_user_head_image_data_handle.h"
 #include "handle/upload_user_head_image_handle.h"
+#include "handle/group_invatation_handle.h"
+#include "handle/create_group_handle.h"
 HandlerManager * HandlerManager::g_instance = new HandlerManager;
 
 HandlerManager::HandlerManager(QObject *parent) : QObject(parent)
@@ -65,8 +67,10 @@ void HandlerManager::init()
     initRecvMethod();
     //初始化返回包统一接口
     initResponseMethod();
+    initVideoMethod();
+    initMsgMethod();
     //初始化文件接收
-    initRecvFileMethod();
+    initGroupMethod();
     //初始化文件发送
     initSendFileMethod();
 }
@@ -78,29 +82,13 @@ void HandlerManager::initRecvMethod()
     InitHandler<ConnectFileServerSuccessHandle>(ConnectFileServerSuccess);
     InitHandler<DownloadChatImageDataHandle>(DownloadChatImageData);
     InitHandler<GetFileServerAddrHandle>(GetFileServerAddr);
-    InitHandler<GetMqttAddrHandle>(GetMqttAddr);
-    InitHandler<GetMsgHandle>(GetMsg);
-    InitHandler<GetMsgNotifyHandle>(GetMsgNotify);
-    InitHandler<GetOfflineMsgHandle>(GetOfflineMsg);
     InitHandler<GetOnlineUserHandle>(GetOnlineUser);
     InitHandler<GetOrgHandle>(GetOrg);
     InitHandler<GetUserHeadImageDataHandle>(GetUserHeadImageData);
     InitHandler<GetUserOrgHandle>(GetUserOrg);
-    InitHandler<GetVideoMqttAddrHandle>(GetVideoMqttAddr);
-    InitHandler<MsgHasBeenReadHandle>(MegHasBeenRead);
-    InitHandler<NotifyAudioAccptHandle>(NotifyAudioAccpt);
-    InitHandler<NotifyAudioStartHandle>(NotifyAudioStart);
-    InitHandler<NotifyAudioStopHandle>(NotifyAudioStop);
-    InitHandler<NotifyVideoAccptHandle>(NotifyVideoAccpt);
-    InitHandler<NotifyVideoStartHandle>(NotifyVideoStart);
-    InitHandler<NotifyVideoStopHandle>(NotifyVideoStop);
     InitHandler<OnlineUserListHandle>(OnlineUserList);
-    InitHandler<SendMsgHandle>(SendMsg);
     InitHandler<UpdateConnectFileServerStateHandle>(UpdateConnectFileServerState);
-    InitHandler<UpdateMsgStatusHandle>(UpdateMsgStatus);
     InitHandler<UpdateOnlineUserHandle>(UpdateOnlineUser);
-    InitHandler<UploadChatImageDataHandle>(UploadChatImageData);
-    InitHandler<UploadChatImageHandle>(UploadChatImage);
     InitHandler<UploadUserHeadImageDataHandle>(UploadUserHeadImageData);
     InitHandler<UploadUserHeadImageHandle>(UploadUserHeadImage);
 }
@@ -110,9 +98,34 @@ void HandlerManager::initResponseMethod()
 
 }
 
-void HandlerManager::initRecvFileMethod()
+void HandlerManager::initVideoMethod()
 {
+    InitHandler<GetVideoMqttAddrHandle>(GetVideoMqttAddr);
+    InitHandler<NotifyAudioAccptHandle>(NotifyAudioAccpt);
+    InitHandler<NotifyAudioStartHandle>(NotifyAudioStart);
+    InitHandler<NotifyAudioStopHandle>(NotifyAudioStop);
+    InitHandler<NotifyVideoAccptHandle>(NotifyVideoAccpt);
+    InitHandler<NotifyVideoStartHandle>(NotifyVideoStart);
+    InitHandler<NotifyVideoStopHandle>(NotifyVideoStop);
+    InitHandler<GetMqttAddrHandle>(GetMqttAddr);
+}
 
+void HandlerManager::initMsgMethod()
+{
+    InitHandler<GetMsgHandle>(GetMsg);
+    InitHandler<GetMsgNotifyHandle>(GetMsgNotify);
+    InitHandler<GetOfflineMsgHandle>(GetOfflineMsg);
+    InitHandler<MsgHasBeenReadHandle>(MegHasBeenRead);
+    InitHandler<SendMsgHandle>(SendMsg);
+    InitHandler<UploadChatImageDataHandle>(UploadChatImageData);
+    InitHandler<UploadChatImageHandle>(UploadChatImage);
+    InitHandler<UpdateMsgStatusHandle>(UpdateMsgStatus);
+}
+
+void HandlerManager::initGroupMethod()
+{
+    InitHandler<CreateGroupHandle>(CreateGroup);
+    InitHandler<GroupInvitationHandle>(GroupInviteMember);
 }
 
 void HandlerManager::initSendFileMethod()

@@ -65,6 +65,7 @@ void GlobalCenter::initConnection()
     connect(this,&GlobalCenter::signUploadChatImageData,        m_tcpClient,&LhtTcpClient::slotUploadChatImageData      ,Qt::QueuedConnection);
     connect(this,&GlobalCenter::signDownloadChatImageData,        m_tcpClient,&LhtTcpClient::slotDownloadChatImageData      ,Qt::QueuedConnection);
     connect(this,&GlobalCenter::signUpdateConnectFileServerState,m_tcpClient,&LhtTcpClient::slotUpdateConnectFileServerState,Qt::QueuedConnection);
+    connect(this,&GlobalCenter::signSendGroupMsg,         m_tcpClient,&LhtTcpClient::slotSendGroupMsg           ,Qt::QueuedConnection);
 
 
     connect(this,&GlobalCenter::signFileServer,           m_fileClient,&LhtFileClient::slotConnect2FileServer          ,Qt::QueuedConnection);
@@ -693,4 +694,9 @@ void GlobalCenter::showAudioUI(MsgBody qbody)
     body.SendTime       = getCurrentTimeSeconds();
     signSendMsg(body,NotifyAudioAccpt,0);
     slotAccptAudio(body);
+}
+
+void GlobalCenter::createGroup(GroupBody body)
+{
+    signSendGroupMsg(body,CreateGroup);
 }

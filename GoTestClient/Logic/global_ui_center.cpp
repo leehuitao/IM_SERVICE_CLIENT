@@ -245,6 +245,11 @@ void GlobalUiCenter::slotHasImag()
     }
 }
 
+void GlobalUiCenter::createGroup(GroupBody b)
+{
+    GlobalCenter::getInstance()->createGroup(b);
+}
+
 void GlobalUiCenter::slotLoginStatus(int status, QString str)
 {
     m_orgMainWidget->slotLoginStatus(status,str);

@@ -138,6 +138,7 @@ type GroupBody struct {
 	SendUserId   int    `json:"SendUserId"`
 	SendUserName string `json:"SendUserName"`
 	GroupId      string `json:"GroupId"`
+	GroupName    string `json:"GroupName"`
 	GroupInfo    string `json:"GroupInfo"`
 	SendTime     string `json:"SendTime"`
 	MsgType      int    `json:"MsgType"`

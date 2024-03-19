@@ -23,6 +23,8 @@ public:
 
     void updateMsgInfo(int userId,const QString& msg,const QString& time);
 
+    void updateGroupMsgInfo(QString groupId,const QString& msg,const QString& time);
+
     void updateMsgItemSort(int userId);
 
     void updateMsgItemSort(QString groupId);

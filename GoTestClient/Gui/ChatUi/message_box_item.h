@@ -17,7 +17,11 @@ public:
 
     void initMsg(const MsgBody &msg , bool updateMsg = 1);
 
+    void initGroupMsg(const GroupBody &msg , bool updateMsg = 1);
+
     void initImageMsg(const MsgBody &msg, bool updateMsg = 1);
+
+    void initGroupImageMsg(const GroupBody &msg, bool updateMsg = 1);
     /**
         增加文件发送消息
         type = 0  发送文件成功消息
@@ -55,6 +59,7 @@ private:
     QString m_filePath = "";
     QSize m_size;
     MsgBody m_msgBody;
+    GroupBody m_groupMsgBody;
     QString m_imgPath;
     int m_currentState = -1;
     bool isImageMessage = false;

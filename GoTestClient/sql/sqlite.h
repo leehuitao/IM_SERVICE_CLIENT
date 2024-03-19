@@ -17,6 +17,8 @@ public:
 
     void insertHistoryMsg(MsgBody body);
 
+    void insertGroupHistoryMsg(GroupBody body);
+
     void updateMsgStatus(QString msgId, int status);
 
     int getUnreadNumber(int dstUserID,int myid);

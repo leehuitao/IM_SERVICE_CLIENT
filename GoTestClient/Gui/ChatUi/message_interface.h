@@ -23,6 +23,8 @@ public:
 
     void addNewMsg(const MsgBody &msg);
 
+    void addNewGroupMsg(const GroupBody &msg);
+
 
     void setMaxiMum();
     /**

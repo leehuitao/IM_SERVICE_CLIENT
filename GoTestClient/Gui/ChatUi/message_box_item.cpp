@@ -175,71 +175,77 @@ void MessageBoxItem::initMsg(const MsgBody &msg, bool updateMsg)
     }else{//用户ID错误
         return;
     }
-    /*
-    for(auto iter : textList){
-        auto src = iter;
-        src = src.replace(regex, replaceText);
-        //文字总长度
-        int nMaxWidth = 0;
-        nMaxWidth = fm.width(src);
-        auto msgBody = m_msgBody;
-        msgBody.Msg = iter;
-        if(m_msgBody.SendUserId == AppCache::Instance()->m_userId){
-            // 设置对齐方式
-            setDisPlayWid(1);
-            ui->self_textEdit->setAlignment(Qt::AlignLeft); // 右对齐
-            if(updateMsg)
-                ui->self_textEdit->initMsg(msgBody);
 
-            if(nMaxWidth <= widWidth){
-                ui->self_textEdit->setFixedWidth(fm.width(src) + 20);
-                ui->self_textEdit->setFixedHeight(fm.height() + 18);
-                m_size = QSize(ui->self_textEdit->width() + 60,ui->self_textEdit->height()+ 32);
-            }else{
-                ui->self_textEdit->setFixedWidth(widWidth);
-                auto h =  ((nMaxWidth / widWidth) + 1)* (fm.lineSpacing() + 2) + 50;
-                ui->self_textEdit->setFixedHeight(h - 32);
-                m_size = QSize(this->width(),h+30);
-            }
-            if(m_currentState > m_msgBody.MsgStatus)
-                m_msgBody.MsgStatus = m_currentState;
-            if(m_msgBody.MsgStatus == 0){//发送中
-                ui->self_msg_state_lab->setText("发送中");
-            }else if(m_msgBody.MsgStatus == 1){//未读
-                ui->self_msg_state_lab->setText("未读");
-            }else if(m_msgBody.MsgStatus == 2){//已读
-                ui->self_msg_state_lab->setText("已读");
-            }else{//错误
-                return;
-            }
-        }else if(m_msgBody.DstUserId == AppCache::Instance()->m_userId){//是我接收的消息
-            if(nMaxWidth <= widWidth){
-                ui->other_textEdit->setFixedWidth(fm.width(src) + 20);
-                ui->other_textEdit->setFixedHeight(fm.height() + 18);
-                m_size = QSize(ui->other_textEdit->width() + 60,ui->other_textEdit->height()+ 32);
-            }else{
-                ui->other_textEdit->setFixedWidth(widWidth);
+}
 
-                auto h =  ((nMaxWidth / widWidth) + 1)* (fm.lineSpacing() + 2) + 50;
-                ui->other_textEdit->setFixedHeight(h - 32);
-                m_size = QSize(this->width(),h+30);
-            }
-            // 设置对齐方式
-            setDisPlayWid(2);
-            ui->other_textEdit->setAlignment(Qt::AlignLeft); // 左对齐
-            if(updateMsg)
-                ui->other_textEdit->initMsg(msgBody);
+void MessageBoxItem::initGroupMsg(const GroupBody &msg, bool updateMsg)
+{
+    m_groupMsgBody = msg;
 
-        }else{//用户ID错误
-            return;
+    m_msgId = m_groupMsgBody.MsgId;
+    //绘制用户头像
+    setUserAvatar(m_groupMsgBody.SendUserId);
+    //是我发送的消息
+    //UI总宽度
+    auto widWidth = this->width();
+    auto widheight = this->height();
+    //可用长度   行最大长度
+    widWidth = widWidth - (40 + 19) *2 - 60;
+
+    QFontMetricsF fm(this->font());
+    // 使用正则表达式匹配模式
+    QRegularExpression regex("%\\$emjstart.*?%\\$emjend");
+
+    // 替换文本
+    QString replaceText = "表情"; // 您要替换的表情或文本
+
+    QString imgStart = ImageHeader;
+    QString imgEnd = ImageEnd;
+
+    auto src = m_groupMsgBody.Msg;
+    src = src.replace(regex, replaceText);
+    //文字总长度
+    int nMaxWidth = 0;
+    nMaxWidth = fm.width(src);
+    if(m_groupMsgBody.SendUserId == AppCache::Instance()->m_userId){
+        // 设置对齐方式
+        setDisPlayWid(1);
+        ui->self_textEdit->setAlignment(Qt::AlignLeft); // 右对齐
+
+        ui->self_msg_state_lab->hide();
+        if(nMaxWidth <= widWidth){
+            ui->self_textEdit->setFixedWidth(nMaxWidth + 20);
+            ui->self_textEdit->setFixedHeight(fm.height() + 16 > 40 ? fm.height() + 16 : 40 );
+            m_size = QSize(ui->self_textEdit->width() + 60,ui->self_textEdit->height()+ 18);
+        }else{
+            ui->self_textEdit->setFixedWidth(widWidth);
+            auto h =  ((nMaxWidth / widWidth) + 1)* (fm.lineSpacing() + 2)+5 ;
+            ui->self_textEdit->setFixedHeight(h);
+            m_size = QSize(this->width(),h+18);
         }
-        for(auto iter : imgList){
+        if(updateMsg)
+            ui->self_textEdit->initGroupMsg(m_groupMsgBody);
+    }else if(m_groupMsgBody.SendUserId != AppCache::Instance()->m_userId){//是我接收的消息
+        if(nMaxWidth <= widWidth){
+            ui->other_textEdit->setFixedWidth(fm.width(src) + 20);
+            ui->other_textEdit->setFixedHeight(fm.height() + 16 > 40 ? fm.height() + 16 : 40);
+            m_size = QSize(ui->other_textEdit->width() + 60,ui->other_textEdit->height()+ 18);
+        }else{
+            ui->other_textEdit->setFixedWidth(widWidth);
 
+            auto h =  ((nMaxWidth / widWidth) + 1)* (fm.lineSpacing() + 2) + 5;
+            ui->other_textEdit->setFixedHeight(h);
+            m_size = QSize(this->width(),h+18);
         }
+        // 设置对齐方式
+        setDisPlayWid(2);
+        ui->other_textEdit->setAlignment(Qt::AlignLeft); // 左对齐
+        if(updateMsg)
+            ui->other_textEdit->initGroupMsg(m_groupMsgBody);
 
-    }*/
-
-
+    }else{//用户ID错误
+        return;
+    }
 }
 
 void MessageBoxItem::initImageMsg(const MsgBody &msg, bool updateMsg)
@@ -280,6 +286,47 @@ void MessageBoxItem::initImageMsg(const MsgBody &msg, bool updateMsg)
             return;
         }
     }else if(m_msgBody.DstUserId == AppCache::Instance()->m_userId){//是我接收的消息
+        // 设置对齐方式
+        setDisPlayWid(2);
+        ui->other_textEdit->hide();
+        ui->other_image_label->show();
+        ui->other_image_label->setFixedWidth(temp.width());
+        ui->other_image_label->setFixedHeight(temp.height());
+        m_size = QSize(ui->other_image_label->width()+ 20,ui->other_image_label->height()+ 40);
+        ui->other_image_label->setPixmap(QPixmap::fromImage(temp));
+    }else{//用户ID错误
+        return;
+    }
+}
+
+void MessageBoxItem::initGroupImageMsg(const GroupBody &msg, bool updateMsg)
+{
+    isImageMessage = 1;
+
+    m_groupMsgBody = msg;
+
+    m_msgId = m_groupMsgBody.MsgId;
+    //绘制用户头像
+    setUserAvatar(m_groupMsgBody.SendUserId);
+    m_imgPath = ChatImagePath+ msg.Msg.split("/").last();
+    QImage temp( m_imgPath);
+    if(temp.width() > 200){
+        temp = temp.scaledToWidth(200,Qt::SmoothTransformation);
+    }
+    if(temp.height()>200){
+        temp = temp.scaledToHeight(200,Qt::SmoothTransformation);
+    }
+    if(m_groupMsgBody.SendUserId == AppCache::Instance()->m_userId){
+        // 设置对齐方式
+        setDisPlayWid(1);
+        ui->self_textEdit->hide();
+        ui->self_image_label->show();
+        ui->self_image_label->setFixedWidth(temp.width());
+        ui->self_image_label->setFixedHeight(temp.height());
+        m_size = QSize(ui->self_image_label->width()+ 20,ui->self_image_label->height() + 40);
+        ui->self_image_label->setPixmap(QPixmap::fromImage(temp));
+
+    }else if(m_groupMsgBody.SendUserId != AppCache::Instance()->m_userId){//是我接收的消息
         // 设置对齐方式
         setDisPlayWid(2);
         ui->other_textEdit->hide();

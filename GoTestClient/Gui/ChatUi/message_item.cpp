@@ -22,6 +22,13 @@ void MessageItem::initMsg(const MsgBody &msg)
     parseMsg(msg.Msg);
 }
 
+void MessageItem::initGroupMsg(const GroupBody &msg)
+{
+    m_groupMsgBody = msg;
+    //解析文字
+    parseMsg(msg.Msg);
+}
+
 void MessageItem::initMsg(const QString &imgText)
 {
     updateBackground = 0;

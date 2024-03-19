@@ -482,51 +482,53 @@ MsgBody GlobalCenter::sendMsg(QString msg, int msgType, int method)
         //发送图片
 
         return body;
-    }else if(method == SendGroupMsg){
-        GroupBody body;
-        // 生成一个随机的 UUID
-        QUuid uuid = QUuid::createUuid();
-
-        // 将 UUID 转换为字符串表示形式
-        QString uuidString = uuid.toString();
-        body.MsgId = uuidString;
-        body.UserId         = AppCache::Instance()->m_userId;
-        body.SendUserId     = AppCache::Instance()->m_userId;
-        body.SendUserName   = AppCache::Instance()->m_userName;
-        body.GroupId        = m_currentChoiseGroup;
-        body.GroupName      = AppCache::Instance()->m_groupInfos[m_currentChoiseGroup].GroupName;
-        body.Msg            = msg;
-        body.MsgType        = 1;
-        body.SendTime       = getCurrentTimeSeconds();
-
-        if(msg.contains(ImageHeader)){//如果存在图片先发送图片
-            auto fileName = msg;
-            fileName.replace(ImageHeader,"");
-            fileName.replace(ImageEnd,"");
-            copyFileToFolder(fileName,ChatImagePath);
-            auto md5 = createFileMd5(fileName);
-            body.Msg = ImageHeader + md5 + "_" +fileName.split("/").last() + ImageEnd;
-            m_md52groupMsg[md5] = body;
-            FileBody fbody;
-            QFile file;
-            file.setFileName(fileName);
-            int size = file.size();
-            fbody.UserId = AppCache::Instance()->m_userId;
-            fbody.FileName = md5 + "_" +fileName.split("/").last();
-            fbody.SendUserId = AppCache::Instance()->m_userId;
-            fbody.RecvUserId = m_currentChoiseUserId;
-            fbody.FileMD5 = md5;
-            fbody.TotalSize = size;
-            fbody.CurrentSize = 0;
-            fbody.FileSeek = 0;
-            signUploadChatImage(fbody);
-        }else{//普通消息
-            signSendGroupMsg(body,SendGroupMsg);
-        }
     }
 
+}
 
+GroupBody GlobalCenter::sendGroupMsg(QString msg, int msgType, int method)
+{
+    GroupBody body;
+    // 生成一个随机的 UUID
+    QUuid uuid = QUuid::createUuid();
 
+    // 将 UUID 转换为字符串表示形式
+    QString uuidString = uuid.toString();
+    body.MsgId = uuidString;
+    body.UserId         = AppCache::Instance()->m_userId;
+    body.SendUserId     = AppCache::Instance()->m_userId;
+    body.SendUserName   = AppCache::Instance()->m_userName;
+    body.GroupId        = m_currentChoiseGroup;
+    body.GroupName      = AppCache::Instance()->m_groupInfos[m_currentChoiseGroup].GroupName;
+    body.Msg            = msg;
+    body.MsgType        = 1;
+    body.SendTime       = getCurrentTimeSeconds();
+
+    if(msg.contains(ImageHeader)){//如果存在图片先发送图片
+        auto fileName = msg;
+        fileName.replace(ImageHeader,"");
+        fileName.replace(ImageEnd,"");
+        copyFileToFolder(fileName,ChatImagePath);
+        auto md5 = createFileMd5(fileName);
+        body.Msg = ImageHeader + md5 + "_" +fileName.split("/").last() + ImageEnd;
+        m_md52groupMsg[md5] = body;
+        FileBody fbody;
+        QFile file;
+        file.setFileName(fileName);
+        int size = file.size();
+        fbody.UserId = AppCache::Instance()->m_userId;
+        fbody.FileName = md5 + "_" +fileName.split("/").last();
+        fbody.SendUserId = AppCache::Instance()->m_userId;
+        fbody.RecvUserId = m_currentChoiseUserId;
+        fbody.FileMD5 = md5;
+        fbody.TotalSize = size;
+        fbody.CurrentSize = 0;
+        fbody.FileSeek = 0;
+        signUploadChatImage(fbody);
+    }else{//普通消息
+        signSendGroupMsg(body,SendGroupMsg);
+    }
+    return body;
 }
 
 MsgBody GlobalCenter::sendAudioMsg(QString mqttServer,int msgType)

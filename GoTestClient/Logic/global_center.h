@@ -53,6 +53,8 @@ public:
     //----------------------Tcp相关------------------------
     MsgBody sendMsg(QString msg,int msgType = 0,int method = SendMsg);
 
+    GroupBody sendGroupMsg(QString msg,int msgType = 0,int method = SendGroupMsg);
+
     MsgBody sendAudioMsg(QString mqttServer,int msgType = NotifyAudioStart);
 
     MsgBody sendVideoMsg(QString mqttServer,int msgType = NotifyVideoStart);

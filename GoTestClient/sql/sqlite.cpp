@@ -27,7 +27,12 @@ void Sqlite::insertHistoryMsg(MsgBody body)
             .arg(body.SendTime).arg(body.MsgType).arg(body.Msg).arg(body.MsgStatus);
 //    qDebug()<<"str = "<<str;
     query.exec(str);
-//    qDebug()<<__FUNCTION__<<query.lastError();
+    //    qDebug()<<__FUNCTION__<<query.lastError();
+}
+
+void Sqlite::insertGroupHistoryMsg(GroupBody body)
+{
+
 }
 
 void Sqlite::updateMsgStatus(QString msgId, int status)

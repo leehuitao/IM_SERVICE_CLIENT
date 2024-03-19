@@ -90,6 +90,11 @@ void HistoricalUserList::updateMsgInfo(int userId, const QString &msg, const QSt
     m_userid2UserChat[userId]->updateMsgInfo(msg,time);
 }
 
+void HistoricalUserList::updateGroupMsgInfo(QString groupId, const QString &msg, const QString &time)
+{
+    m_groupid2UserChat[groupId]->updateMsgInfo(msg,time);
+}
+
 void HistoricalUserList::updateMsgItemSort(int userId)
 {
     QString name;
@@ -143,7 +148,7 @@ void HistoricalUserList::updateMsgItemSort(QString groupId)
         }
     }
     QListWidgetItem *item = new QListWidgetItem();
-    item->setData(Qt::UserRole, GlobalCenter::getInstance()->currentUserId());
+    item->setData(Qt::UserRole, GlobalCenter::getInstance()->currentGroupId());
     this->insertItem(0,item);
     auto w = new MsgWidgetItem;
     m_groupid2UserChat[GlobalCenter::getInstance()->currentGroupId()] =  w;

@@ -91,6 +91,7 @@ void GlobalUiCenter::clicked(const QModelIndex &index)
 
 void GlobalUiCenter::doubleClicked(const QModelIndex &index)
 {
+    m_currentChatType = 1;
     auto currentChoiseUser = index.data(Qt::WhatsThisRole).toString();
     auto currentChoiseUserId = index.data(Qt::ToolTipRole).toInt();
     if(currentChoiseUserId == 0)
@@ -225,12 +226,12 @@ void GlobalUiCenter::on_sendmsg_btn_clicked()
                 m_currentMessageInterface->addNewMsg(body);
             }
         }else if(m_currentChatType == 2){
-            auto body = GlobalCenter::getInstance()->sendMsg(fMsg,0,SendGroupMsg);
-            m_historicalUserList->updateMsgItemSort(GlobalCenter::getInstance()->currentUserId());
-            m_sql.insertHistoryMsg(body);
-            m_historicalUserList->updateMsgInfo(body.DstUserId,body.Msg,body.SendTime);
+            auto body = GlobalCenter::getInstance()->sendGroupMsg(fMsg,0,SendGroupMsg);
+            m_historicalUserList->updateMsgItemSort(GlobalCenter::getInstance()->currentGroupId());
+            m_sql.insertGroupHistoryMsg(body);
+            m_historicalUserList->updateGroupMsgInfo(body.GroupId,body.Msg,body.SendTime);
             if(m_currentMessageInterface){
-                m_currentMessageInterface->addNewMsg(body);
+                m_currentMessageInterface->addNewGroupMsg(body);
             }
         }
 
@@ -285,25 +286,7 @@ void GlobalUiCenter::slotCreateGroup(GroupBody b)
 
 void GlobalUiCenter::groupListWidgetItemClicked(QListWidgetItem *item)
 {
-    m_currentChatType = 2;
-    QString before = GlobalCenter::getInstance()->currentGroupId();
 
-    QListWidget *widget = item->listWidget();
-    if (widget) {
-        // 获取与QListWidgetItem关联的控件
-        QWidget *widgetItem = widget->itemWidget(item);
-        if (widgetItem) {
-            // 检查控件类型并执行相应操作
-            if (qobject_cast<MsgWidgetItem*>(widgetItem)) {
-                MsgWidgetItem *wid = qobject_cast<MsgWidgetItem*>(widgetItem);
-                auto currentChoiseGroup = wid->getGroupId();
-
-                wid->clearUnread();
-                wid->updateUnread(0);
-                groupListWidgetItemClicked(currentChoiseGroup);
-            }
-        }
-    }
 //文件相关的先不做，先做消息
 //    m_currentMessageInterface->listWidgetItemClicked(item);
 //    int after = GlobalCenter::getInstance()->currentUserId();
@@ -345,6 +328,7 @@ void GlobalUiCenter::groupListWidgetItemClicked(QString groupId)
 
 void GlobalUiCenter::groupDoubleClicked(const QModelIndex &index)
 {
+    m_currentChatType = 2;
     auto currentChoiseGroup = index.data(Qt::WhatsThisRole).toString();
     auto currentChoiseGroupId = index.data(Qt::ToolTipRole).toString();
     if(currentChoiseGroupId.isEmpty())

@@ -77,6 +77,40 @@ void MessageInterface::addNewMsg(const MsgBody &msg)
     }
 }
 
+void MessageInterface::addNewGroupMsg(const GroupBody &msg)
+{
+    if(msg.Msg.contains(ImageHeader)){
+        MessageBoxItem *w = new MessageBoxItem();
+        auto temp = msg;
+        temp.Msg.replace(ImageHeader,"");
+        temp.Msg.replace(ImageEnd,"");
+        w->initGroupImageMsg(temp);
+        w->setFixedWidth(this->width());
+        QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
+        item->setSizeHint(w->getSize());
+        ui->listWidget->setItemWidget(item, w);
+        //        ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
+        ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
+        QScrollBar *vScrollBar = ui->listWidget->verticalScrollBar();
+        vScrollBar->setValue(vScrollBar->maximum()); // 滚动到底部
+    }else{
+        if(msg.Msg != " " && !msg.Msg.isEmpty()){
+            MessageBoxItem *w = new MessageBoxItem();
+            w->initGroupMsg(msg);
+            auto size = this->width();
+            w->setFixedWidth(size);
+            QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
+            item->setSizeHint(w->getSize());
+            ui->listWidget->setItemWidget(item, w);
+//            ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
+            ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
+            QScrollBar *vScrollBar = ui->listWidget->verticalScrollBar();
+            vScrollBar->setValue(vScrollBar->maximum()); // 滚动到底部
+        }
+
+    }
+}
+
 void MessageInterface::setMaxiMum()
 {
     // 将垂直滚动条设置为最大值，将滚动条滚动到底部

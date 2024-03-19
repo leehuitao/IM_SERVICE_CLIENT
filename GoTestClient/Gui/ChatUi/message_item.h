@@ -19,6 +19,8 @@ public:
     MessageItem(QWidget *parent = nullptr);
 
     void initMsg(const MsgBody &msg);
+
+    void initGroupMsg(const GroupBody &msg);
     void initMsg(const QString &imgPath);
     void wheelEvent(QWheelEvent *event) override {
             // 重写 wheelEvent，但不调用基类的实现
@@ -45,6 +47,7 @@ private:
 private:
     int m_lineHeight;
     MsgBody m_msgBody;
+    GroupBody m_groupMsgBody;
 
     bool updateBackground = 1;
 };

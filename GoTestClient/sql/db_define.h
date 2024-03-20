@@ -16,6 +16,9 @@
 #define InsertMsg "insert into HistoryMsg (MsgId,SendUserId,SendUserName,DstUserId,DstUserName,SendTime,MsgType,Msg,MsgStatus) "\
     "values ('%1',%2,'%3',%4,'%5','%6',%7,'%8',%9)"
 
+#define InsertGroupMsg "INSERT INTO HistoryGroupMsg (GroupId, SendUserId, SendUserName, Content, MsgId, GroupName, SendTime,MsgType) "\
+    "VALUES ('%1', %2, '%3', '%4', '%5', '%6', '%7',%8)"
+
 #define UpdateMsgStatusQuery "UPDATE HistoryMsg SET MsgStatus = %2 WHERE MsgId = '%1'"
 
 #define UpdateMsgType "SELECT * FROM HistoryMsg WHERE DstUserId == %1 and SendUserId == %2 and MsgStatus != 2;"
@@ -56,7 +59,19 @@ struct HistoryMsgStruct{
     int             MsgType;
 };
 
+struct HistoryGroupMsgStruct{
+    int             id;
+    QString         GroupId;
+    int             SendUserId;
+    QString         SendUserName;
+    QString         Content;
+    QString         MsgId;
+    QString         GroupName;
+    QString         SendTime;
+    int             MsgType;
+};
 
 typedef QList<HistoryMsgStruct> HistoryMsgList;
 
+typedef QList<HistoryGroupMsgStruct> HistoryGroupMsgList;
 #endif // DB_DEFINE_H

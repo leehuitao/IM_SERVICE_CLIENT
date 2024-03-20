@@ -181,6 +181,17 @@ struct GroupStruct{
 };
 
 struct GroupBody {
+    GroupBody(){}
+    GroupBody(const HistoryGroupMsgStruct & msg){
+        this->GroupId           = msg.GroupId;
+        this->SendUserId        = msg.SendUserId;
+        this->SendUserName      = msg.SendUserName;
+        this->MsgId             = msg.MsgId;
+        this->Msg               = msg.Content;
+        this->GroupName         = msg.GroupName;
+        this->SendTime          = msg.SendTime;
+        this->MsgType           = msg.MsgType;
+    }
     QString         MsgId         ;
     int             UserId        ;
     int             SendUserId    ;
@@ -189,7 +200,7 @@ struct GroupBody {
     QString         GroupName     ;
     QString         GroupInfo     ;
     QString         SendTime      ;
-    int             MsgType = -1  ;
+    int             MsgType = -1  ;//0:普通消息 1：接收文件    2：发送文件 3:语音  4:视频
     QString         Msg           ;
 };
 

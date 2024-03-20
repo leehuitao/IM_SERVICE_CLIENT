@@ -32,7 +32,13 @@ void Sqlite::insertHistoryMsg(MsgBody body)
 
 void Sqlite::insertGroupHistoryMsg(GroupBody body)
 {
-
+    QSqlQuery query;
+    QString str = QString(InsertGroupMsg).arg(body.GroupId).arg(body.SendUserId).arg(body.SendUserName)
+            .arg(body.Msg).arg(body.MsgId)
+            .arg(body.GroupName).arg(body.SendTime).arg(body.MsgType);
+    qDebug()<<"str = "<<str;
+    query.exec(str);
+    //    qDebug()<<__FUNCTION__<<query.lastError();
 }
 
 void Sqlite::updateMsgStatus(QString msgId, int status)
@@ -84,25 +90,24 @@ HistoryMsgList Sqlite::selectHistoryMsg(int sendUserId,int recvUserId)
     return list;
 }
 
-HistoryMsgList Sqlite::selectHistoryMsg(QString groupId)
+HistoryGroupMsgList Sqlite::selectHistoryMsg(QString groupId)
 {
     QSqlQuery query;
     QString str = QString(SelectGroupMsg).arg(groupId);
     qDebug()<<str;
     query.exec(str);
-    HistoryMsgList list;
+    HistoryGroupMsgList list;
     while(query.next()){
-        HistoryMsgStruct msg;
+        HistoryGroupMsgStruct msg;
         msg.id = query.value(0).toInt();
-        msg.MsgId = query.value(1).toString();
+        msg.GroupId = query.value(1).toString();
         msg.SendUserId = query.value(2).toInt();
         msg.SendUserName = query.value(3).toString();
-        msg.RecvUserId = query.value(4).toInt();
-        msg.RecvUserName = query.value(5).toString();
-        msg.SendTime = query.value(6).toString();
-        msg.MsgType = query.value(7).toInt();
-        msg.Content = query.value(8).toString();
-        msg.MsgStatus = query.value(9).toInt();
+        msg.Content = query.value(4).toString();
+        msg.MsgId = query.value(5).toString();
+        msg.GroupName = query.value(6).toString();
+        msg.SendTime = query.value(7).toString();
+        msg.MsgType = query.value(8).toInt();
         list.insert(0,msg);
         qDebug()<<msg.Content;
     }

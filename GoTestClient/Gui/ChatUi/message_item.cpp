@@ -11,7 +11,7 @@ MessageItem::MessageItem(QWidget *parent): QTextEdit(parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     // 设置背景为透明，以便自定义绘制
     setAttribute(Qt::WA_TranslucentBackground);
-    setAttribute(Qt::WA_OpaquePaintEvent, false);
+//    setAttribute(Qt::WA_OpaquePaintEvent, false);
     // 获取 MessageItem 中的 QTextEdit
 }
 
@@ -210,6 +210,7 @@ void MessageItem::focusOutEvent(QFocusEvent *e)
 //    unsetCursor();
 //    this->setReadOnly(true); // 设置为只读以隐藏光标
     update();
+    QWidget::focusOutEvent(e);
 }
 void MessageItem::subAnimate(int a)
 {

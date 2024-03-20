@@ -501,7 +501,7 @@ GroupBody GlobalCenter::sendGroupMsg(QString msg, int msgType, int method)
     body.GroupId        = m_currentChoiseGroup;
     body.GroupName      = AppCache::Instance()->m_groupInfos[m_currentChoiseGroup].GroupName;
     body.Msg            = msg;
-    body.MsgType        = 1;
+    body.MsgType        = 0;
     body.SendTime       = getCurrentTimeSeconds();
 
     if(msg.contains(ImageHeader)){//如果存在图片先发送图片

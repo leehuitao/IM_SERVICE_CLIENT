@@ -69,7 +69,7 @@ void MessageInterface::addNewMsg(const MsgBody &msg)
             QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
             item->setSizeHint(w->getSize());
             ui->listWidget->setItemWidget(item, w);
-//            ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
+            //            ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
             ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
             QScrollBar *vScrollBar = ui->listWidget->verticalScrollBar();
             vScrollBar->setValue(vScrollBar->maximum()); // 滚动到底部
@@ -103,7 +103,7 @@ void MessageInterface::addNewGroupMsg(const GroupBody &msg)
             QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
             item->setSizeHint(w->getSize());
             ui->listWidget->setItemWidget(item, w);
-//            ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
+            //            ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
             ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
             QScrollBar *vScrollBar = ui->listWidget->verticalScrollBar();
             vScrollBar->setValue(vScrollBar->maximum()); // 滚动到底部
@@ -132,14 +132,14 @@ void MessageInterface::addNewFileMsg(const QString &filePath, int type)
 }
 void MessageInterface::flashWindow() {
     QApplication::alert(this);
-//    FLASHWINFO fwInfo;
-//    fwInfo.cbSize = sizeof(FLASHWINFO);
-//    fwInfo.hwnd = reinterpret_cast<HWND>(m_mainWinId);
-//    fwInfo.dwFlags = FLASHW_ALL;
-//    fwInfo.uCount = 2; // 闪烁次数
-//    fwInfo.dwTimeout = 0;
+    //    FLASHWINFO fwInfo;
+    //    fwInfo.cbSize = sizeof(FLASHWINFO);
+    //    fwInfo.hwnd = reinterpret_cast<HWND>(m_mainWinId);
+    //    fwInfo.dwFlags = FLASHW_ALL;
+    //    fwInfo.uCount = 2; // 闪烁次数
+    //    fwInfo.dwTimeout = 0;
 
-//    FlashWindowEx(&fwInfo);
+    //    FlashWindowEx(&fwInfo);
 }
 
 void MessageInterface::slotRecvMsg(MsgBody body)
@@ -206,11 +206,11 @@ void MessageInterface::clear()
 
 void MessageInterface::showEvent(QShowEvent *event)
 {
-//    setMaxiMum();
+    //    setMaxiMum();
     for(auto it : m_unreadMsgIdList){
         updateMsgReadStatus(it.MsgId,2);
         it.MsgStatus = 2;
-//            m_sql.updateMsgStatus(body.MsgId,body.MsgStatus);
+        //            m_sql.updateMsgStatus(body.MsgId,body.MsgStatus);
         GlobalCenter::getInstance()->signUpdateMsgStatus(it);
     }
     m_unreadMsgIdList.clear();
@@ -275,7 +275,7 @@ void MessageInterface::listWidgetItemClicked(int userId, QString userName)
     GlobalCenter::getInstance()->setCurrentUser(userId,userName);
 
     auto list = m_sql.selectHistoryMsg(userId,AppCache::Instance()->m_userId);
-//    clear();
+    //    clear();
     for(auto it : list){
         MsgBody body(it);
         if(body.MsgType == 0)
@@ -286,7 +286,7 @@ void MessageInterface::listWidgetItemClicked(int userId, QString userName)
             body.UserId = AppCache::Instance()->m_userId;
             body.MsgStatus = 2;
             updateMsgReadStatus(body.MsgId,body.MsgStatus);
-//            m_sql.updateMsgStatus(body.MsgId,body.MsgStatus);
+            //            m_sql.updateMsgStatus(body.MsgId,body.MsgStatus);
             GlobalCenter::getInstance()->signUpdateMsgStatus(body);
         }
     }
@@ -299,20 +299,12 @@ void MessageInterface::listWidgetItemClicked(QString groupId)
     GlobalCenter::getInstance()->setCurrentGroupId(groupId);
 
     auto list = m_sql.selectHistoryMsg(groupId);
-//    clear();
     for(auto it : list){
-        MsgBody body(it);
+        GroupBody body(it);
         if(body.MsgType == 0)
-            addNewMsg(body);
+            addNewGroupMsg(body);
         else
             addNewFileMsg(body.Msg,body.MsgType == 1 ? 1 : 0);
-        if(body.MsgStatus == 1 && body.DstUserId == AppCache::Instance()->m_userId){//如果时未读消息
-            body.UserId = AppCache::Instance()->m_userId;
-            body.MsgStatus = 2;
-            updateMsgReadStatus(body.MsgId,body.MsgStatus);
-//            m_sql.updateMsgStatus(body.MsgId,body.MsgStatus);
-            GlobalCenter::getInstance()->signUpdateMsgStatus(body);
-        }
     }
 }
 

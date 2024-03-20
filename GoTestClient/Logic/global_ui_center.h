@@ -84,6 +84,7 @@ public slots:
     void groupDoubleClicked(const QModelIndex &index);
     void groupClicked(const QModelIndex &index);
     void slotRecvGroups(QList<GroupStruct>);
+    void slotRecvGroupUsers(QList<GroupUsersStruct>);
     //----------------文件相关----------------
     void slotRecvFileProgress(FileBody bodyf);
     void slotSendFileProgress(FileBody bodyf);

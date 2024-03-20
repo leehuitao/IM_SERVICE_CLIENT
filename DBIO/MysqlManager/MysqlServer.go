@@ -50,16 +50,9 @@ func InsertLht(sql string) error {
 	return nil
 }
 
-func GetGroups(sql string) *sql.Rows {
+func GetRows(sql string) *sql.Rows {
 	rows, _ := dbPool.Query(sql)
 	return rows
-	//if rows != nil {
-	//	err := rows.Close()
-	//	if err != nil {
-	//		return nil
-	//	} //释放连接
-	//}
-	//return rows
 }
 
 // Insert 外部调用函数

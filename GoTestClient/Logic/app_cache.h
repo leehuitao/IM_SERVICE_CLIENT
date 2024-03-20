@@ -59,16 +59,17 @@ public:
         }
         return instance_;
     }
-    QString m_userName;
-    QString m_userLoginName;
-    QString m_passWord;
-    QString m_currentFilePath;
-    int     m_userId = 0;
-    int     m_msgSize=0;
-    QString                 m_userHeadImagePath;
-    QMap<int,QString>       m_headImagePath;
-    QMap<int,LoginBody>     m_userInfos;
+    QString                     m_userName;
+    QString                     m_userLoginName;
+    QString                     m_passWord;
+    QString                     m_currentFilePath;
+    int                         m_userId = 0;
+    int                         m_msgSize=0;
+    QString                     m_userHeadImagePath;
+    QMap<int,QString>           m_headImagePath;
+    QMap<int,LoginBody>         m_userInfos;
     QMap<QString,GroupBody>     m_groupInfos;
+    QMap<QString,QList<GroupUsersStruct>>    m_groupUsers;
     QString m_fileSavePath="D:/ceshi/";
 private:
     AppCache();

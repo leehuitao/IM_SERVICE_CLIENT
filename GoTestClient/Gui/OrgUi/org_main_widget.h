@@ -36,6 +36,7 @@ public:
 
     void updateIcon(int userId);
 
+
     QList<int> getAllUserIdList(){
         return m_userId2UiPointer.keys();
     }

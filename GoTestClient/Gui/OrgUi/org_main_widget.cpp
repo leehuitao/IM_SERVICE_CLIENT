@@ -400,6 +400,7 @@ void OrgMainWidget::updateIcon(int userId)
     }
 }
 
+
 void OrgMainWidget::slotClicked(const QModelIndex &index)
 {
     clicked(index);

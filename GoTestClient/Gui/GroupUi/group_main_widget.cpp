@@ -21,6 +21,18 @@ void GroupMainWidget::init()
 
 }
 
+void GroupMainWidget::clearGroups()
+{
+
+}
+
+void GroupMainWidget::updateGroupInfo(GroupBody body)
+{
+    ui->group_name_label->setText(body.GroupName);
+    ui->group_info_label->setText(body.GroupInfo);
+    ui->group_size_label->setText(QString::number(AppCache::Instance()->m_groupUsers[body.GroupId].size()));
+}
+
 void GroupMainWidget::slotAddNewGroup(GroupBody body)
 {
     AppCache::Instance()->m_groupInfos[body.GroupId] = body;

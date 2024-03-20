@@ -4,6 +4,7 @@ HEADERS += \
     $$PWD/LhtTcpClient/Handle/handle/create_group_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/download_chat_image_data_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_file_server_addr_handle.h \
+    $$PWD/LhtTcpClient/Handle/handle/get_group_users_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_mqtt_addr_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_msg_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_msg_notify_handle.h \

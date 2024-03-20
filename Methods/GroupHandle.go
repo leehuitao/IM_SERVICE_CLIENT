@@ -14,6 +14,12 @@ import (
 	"time"
 )
 
+const (
+	GroupNormal = iota
+	GroupAdmin
+	GroupCreate
+)
+
 func CreateGroup(pack *PackManager.Pack, client *TcpClient) (requestPack *PackManager.Pack) {
 	groupBody := PackManager.GroupBody{}
 	if err := json.Unmarshal(pack.Body, &groupBody); err != nil {
@@ -35,7 +41,7 @@ func CreateGroup(pack *PackManager.Pack, client *TcpClient) (requestPack *PackMa
 	if err != nil {
 		LogService.Logger.Error(err.Error())
 	}
-	queryStr = fmt.Sprintf(MysqlManager.AddGroupMemberQuery, uuid, groupBody.UserId)
+	queryStr = fmt.Sprintf(MysqlManager.AddGroupMemberQuery, uuid, groupBody.UserId, GroupCreate)
 	err = MysqlManager.InsertLht(queryStr)
 	if err != nil {
 		LogService.Logger.Error(err.Error())
@@ -57,7 +63,7 @@ func CreateGroup(pack *PackManager.Pack, client *TcpClient) (requestPack *PackMa
 	data := createSendBuffer(*pack)
 	for _, it := range intArray {
 		if it >= 88880000 {
-			queryStr = fmt.Sprintf(MysqlManager.AddGroupMemberQuery, uuid, it)
+			queryStr = fmt.Sprintf(MysqlManager.AddGroupMemberQuery, uuid, it, GroupNormal)
 			err = MysqlManager.InsertLht(queryStr)
 			if err != nil {
 				LogService.Logger.Error(err.Error())
@@ -144,7 +150,7 @@ func GroupInviteMember(pack *PackManager.Pack, client *TcpClient) (requestPack *
 	data := createSendBuffer(*pack)
 	for it := range intArray {
 		if it >= 88880000 {
-			queryStr := fmt.Sprintf(MysqlManager.AddGroupMemberQuery, groupBody.GroupId, it)
+			queryStr := fmt.Sprintf(MysqlManager.AddGroupMemberQuery, groupBody.GroupId, it, GroupNormal)
 			err := MysqlManager.InsertLht(queryStr)
 			if err != nil {
 				LogService.Logger.Error(err.Error())
@@ -185,6 +191,13 @@ type Group struct {
 	CreatedAt    string `json:"created_at"`
 	CreatorID    string `json:"creator_id"`
 }
+type GroupUsers struct {
+	Id        int    `json:"id"`
+	GroupID   string `json:"group_id"`
+	UserId    int    `json:"user_id"`
+	JoinAt    string `json:"join_at"`
+	UserLevel int    `json:"user_level"`
+}
 
 // GetUserGroupList 获取群组列表
 func GetUserGroupList(pack *PackManager.Pack, client *TcpClient) (requestPack *PackManager.Pack) {
@@ -197,7 +210,8 @@ func GetUserGroupList(pack *PackManager.Pack, client *TcpClient) (requestPack *P
 		return nil
 	}
 	queryStr := fmt.Sprintf(MysqlManager.GetGroupsQuery, groupBody.UserId)
-	rows := MysqlManager.GetGroups(queryStr)
+	rows := MysqlManager.GetRows(queryStr)
+	defer rows.Close()
 	var groups []Group
 	for rows.Next() {
 		var g Group
@@ -230,15 +244,44 @@ func GetUserGroupList(pack *PackManager.Pack, client *TcpClient) (requestPack *P
 
 // GetGroupUserList 获取群组中的用户列表
 func GetGroupUserList(pack *PackManager.Pack, client *TcpClient) (requestPack *PackManager.Pack) {
-	loginBody := PackManager.GroupBody{}
-	if err := json.Unmarshal(pack.Body, &loginBody); err != nil {
+	groupBody := PackManager.GroupBody{}
+	if err := json.Unmarshal(pack.Body, &groupBody); err != nil {
 		return nil
 	}
-	status := GlobalCache.GlobalUserLoginStatus.CheckUserIsOnline(loginBody.UserId)
+	status := GlobalCache.GlobalUserLoginStatus.CheckUserIsOnline(groupBody.UserId)
 	if !status {
 		return nil
 	}
+	queryStr := fmt.Sprintf(MysqlManager.GetGroupUsersQuery, groupBody.GroupId)
+	rows := MysqlManager.GetRows(queryStr)
+	defer rows.Close()
+	var groupUsers []GroupUsers
+	for rows.Next() {
+		var g GroupUsers
 
+		if err := rows.Scan(&g.Id, &g.GroupID, &g.UserId, &g.JoinAt, &g.UserLevel); err != nil {
+			log.Fatal(err)
+		}
+
+		groupUsers = append(groupUsers, g)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	// 序列化groups切片为JSON
+	jsonGroups, err := json.Marshal(groupUsers)
+	if err != nil {
+		log.Fatal(err)
+	}
+	groupBody.Msg = string(jsonGroups)
+	//返回包
+	pack.Body, _ = json.Marshal(groupBody)
+	data := createSendBuffer(*pack)
+	if client.conn != nil {
+		client.conn.Write(data) //response
+	}
 	return pack
 }
 

@@ -17,6 +17,9 @@ void registerStruct(){
     qRegisterMetaType<GroupBody>("GroupBody");
     qRegisterMetaType<QList<GroupStruct>>("QList<GroupStruct>");
     qRegisterMetaType<GroupStruct>("GroupStruct");
+    qRegisterMetaType<QList<GroupUsersStruct>>("QList<GroupUsersStruct>");
+    qRegisterMetaType<GroupUsersStruct>("GroupUsersStruct");
+
 }
 
 int main(int argc, char *argv[])

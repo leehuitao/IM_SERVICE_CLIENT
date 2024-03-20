@@ -82,6 +82,8 @@ public:
     void createGroup(GroupBody body);
 
     void slotGetGroups();
+
+    void slotGetGroupUsers(QString groupId);
 private:
     static GlobalCenter* _instance;
     explicit GlobalCenter(QObject *parent = nullptr);
@@ -200,6 +202,8 @@ signals:
     void signCreateGroup(GroupBody body);
 
     void signRecvGroups(QList<GroupStruct>);
+
+    void signRecvGroupUsers(QList<GroupUsersStruct>);
 public slots:
 
     void slotLoginStatus(int status,QString str);
@@ -235,6 +239,8 @@ public slots:
     void slotGetUserOrg(QJsonDocument json);
 
     void slotRecvGroups(QList<GroupStruct>);
+
+    void slotRecvGroupUsers(QList<GroupUsersStruct>);
 
     void slotRecvFileProgress(FileBody body);
 

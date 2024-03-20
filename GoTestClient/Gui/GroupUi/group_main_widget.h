@@ -22,6 +22,10 @@ public:
 
     void updateIcon(int userId);
 
+    void clearGroups();
+
+    void updateGroupInfo(GroupBody);
+
     void setCurrentOrgDept(QMap<int,QList<DeptStruct>> deptListMap){
          m_deptListMap = deptListMap;
     }

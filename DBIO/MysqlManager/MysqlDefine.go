@@ -40,6 +40,7 @@ const (
 	CreateNewGroupQuery = "INSERT INTO groups (`group_id`, `group_name`, `announcement`, `created_at`, `creator_id`)" +
 		"VALUES ('%s', '%s', '%s', '%s',%d)"
 
-	AddGroupMemberQuery = "INSERT INTO group_members (`group_id`, `user_id`) VALUES ('%s', %d)"
+	AddGroupMemberQuery = "INSERT INTO group_members (`group_id`, `user_id`,`user_level`) VALUES ('%s', %d,%d)"
 	GetGroupsQuery      = "SELECT g.* FROM group_members gm JOIN groups g ON gm.group_id = g.group_id WHERE gm.user_id = %d"
+	GetGroupUsersQuery  = "SELECT * FROM group_members  WHERE group_id = '%s'"
 )

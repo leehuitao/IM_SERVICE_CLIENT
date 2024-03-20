@@ -180,6 +180,13 @@ struct GroupStruct{
     QString creatorID   ;
 };
 
+struct GroupUsersStruct{
+   int      Id         ;
+   QString  GroupID    ;
+   int      UserId     ;
+   QString  JoinAt     ;
+   int      UserLevel  ;
+};
 struct GroupBody {
     GroupBody(){}
     GroupBody(const HistoryGroupMsgStruct & msg){

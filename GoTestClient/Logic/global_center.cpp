@@ -260,6 +260,11 @@ void GlobalCenter::slotRecvGroups(QList<GroupStruct> g)
     signRecvGroups(g);
 }
 
+void GlobalCenter::slotRecvGroupUsers(QList<GroupUsersStruct> g)
+{
+    signRecvGroupUsers(g);
+}
+
 void GlobalCenter::slotRecvFileProgress(FileBody body)
 {
     signRecvFileProgress(body);
@@ -768,4 +773,12 @@ void GlobalCenter::slotGetGroups()
     GroupBody body;
     body.UserId = AppCache::Instance()->m_userId;
     signSendGroupMsg(body,GetUserGroupList);
+}
+
+void GlobalCenter::slotGetGroupUsers(QString groupId)
+{
+    GroupBody body;
+    body.UserId = AppCache::Instance()->m_userId;
+    body.GroupId = groupId;
+    signSendGroupMsg(body,GetGroupUserList);
 }

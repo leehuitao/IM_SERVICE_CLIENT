@@ -68,6 +68,7 @@ void GlobalUiCenter::initUi()
     connect(GlobalCenter::getInstance(),&GlobalCenter::signCloseFile,this,&GlobalUiCenter::slotCloseFile,Qt::QueuedConnection);
     connect(GlobalCenter::getInstance(),&GlobalCenter::signCreateGroup,this,&GlobalUiCenter::slotCreateGroup,Qt::QueuedConnection);
     connect(GlobalCenter::getInstance(),&GlobalCenter::signRecvGroups,this,&GlobalUiCenter::slotRecvGroups,Qt::QueuedConnection);
+    connect(GlobalCenter::getInstance(),&GlobalCenter::signRecvGroupUsers,this,&GlobalUiCenter::slotRecvGroupUsers,Qt::QueuedConnection);
 
     GlobalCenter::getInstance()->initConnection();
 
@@ -351,9 +352,17 @@ void GlobalUiCenter::groupDoubleClicked(const QModelIndex &index)
 
 void GlobalUiCenter::groupClicked(const QModelIndex &index)
 {
-
+    auto currentChoiseGroupId = index.data(Qt::ToolTipRole).toString();
+    m_groupWidget->updateGroupInfo(AppCache::Instance()->m_groupInfos[currentChoiseGroupId]);
 }
-
+//流程   1.登录
+//2. slotLoginStatus 中获取组织架构
+//3. slotGetOrg 中获取人员列表
+//4. 获取在线人员列表
+//5. slotRecvOnlineUserList中 获取单人的离线通知消息
+//4. slotGetUserOrg中  获取群组
+//5. slotRecvGroups中  获取群组人员信息
+//6. slotRecvGroupUsers中  获取离线群组消息
 void GlobalUiCenter::slotRecvGroups(QList<GroupStruct> g)
 {
     GroupBody body;
@@ -362,8 +371,19 @@ void GlobalUiCenter::slotRecvGroups(QList<GroupStruct> g)
         body.GroupName = it.groupName;
         body.GroupInfo = it.announcement;
         m_groupWidget->slotAddNewGroup(body);
+        //继续获取所有群组的人员列表
+        GlobalCenter::getInstance()->slotGetGroupUsers(it.groupID);
     }
 
+
+}
+
+void GlobalUiCenter::slotRecvGroupUsers(QList<GroupUsersStruct> g)
+{
+    if(g.size() > 0){
+        AppCache::Instance()->m_groupUsers[g.first().GroupID].clear();
+        AppCache::Instance()->m_groupUsers[g.first().GroupID].append(g);
+    }
 }
 
 void GlobalUiCenter::slotLoginStatus(int status, QString str)

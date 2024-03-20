@@ -80,7 +80,7 @@ void MessageInterface::addNewMsg(const MsgBody &msg)
 
 void MessageInterface::addNewGroupMsg(const GroupBody &msg)
 {
-    if(this->isHidden())
+    if(this->isHidden()&& msg.MsgStatus == 1&&msg.SendUserId != AppCache::Instance()->m_userId)
         m_unreadGroupMsgIdList.append(msg);
     if(msg.Msg.contains(ImageHeader)){
         MessageBoxItem *w = new MessageBoxItem();
@@ -154,7 +154,7 @@ void MessageInterface::slotRecvMsg(MsgBody body)
         if(body.SendUserId == AppCache::Instance()->m_userId){//表示发送消息成功了，插入本地数据库，更新消息状态为未读
             updateMsgReadStatus(body.MsgId,body.MsgStatus);
         }else if(body.DstUserId == AppCache::Instance()->m_userId){//接收到消息了
-            if(this->isHidden())
+            if(this->isHidden() && body.MsgStatus == 1)
                 m_unreadMsgIdList.append(body);
             m_sql.insertHistoryMsg(body);
             if(GlobalCenter::getInstance()->currentUserId() == body.SendUserId){

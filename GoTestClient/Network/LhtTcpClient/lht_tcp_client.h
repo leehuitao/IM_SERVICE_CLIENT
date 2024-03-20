@@ -98,6 +98,8 @@ public slots:
     void slotDownloadChatImageData(FileBody body);
 
     void slotSendGroupMsg(GroupBody body,int method,int methodType = 0);
+
+    void sendUpdateGroupMsgStatus(GroupBody);
 private slots:
     void init();
 

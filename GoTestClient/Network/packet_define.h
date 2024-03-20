@@ -198,6 +198,7 @@ struct GroupBody {
         this->GroupName         = msg.GroupName;
         this->SendTime          = msg.SendTime;
         this->MsgType           = msg.MsgType;
+        this->MsgStatus           = msg.MsgStatus;
     }
     QString         MsgId         ;
     int             UserId        ;
@@ -323,6 +324,7 @@ struct Pack  {
         json.insert("MsgType", body.MsgType);
         json.insert("Msg", body.Msg);
         json.insert("GroupInfo", body.GroupInfo);
+        json.insert("MsgStatus", body.MsgStatus);
         QJsonDocument document;
         document.setObject(json);
         QByteArray byte_array = document.toJson(QJsonDocument::Compact);

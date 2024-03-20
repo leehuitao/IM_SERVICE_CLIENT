@@ -123,6 +123,13 @@ void LhtTcpClient::slotSendGroupMsg(GroupBody body, int method, int methodType)
     m_socket->write(data);
 }
 
+void LhtTcpClient::sendUpdateGroupMsgStatus(GroupBody body)
+{
+    Pack pack(body,UpdateGroupMsgState,0);
+    auto data = pack.toByte();
+    m_socket->write(data);
+}
+
 void LhtTcpClient::sendGetOrg(SystemBody body, int method, int methodType)
 {
     Pack pack(body,method,methodType);

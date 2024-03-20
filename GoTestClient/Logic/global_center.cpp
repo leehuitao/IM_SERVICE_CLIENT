@@ -71,6 +71,7 @@ void GlobalCenter::initConnection()
     connect(this,&GlobalCenter::signDownloadChatImageData,        m_tcpClient,&LhtTcpClient::slotDownloadChatImageData      ,Qt::QueuedConnection);
     connect(this,&GlobalCenter::signUpdateConnectFileServerState,m_tcpClient,&LhtTcpClient::slotUpdateConnectFileServerState,Qt::QueuedConnection);
     connect(this,&GlobalCenter::signSendGroupMsg,         m_tcpClient,&LhtTcpClient::slotSendGroupMsg           ,Qt::QueuedConnection);
+    connect(this,&GlobalCenter::signUpdateGroupMsgStatus,      m_tcpClient,&LhtTcpClient::sendUpdateGroupMsgStatus       ,Qt::QueuedConnection);
 
 
     connect(this,&GlobalCenter::signFileServer,           m_fileClient,&LhtFileClient::slotConnect2FileServer          ,Qt::QueuedConnection);

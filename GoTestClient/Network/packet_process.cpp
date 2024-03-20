@@ -91,6 +91,7 @@ GroupBody PacketProcess::parseGroupBodyPack(QByteArray arr)
     groupBody.SendTime        = values.value("SendTime").toString();
     groupBody.MsgType         = values.value("MsgType").toInt();
     groupBody.Msg             = values.value("Msg").toString();
+    groupBody.MsgStatus       = values.value("MsgStatus").toInt();
     return groupBody;
 }
 

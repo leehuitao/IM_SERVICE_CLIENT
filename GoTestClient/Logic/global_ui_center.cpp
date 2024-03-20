@@ -320,6 +320,7 @@ void GlobalUiCenter::groupListWidgetItemClicked(QString groupId)
         m_currentMessageInterface  = new MessageInterface();
         m_groupInterfaceMap[groupId] = m_currentMessageInterface;
         m_messageInterface->addWidget(m_currentMessageInterface);
+        m_currentMessageInterface->hide();
         m_groupInterfaceMap[groupId]->listWidgetItemClicked(groupId);
 
 
@@ -396,22 +397,21 @@ void GlobalUiCenter::slotRecvGroupUsers(QList<GroupUsersStruct> g)
 
 void GlobalUiCenter::slotNewGroupMsg(GroupBody body)
 {
-    m_sql.insertGroupHistoryMsg(body);
+    if(m_historicalUserList->checkUserIsExists(body.GroupId)){
+        m_historicalUserList->updateGroupMsgInfo(body.GroupId,body.Msg,body.SendTime);
+    }else{//如果不存在则新建
+        m_historicalUserList->addNewUser(body.GroupId,body.GroupName);
+        groupListWidgetItemClicked(body.GroupId);
+        m_historicalUserList->updateGroupMsgInfo(body.GroupId,body.Msg,body.SendTime);
+        //            on_msg_listWidget_itemClicked(item);
+    }
     if(m_groupInterfaceMap.find(body.GroupId) != m_groupInterfaceMap.end()){
         auto msgWid = m_groupInterfaceMap[body.GroupId];
         if(msgWid){
             msgWid->addNewGroupMsg(body);
         }
     }
-
-    if(m_historicalUserList->checkUserIsExists(body.GroupId)){
-        m_historicalUserList->updateGroupMsgInfo(body.GroupId,body.Msg,body.SendTime);
-    }else{//如果不存在则新建
-        m_historicalUserList->addNewUser(body.GroupId,body.GroupName);
-        groupListWidgetItemClicked(body.GroupId);
-        m_historicalUserList->updateMsgInfo(body.SendUserId,body.Msg,body.SendTime);
-        //            on_msg_listWidget_itemClicked(item);
-    }
+    m_sql.insertGroupHistoryMsg(body);
     //更新列表 提示未读
     int unRead = m_sql.getUnreadNumber(body.GroupId,AppCache::Instance()->m_userId);
     signUpdataUnread(body.GroupId, unRead);

@@ -43,6 +43,7 @@ const (
 	SendGroupMsg                 = 158
 	GetGroupMsg                  = 159
 	GetGroupOfflineNotify        = 160
+	UpdateGroupMsgState          = 161
 	UpdateOnlineUser             = 201
 	GetOrg                       = 300
 	GetOnlineUser                = 301
@@ -130,19 +131,34 @@ type SystemBody struct {
 	UserId    int    `json:"UserId"`
 	SystemCMD string `json:"SystemCMD"`
 }
+type Group struct {
+	GroupID      string `json:"group_id"`
+	GroupName    string `json:"group_name"`
+	Announcement string `json:"announcement"`
+	CreatedAt    string `json:"created_at"`
+	CreatorID    string `json:"creator_id"`
+}
+type GroupUsers struct {
+	Id        int    `json:"id"`
+	GroupID   string `json:"group_id"`
+	UserId    int    `json:"user_id"`
+	JoinAt    string `json:"join_at"`
+	UserLevel int    `json:"user_level"`
+}
 
 // GroupBody  群组指令json
 type GroupBody struct {
-	MsgId        string `json:"MsgId"`
-	UserId       int    `json:"UserId"`
-	SendUserId   int    `json:"SendUserId"`
-	SendUserName string `json:"SendUserName"`
-	GroupId      string `json:"GroupId"`
-	GroupName    string `json:"GroupName"`
-	GroupInfo    string `json:"GroupInfo"`
-	SendTime     string `json:"SendTime"`
-	MsgType      int    `json:"MsgType"`
-	Msg          string `json:"Msg"`
+	MsgId        string `json:"MsgId" bson:"MsgId"`
+	UserId       int    `json:"UserId" bson:"UserId"`
+	SendUserId   int    `json:"SendUserId" bson:"SendUserId"`
+	SendUserName string `json:"SendUserName" bson:"SendUserName"`
+	GroupId      string `json:"GroupId" bson:"GroupId"`
+	GroupName    string `json:"GroupName" bson:"GroupName"`
+	GroupInfo    string `json:"GroupInfo" bson:"GroupInfo"`
+	SendTime     string `json:"SendTime" bson:"SendTime"`
+	MsgType      int    `json:"MsgType" bson:"MsgType"`
+	MsgStatus    int    `json:"MsgStatus" bson:"MsgStatus"`
+	Msg          string `json:"Msg" bson:"Msg"`
 }
 
 // OnlineListBody  用户状态更新json
@@ -183,6 +199,20 @@ type MongoMsg struct {
 	Msg              string `bson:"Msg"`
 	Status           int    `bson:"Status"` //消息状态   0未读   1已读
 	SendTime         string `bson:"SendTime"`
+}
+type MongoGroupMsg struct {
+	Id           string `bson:"-"`
+	MsgId        string `bson:"MsgId"`
+	UserId       int    `bson:"UserId"`
+	SendUserId   int    `bson:"SendUserId"`
+	SendUserName string `bson:"SendUserName"`
+	GroupId      string `bson:"GroupId"`
+	GroupName    string `bson:"GroupName"`
+	SendTime     string `bson:"SendTime"`
+	RecvId       int    `bson:"RecvId"`
+	MsgType      int    `bson:"MsgType"`
+	MsgStatus    int    `bson:"MsgStatus"`
+	Msg          string `bson:"Msg"`
 }
 type HeadImage struct {
 	UserId          int    `json:"UserId"`

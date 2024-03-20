@@ -85,6 +85,9 @@ public slots:
     void groupClicked(const QModelIndex &index);
     void slotRecvGroups(QList<GroupStruct>);
     void slotRecvGroupUsers(QList<GroupUsersStruct>);
+    void slotNewGroupMsg(GroupBody body);
+    void slotRecvGroupMsgNotify(GroupBody body);
+    void getGroupMsg(QString msgid);
     //----------------文件相关----------------
     void slotRecvFileProgress(FileBody bodyf);
     void slotSendFileProgress(FileBody bodyf);
@@ -108,6 +111,7 @@ public slots:
     void on_msg_listWidget_itemClicked(QListWidgetItem *item);
 signals:
     void signUpdataUnread(int id,int number);
+    void signUpdataUnread(QString id,int number);
 private:
     static GlobalUiCenter* _instance;
     explicit GlobalUiCenter(QObject *parent = nullptr);

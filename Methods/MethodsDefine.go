@@ -225,6 +225,8 @@ func Register() {
 	MethodMap[PackManager.SendGroupMsg] = SendGroupMsg
 	MethodMap[PackManager.GetGroupMsg] = GetGroupMsg
 	MethodMap[PackManager.GetGroupOfflineNotify] = GetGroupOfflineNotify
+	MethodMap[PackManager.UpdateGroupMsgState] = UpdateGroupMsgState
+
 }
 
 func MethodPerform(pack *PackManager.Pack, client *TcpClient) (request *PackManager.Pack) {

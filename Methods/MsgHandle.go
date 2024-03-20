@@ -54,7 +54,7 @@ func SendMsg(pack *PackManager.Pack, client *TcpClient) (requestPack *PackManage
 	var (
 		msgBody   PackManager.MsgBody
 		mongoBody PackManager.MongoMsg
-		msgId     string
+		//msgId     string
 	)
 
 	if err := json.Unmarshal(pack.Body, &msgBody); err != nil {
@@ -73,8 +73,8 @@ func SendMsg(pack *PackManager.Pack, client *TcpClient) (requestPack *PackManage
 
 	initMongoBody(&msgBody, &mongoBody)
 	//插入mongodb后默认生成一个消息ID
-	msgId = MongoManager.Insert(&mongoBody)
-	queryStr := fmt.Sprintf(MysqlManager.InsertMessageRecord, msgId, msgBody.SendUserId, msgBody.SendUserName, msgBody.DstUserId, msgBody.DstUserName, msgBody.Msg, formattedTime)
+	_ = MongoManager.Insert(&mongoBody)
+	queryStr := fmt.Sprintf(MysqlManager.InsertMessageRecord, msgBody.MsgId, msgBody.SendUserId, msgBody.SendUserName, msgBody.DstUserId, msgBody.DstUserName, msgBody.Msg, formattedTime)
 	MysqlManager.Insert(queryStr)
 	msgBody.MsgStatus = 1
 	msgBody.SendTime = formattedTime

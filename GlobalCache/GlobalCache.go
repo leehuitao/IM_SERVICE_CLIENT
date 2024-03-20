@@ -58,7 +58,17 @@ type DeptCache struct {
 	//部门数组的json数据
 	deptJson map[int]interface{}
 }
+type GroupCache struct {
+	//群组数据
+	Groups map[string][]PackManager.GroupUsers
+}
 
+type GroupHandle interface {
+	// InitGroup 初始化群组
+	InitGroup()
+	// UpdateGroup 更新群组
+	UpdateGroup(groupId string)
+}
 type UserLoginStateHandle interface {
 	// AddOnlineUser 添加在线人员
 	AddOnlineUser(userId int)
@@ -87,6 +97,8 @@ var userIdToReadChatImageStream map[int]*os.File
 func InitGlobalCache() {
 	//组织结构初始化
 	OrgInit()
+	//群组结构初始化
+	NewGroupCache()
 	//用户状态初始化   修改为redis存储用户状态
 	//InitUserLoginState()
 	//人员数据初始化

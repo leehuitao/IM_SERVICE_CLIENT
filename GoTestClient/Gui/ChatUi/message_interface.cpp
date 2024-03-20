@@ -80,6 +80,8 @@ void MessageInterface::addNewMsg(const MsgBody &msg)
 
 void MessageInterface::addNewGroupMsg(const GroupBody &msg)
 {
+    if(this->isHidden())
+        m_unreadGroupMsgIdList.append(msg);
     if(msg.Msg.contains(ImageHeader)){
         MessageBoxItem *w = new MessageBoxItem();
         auto temp = msg;
@@ -187,6 +189,11 @@ void MessageInterface::updateMsgReadStatus(QString msgId, int status)
     m_sql.updateMsgStatus(msgId,status);
 }
 
+void MessageInterface::updateGroupMsgReadStatus(QString msgId, int status)
+{
+    m_sql.updateGroupMsgStatus(msgId,status);
+}
+
 void MessageInterface::updateHead(int userId)
 {
     QList<MessageBoxItem*> tlist = ui->listWidget->findChildren<MessageBoxItem*>();
@@ -214,6 +221,13 @@ void MessageInterface::showEvent(QShowEvent *event)
         GlobalCenter::getInstance()->signUpdateMsgStatus(it);
     }
     m_unreadMsgIdList.clear();
+    for(auto it : m_unreadGroupMsgIdList){
+        updateGroupMsgReadStatus(it.MsgId,2);
+        it.MsgStatus = 2;
+        GlobalCenter::getInstance()->signUpdateGroupMsgStatus(it);
+    }
+    m_unreadGroupMsgIdList.clear();
+
 }
 
 void MessageInterface::resizeEvent(QResizeEvent *event)

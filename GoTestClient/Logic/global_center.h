@@ -84,6 +84,10 @@ public:
     void slotGetGroups();
 
     void slotGetGroupUsers(QString groupId);
+
+    void slotGetGroupOfflineMsg();
+
+    void slotGetGroupMsg(QString);
 private:
     static GlobalCenter* _instance;
     explicit GlobalCenter(QObject *parent = nullptr);
@@ -201,9 +205,15 @@ signals:
 
     void signCreateGroup(GroupBody body);
 
+    void signNewGroupMsg(GroupBody body);
+
+    void signGetGroupOfflineMsg(GroupBody body);
+
     void signRecvGroups(QList<GroupStruct>);
 
     void signRecvGroupUsers(QList<GroupUsersStruct>);
+
+    void signUpdateGroupMsgStatus(GroupBody);
 public slots:
 
     void slotLoginStatus(int status,QString str);
@@ -229,6 +239,14 @@ public slots:
     void slotSendFileCompelte();
 
     void slotCreateGroup(GroupBody body);
+
+    void slotNewGroupMsg(GroupBody body);
+
+    void slotGetOfflineGroupMsg(GroupBody body);
+
+    void slotGetGroupMsg(GroupBody body);
+
+    void slotUpdateGroupMsgState(GroupBody body);
 
     void slotFileCancel(FileBody);
 

@@ -37,6 +37,25 @@ void HistoricalUserList::addNewUser(int userId, QString userName)
     this->setCurrentItem(item);
 }
 
+void HistoricalUserList::addNewUser(GroupBody body)
+{
+    QListWidgetItem *item = new QListWidgetItem();
+    item->setData(Qt::UserRole, body.GroupId);
+    this->insertItem(0,item);
+    auto w = new MsgWidgetItem;
+
+    m_groupid2UserChat[body.GroupId] =  w;
+
+//    signCurrentUserListUpdate(m_userid2UserChat.keys());
+
+    w->setUserInfo(body.GroupName,body.GroupId,m_headImagePath);
+
+    w->updateMsgInfo(body.Msg,body.SendTime);
+    item->setSizeHint(w->minimumSizeHint());
+    this->setItemWidget(item,w);
+    this->setCurrentItem(item);
+}
+
 void HistoricalUserList::addNewUser(QString groupId, QString userName)
 {
     QListWidgetItem *item = new QListWidgetItem();
@@ -45,8 +64,9 @@ void HistoricalUserList::addNewUser(QString groupId, QString userName)
     auto w = new MsgWidgetItem;
 
     m_groupid2UserChat[groupId] =  w;
-    signCurrentUserListUpdate(m_userid2UserChat.keys());
+//    signCurrentUserListUpdate(m_userid2UserChat.keys());
     w->setUserInfo(userName,groupId,m_headImagePath);
+
     item->setSizeHint(w->minimumSizeHint());
     this->setItemWidget(item,w);
     this->setCurrentItem(item);

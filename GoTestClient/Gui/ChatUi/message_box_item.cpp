@@ -74,8 +74,13 @@ void MessageBoxItem::updateMsgReadStatus(int status)
 
 void MessageBoxItem::resizeEvent(QResizeEvent *event)
 {
-    if(!isImageMessage)
-        initMsg(m_msgBody,0);
+    if(!isImageMessage){
+        if(!m_msgBody.MsgId.isEmpty()){
+            initMsg(m_msgBody,0);
+        }else{
+            initGroupMsg(m_groupMsgBody,0);
+        }
+    }
 }
 
 void MessageBoxItem::initMsg(const QString &filePath, int type)
@@ -242,7 +247,6 @@ void MessageBoxItem::initGroupMsg(const GroupBody &msg, bool updateMsg)
         ui->other_textEdit->setAlignment(Qt::AlignLeft); // 左对齐
         if(updateMsg)
             ui->other_textEdit->initGroupMsg(m_groupMsgBody);
-
     }else{//用户ID错误
         return;
     }
@@ -405,6 +409,8 @@ void MessageBoxItem::setUserAvatar(int userId)
     if(userId == AppCache::Instance()->m_userId){//我发送的
         ui->self_icon_lab->setPixmap(QPixmap(path.isEmpty() ?"self.png":path));
     }else{//我接收的
-        ui->other_icon_lab->setPixmap(QPixmap(path.isEmpty() ?"other.png":path));
+        ui->other_icon_lab->show();
+        auto pix = QPixmap(path.isEmpty() ?"other.png":path).scaled(40,40);
+        ui->other_icon_lab->setPixmap(pix);
     }
 }

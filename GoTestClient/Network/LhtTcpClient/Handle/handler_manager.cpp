@@ -36,6 +36,10 @@
 #include "handle/create_group_handle.h"
 #include "handle/get_user_groups_handle.h"
 #include "handle/get_group_users_handle.h"
+#include "handle/get_group_msg_handle.h"
+#include "handle/get_group_offline_msg_handle.h"
+#include "handle/send_group_msg_handle.h"
+#include "handle/update_group_msg_state_handle.h"
 HandlerManager * HandlerManager::g_instance = new HandlerManager;
 
 HandlerManager::HandlerManager(QObject *parent) : QObject(parent)
@@ -130,6 +134,10 @@ void HandlerManager::initGroupMethod()
     InitHandler<GroupInvitationHandle>(GroupInviteMember);
     InitHandler<GetUserGroupsHandle>(GetUserGroupList);
     InitHandler<GetGroupUsersHandle>(GetGroupUserList);
+    InitHandler<GetGroupMsgHandle>(GetGroupMsg);
+    InitHandler<GetGroupOfflineMsgHandle>(GetGroupOfflineNotify);
+    InitHandler<SendGroupMsgHandle>(SendGroupMsg);
+    InitHandler<UpdateGroupMsgStateHandle>(UpdateGroupMsgState);
 }
 
 void HandlerManager::initSendFileMethod()

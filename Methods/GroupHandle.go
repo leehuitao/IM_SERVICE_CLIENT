@@ -6,6 +6,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"testserver/DBIO/MongoManager"
 	"testserver/DBIO/MysqlManager"
 	"testserver/GlobalCache"
 	"testserver/LogService"
@@ -184,21 +185,6 @@ func GroupSetAdmin(pack *PackManager.Pack, client *TcpClient) (requestPack *Pack
 	return pack
 }
 
-type Group struct {
-	GroupID      string `json:"group_id"`
-	GroupName    string `json:"group_name"`
-	Announcement string `json:"announcement"`
-	CreatedAt    string `json:"created_at"`
-	CreatorID    string `json:"creator_id"`
-}
-type GroupUsers struct {
-	Id        int    `json:"id"`
-	GroupID   string `json:"group_id"`
-	UserId    int    `json:"user_id"`
-	JoinAt    string `json:"join_at"`
-	UserLevel int    `json:"user_level"`
-}
-
 // GetUserGroupList 获取群组列表
 func GetUserGroupList(pack *PackManager.Pack, client *TcpClient) (requestPack *PackManager.Pack) {
 	groupBody := PackManager.GroupBody{}
@@ -212,9 +198,9 @@ func GetUserGroupList(pack *PackManager.Pack, client *TcpClient) (requestPack *P
 	queryStr := fmt.Sprintf(MysqlManager.GetGroupsQuery, groupBody.UserId)
 	rows := MysqlManager.GetRows(queryStr)
 	defer rows.Close()
-	var groups []Group
+	var groups []PackManager.Group
 	for rows.Next() {
-		var g Group
+		var g PackManager.Group
 
 		if err := rows.Scan(&g.GroupID, &g.GroupName, &g.Announcement, &g.CreatedAt, &g.CreatorID); err != nil {
 			log.Fatal(err)
@@ -255,9 +241,9 @@ func GetGroupUserList(pack *PackManager.Pack, client *TcpClient) (requestPack *P
 	queryStr := fmt.Sprintf(MysqlManager.GetGroupUsersQuery, groupBody.GroupId)
 	rows := MysqlManager.GetRows(queryStr)
 	defer rows.Close()
-	var groupUsers []GroupUsers
+	var groupUsers []PackManager.GroupUsers
 	for rows.Next() {
-		var g GroupUsers
+		var g PackManager.GroupUsers
 
 		if err := rows.Scan(&g.Id, &g.GroupID, &g.UserId, &g.JoinAt, &g.UserLevel); err != nil {
 			log.Fatal(err)
@@ -287,41 +273,129 @@ func GetGroupUserList(pack *PackManager.Pack, client *TcpClient) (requestPack *P
 
 // SendGroupMsg 发送用户通知
 func SendGroupMsg(pack *PackManager.Pack, client *TcpClient) (requestPack *PackManager.Pack) {
-	loginBody := PackManager.GroupBody{}
-	if err := json.Unmarshal(pack.Body, &loginBody); err != nil {
+	groupBody := PackManager.GroupBody{}
+	if err := json.Unmarshal(pack.Body, &groupBody); err != nil {
 		return nil
 	}
-	status := GlobalCache.GlobalUserLoginStatus.CheckUserIsOnline(loginBody.UserId)
+	status := GlobalCache.GlobalUserLoginStatus.CheckUserIsOnline(groupBody.UserId)
 	if !status {
 		return nil
 	}
+	//插入mongodb后默认生成一个消息ID
+	queryStr := fmt.Sprintf(MysqlManager.InsertMessageGroupRecord, groupBody.MsgId, groupBody.GroupId, groupBody.GroupName, groupBody.UserId, groupBody.SendUserName, groupBody.Msg)
+	MysqlManager.Insert(queryStr)
 
+	pack.Header.MethodType = 1
+	groupBody.MsgStatus = 1
+	pack.Body, _ = json.Marshal(groupBody)
+	data := createSendBuffer(*pack)
+	if client.conn != nil {
+		client.conn.Write(data) //response
+	}
+	if v, ok := GlobalCache.GlobalGroupCache.Groups[groupBody.GroupId]; ok {
+		insertMongoBody := PackManager.MongoGroupMsg{}
+		insertMongoBody.MsgId = groupBody.MsgId
+		insertMongoBody.UserId = groupBody.UserId
+		insertMongoBody.SendUserId = groupBody.SendUserId
+		insertMongoBody.SendUserName = groupBody.SendUserName
+		insertMongoBody.GroupId = groupBody.GroupId
+		insertMongoBody.GroupName = groupBody.GroupName
+		insertMongoBody.SendTime = groupBody.SendTime
+		insertMongoBody.MsgType = groupBody.MsgType
+		insertMongoBody.MsgStatus = groupBody.MsgStatus
+		insertMongoBody.Msg = groupBody.Msg
+		for _, item := range v {
+			if item.UserId != groupBody.UserId {
+				insertMongoBody.RecvId = item.UserId
+				_ = MongoManager.GroupInsert(&insertMongoBody)
+				getConn := ClientManagerHandle.GetConn(item.UserId)
+				if getConn.conn != nil {
+					getConn.conn.Write(data)
+				}
+			}
+
+		}
+	}
 	return pack
+}
+func initGroupMsgBody(msgBody *PackManager.GroupBody, mongoBody *PackManager.MongoGroupMsg) {
+	msgBody.MsgId = mongoBody.MsgId
+	msgBody.SendUserId = mongoBody.SendUserId
+	msgBody.SendUserName = mongoBody.SendUserName
+	msgBody.GroupId = mongoBody.GroupId
+	msgBody.GroupName = mongoBody.GroupName
+	msgBody.SendTime = mongoBody.SendTime
+	msgBody.MsgType = mongoBody.MsgType
+	msgBody.MsgStatus = mongoBody.MsgStatus
+	msgBody.Msg = mongoBody.Msg
 }
 
 // GetGroupMsg 获取消息
 func GetGroupMsg(pack *PackManager.Pack, client *TcpClient) (requestPack *PackManager.Pack) {
-	loginBody := PackManager.GroupBody{}
-	if err := json.Unmarshal(pack.Body, &loginBody); err != nil {
+	var (
+		groupBody PackManager.GroupBody
+		mongoBody PackManager.MongoGroupMsg
+	)
+	if err := json.Unmarshal(pack.Body, &groupBody); err != nil {
 		return nil
 	}
-	status := GlobalCache.GlobalUserLoginStatus.CheckUserIsOnline(loginBody.UserId)
+	status := GlobalCache.GlobalUserLoginStatus.CheckUserIsOnline(groupBody.UserId)
 	if !status {
 		return nil
 	}
 
+	//插入mongodb后默认生成一个消息ID
+	mongoBody = *MongoManager.GroupSelect(groupBody.MsgId, groupBody.UserId)
+	initGroupMsgBody(&groupBody, &mongoBody)
+	pack.Body, _ = json.Marshal(groupBody)
+	data := createSendBuffer(*pack)
+	if client.conn != nil {
+		client.conn.Write(data)
+	}
+	return pack
+}
+func UpdateGroupMsgState(pack *PackManager.Pack, client *TcpClient) (requestPack *PackManager.Pack) {
+	groupBody := PackManager.GroupBody{}
+	if err := json.Unmarshal(pack.Body, &groupBody); err != nil {
+		return nil
+	}
+	status := GlobalCache.GlobalUserLoginStatus.CheckUserIsOnline(groupBody.UserId)
+	if !status {
+		return nil
+	}
+	//修改消息为已读
+	MongoManager.GroupUpdate(groupBody.MsgId, groupBody.UserId, groupBody.MsgStatus)
+
+	data := createSendBuffer(*pack)
+	//回复消息
+	if client.conn != nil {
+		client.conn.Write(data)
+	}
 	return pack
 }
 
 // GetGroupOfflineNotify 获取离线群组消息
 func GetGroupOfflineNotify(pack *PackManager.Pack, client *TcpClient) (requestPack *PackManager.Pack) {
-	loginBody := PackManager.GroupBody{}
-	if err := json.Unmarshal(pack.Body, &loginBody); err != nil {
+	groupBody := PackManager.GroupBody{}
+	if err := json.Unmarshal(pack.Body, &groupBody); err != nil {
 		return nil
 	}
-	status := GlobalCache.GlobalUserLoginStatus.CheckUserIsOnline(loginBody.UserId)
+	status := GlobalCache.GlobalUserLoginStatus.CheckUserIsOnline(groupBody.UserId)
 	if !status {
 		return nil
+	}
+
+	//修改消息为已读
+	list := MongoManager.GroupSelectHistory(groupBody.UserId)
+	var body PackManager.GroupBody
+	for _, val := range list {
+		body.MsgId += val.MsgId + "|"
+	}
+	pack.Body, _ = json.Marshal(body)
+	data := createSendBuffer(*pack)
+	//回复消息
+	if client.conn != nil {
+		client.conn.Write(data)
 	}
 
 	return pack

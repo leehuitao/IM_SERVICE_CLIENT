@@ -21,7 +21,6 @@ void GetMsgHandle::HandleMessage(NewTcpProtocolPtr msg)
     }
     MsgBody body;
     body = PacketProcess::parseMsgPack(msg.get()->data);
-    GlobalCenter::getInstance()->slotRecvMsg(body);
 }
 
 

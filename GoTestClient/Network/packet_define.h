@@ -17,7 +17,7 @@
 #include "sql/db_define.h"
 #include "Network/LhtTcpClient/Handle/lht_file_manager.h"
 #define APP_RUNNING_PATH QCoreApplication::applicationDirPath() + "/"
-#define HEAD_IMAGE_PATH APP_RUNNING_PATH+"/headImage/"
+#define HEAD_IMAGE_PATH APP_RUNNING_PATH+"headImage/"
 
 #define     HeaderSize 12
 
@@ -60,7 +60,7 @@
 #define 	SendGroupMsg                158
 #define 	GetGroupMsg                 159
 #define 	GetGroupOfflineNotify       160
-
+#define     UpdateGroupMsgState         161
 #define     OnlineUserList              200
 #define     UpdateOnlineUser            201
 
@@ -208,6 +208,7 @@ struct GroupBody {
     QString         GroupInfo     ;
     QString         SendTime      ;
     int             MsgType = -1  ;//0:普通消息 1：接收文件    2：发送文件 3:语音  4:视频
+    int             MsgStatus = 0 ;//0：发送中  1：未读   2：已读
     QString         Msg           ;
 };
 

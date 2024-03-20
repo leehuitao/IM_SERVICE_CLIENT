@@ -21,13 +21,19 @@ public:
 
     void updateMsgStatus(QString msgId, int status);
 
+    void updateGroupMsgStatus(QString msgId, int status);
+
     int getUnreadNumber(int dstUserID,int myid);
+
+    int getUnreadNumber(QString groupId,int myid);
 
     HistoryMsgList selectHistoryMsg(int sendUserId,int recvUserId);
 
     HistoryGroupMsgList selectHistoryMsg(QString groupId);
 
     HistoryMsgList selectHistoryLastMsg();
+
+    HistoryGroupMsgList selectHistoryLastGroupMsg();
 signals:
 
 public slots:

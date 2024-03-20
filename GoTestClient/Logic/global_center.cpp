@@ -234,6 +234,26 @@ void GlobalCenter::slotCreateGroup(GroupBody body)
     signCreateGroup(body);
 }
 
+void GlobalCenter::slotNewGroupMsg(GroupBody body)
+{
+    signNewGroupMsg(body);
+}
+
+void GlobalCenter::slotGetOfflineGroupMsg(GroupBody body)
+{
+    signGetGroupOfflineMsg(body);
+}
+
+void GlobalCenter::slotGetGroupMsg(GroupBody body)
+{
+
+}
+
+void GlobalCenter::slotUpdateGroupMsgState(GroupBody body)
+{
+
+}
+
 void GlobalCenter::slotFileCancel(FileBody body)
 {
     signCloseFile(body);
@@ -781,4 +801,19 @@ void GlobalCenter::slotGetGroupUsers(QString groupId)
     body.UserId = AppCache::Instance()->m_userId;
     body.GroupId = groupId;
     signSendGroupMsg(body,GetGroupUserList);
+}
+
+void GlobalCenter::slotGetGroupOfflineMsg()
+{
+    GroupBody body;
+    body.UserId = AppCache::Instance()->m_userId;
+    signSendGroupMsg(body,GetGroupOfflineNotify);
+}
+
+void GlobalCenter::slotGetGroupMsg(QString msgId)
+{
+    GroupBody body;
+    body.UserId = AppCache::Instance()->m_userId;
+    body.MsgId = msgId;
+    signSendGroupMsg(body,GetGroupMsg);
 }

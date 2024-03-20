@@ -30,6 +30,7 @@ void GlobalUiCenter::initUi()
     });
 
     connect(this,SIGNAL(signUpdataUnread(int,int)) ,m_historicalUserList,SLOT(slotUpdataUnread(int,int)));
+    connect(this,SIGNAL(signUpdataUnread(QString,int)) ,m_historicalUserList,SLOT(slotUpdataUnread(QString,int)));
     connect(m_historicalUserList,&HistoricalUserList::signCurrentUserListUpdate,this,&GlobalUiCenter::slotCurrentUserListUpdate);
 
     connect(m_orgMainWidget, SIGNAL(clicked(QModelIndex)),this, SLOT(clicked(QModelIndex)));
@@ -69,6 +70,10 @@ void GlobalUiCenter::initUi()
     connect(GlobalCenter::getInstance(),&GlobalCenter::signCreateGroup,this,&GlobalUiCenter::slotCreateGroup,Qt::QueuedConnection);
     connect(GlobalCenter::getInstance(),&GlobalCenter::signRecvGroups,this,&GlobalUiCenter::slotRecvGroups,Qt::QueuedConnection);
     connect(GlobalCenter::getInstance(),&GlobalCenter::signRecvGroupUsers,this,&GlobalUiCenter::slotRecvGroupUsers,Qt::QueuedConnection);
+    connect(GlobalCenter::getInstance(),&GlobalCenter::signNewGroupMsg,this,&GlobalUiCenter::slotNewGroupMsg,Qt::QueuedConnection);
+    connect(GlobalCenter::getInstance(),&GlobalCenter::signGetGroupOfflineMsg,this,&GlobalUiCenter::slotRecvGroupMsgNotify,Qt::QueuedConnection);
+
+
 
     GlobalCenter::getInstance()->initConnection();
 
@@ -151,7 +156,7 @@ void GlobalUiCenter::on_msg_listWidget_itemClicked(QListWidgetItem *item)
         }
     }
 
-//    m_currentMessageInterface->listWidgetItemClicked(item);
+    //    m_currentMessageInterface->listWidgetItemClicked(item);
 
 }
 
@@ -236,7 +241,7 @@ void GlobalUiCenter::on_sendmsg_btn_clicked()
             }
         }
 
-//        m_messageInterface->addNewMsg(body);
+        //        m_messageInterface->addNewMsg(body);
 
     }
     m_sendTextEdit->clear();
@@ -288,12 +293,12 @@ void GlobalUiCenter::slotCreateGroup(GroupBody b)
 void GlobalUiCenter::groupListWidgetItemClicked(QListWidgetItem *item)
 {
 
-//文件相关的先不做，先做消息
-//    m_currentMessageInterface->listWidgetItemClicked(item);
-//    int after = GlobalCenter::getInstance()->currentUserId();
-//    if(m_fileWidgets[after]->getRemainderFileCount()>0)
-//    {
-//        m_fileWidgets[after]->show();
+    //文件相关的先不做，先做消息
+    //    m_currentMessageInterface->listWidgetItemClicked(item);
+    //    int after = GlobalCenter::getInstance()->currentUserId();
+    //    if(m_fileWidgets[after]->getRemainderFileCount()>0)
+    //    {
+    //        m_fileWidgets[after]->show();
     //    }
 }
 
@@ -322,7 +327,7 @@ void GlobalUiCenter::groupListWidgetItemClicked(QString groupId)
         GlobalCenter::getInstance()->setCurrentGroupId(groupId);
         m_currentMessageInterface = m_groupInterfaceMap[groupId];
         m_currentMessageInterface->show();
-//        m_messageInterface->addWidget(m_currentMessageInterface);
+        //        m_messageInterface->addWidget(m_currentMessageInterface);
     }
 
 }
@@ -355,14 +360,15 @@ void GlobalUiCenter::groupClicked(const QModelIndex &index)
     auto currentChoiseGroupId = index.data(Qt::ToolTipRole).toString();
     m_groupWidget->updateGroupInfo(AppCache::Instance()->m_groupInfos[currentChoiseGroupId]);
 }
-//流程   1.登录
+//流程
+//1.登录
 //2. slotLoginStatus 中获取组织架构
 //3. slotGetOrg 中获取人员列表
 //4. 获取在线人员列表
 //5. slotRecvOnlineUserList中 获取单人的离线通知消息
 //4. slotGetUserOrg中  获取群组
 //5. slotRecvGroups中  获取群组人员信息
-//6. slotRecvGroupUsers中  获取离线群组消息
+//6. slotRecvGroupUsers中  绘制历史消息，获取离线群组消息
 void GlobalUiCenter::slotRecvGroups(QList<GroupStruct> g)
 {
     GroupBody body;
@@ -375,7 +381,9 @@ void GlobalUiCenter::slotRecvGroups(QList<GroupStruct> g)
         GlobalCenter::getInstance()->slotGetGroupUsers(it.groupID);
     }
 
-
+    drawHistoryLastMsg();
+    //获取离线群组消息
+    GlobalCenter::getInstance()->slotGetGroupOfflineMsg();
 }
 
 void GlobalUiCenter::slotRecvGroupUsers(QList<GroupUsersStruct> g)
@@ -384,6 +392,45 @@ void GlobalUiCenter::slotRecvGroupUsers(QList<GroupUsersStruct> g)
         AppCache::Instance()->m_groupUsers[g.first().GroupID].clear();
         AppCache::Instance()->m_groupUsers[g.first().GroupID].append(g);
     }
+}
+
+void GlobalUiCenter::slotNewGroupMsg(GroupBody body)
+{
+    m_sql.insertGroupHistoryMsg(body);
+    if(m_groupInterfaceMap.find(body.GroupId) != m_groupInterfaceMap.end()){
+        auto msgWid = m_groupInterfaceMap[body.GroupId];
+        if(msgWid){
+            msgWid->addNewGroupMsg(body);
+        }
+    }
+
+    if(m_historicalUserList->checkUserIsExists(body.GroupId)){
+        m_historicalUserList->updateGroupMsgInfo(body.GroupId,body.Msg,body.SendTime);
+    }else{//如果不存在则新建
+        m_historicalUserList->addNewUser(body.GroupId,body.GroupName);
+        groupListWidgetItemClicked(body.GroupId);
+        m_historicalUserList->updateMsgInfo(body.SendUserId,body.Msg,body.SendTime);
+        //            on_msg_listWidget_itemClicked(item);
+    }
+    //更新列表 提示未读
+    int unRead = m_sql.getUnreadNumber(body.GroupId,AppCache::Instance()->m_userId);
+    signUpdataUnread(body.GroupId, unRead);
+
+
+}
+
+void GlobalUiCenter::slotRecvGroupMsgNotify(GroupBody body)
+{
+    auto list = body.MsgId.split("|");
+    for(auto it : list){
+        if(!it.isEmpty())
+            getGroupMsg(it);
+    }
+}
+
+void GlobalUiCenter::getGroupMsg(QString msgid)
+{
+    GlobalCenter::getInstance()->slotGetGroupMsg(msgid);
 }
 
 void GlobalUiCenter::slotLoginStatus(int status, QString str)
@@ -408,7 +455,7 @@ void GlobalUiCenter::slotRecvMsg(MsgBody body)
         }
     }
 
-//    m_messageInterface->slotRecvMsg(body);
+    //    m_messageInterface->slotRecvMsg(body);
     if(body.DstUserId == AppCache::Instance()->m_userId){//接收到消息了
 
         if(m_historicalUserList->checkUserIsExists(body.SendUserId)){
@@ -449,7 +496,7 @@ void GlobalUiCenter::slotRecvFileProgress(FileBody bodyf)
                 msgWid->addNewFileMsg(bodyf.FileName,1);
             }
         }
-//        m_messageInterface->addNewFileMsg(bodyf.FileName,1);
+        //        m_messageInterface->addNewFileMsg(bodyf.FileName,1);
         MsgBody body;
         // 生成一个随机的 UUID
         QUuid uuid = QUuid::createUuid();
@@ -504,7 +551,7 @@ void GlobalUiCenter::slotSendFileProgress(FileBody bodyf)
                 msgWid->addNewFileMsg(bodyf.FileName,0);
             }
         }
-//        m_messageInterface->addNewFileMsg(bodyf.FileName,0);
+        //        m_messageInterface->addNewFileMsg(bodyf.FileName,0);
         MsgBody body;
         // 生成一个随机的 UUID
         QUuid uuid = QUuid::createUuid();
@@ -550,25 +597,49 @@ void GlobalUiCenter::getUserHeader(int userId, QString userName)
 void GlobalUiCenter::drawHistoryLastMsg()
 {
     auto list = m_sql.selectHistoryLastMsg();
-    for(auto it : list){
+    auto groupList = m_sql.selectHistoryLastGroupMsg();
+    int index = 0;
+    for(int i = 0 ; i < list.size();i++){
+        auto it = list.at(i);
+        QDateTime date = QDateTime::fromString(it.SendTime,"yyyy-MM-dd hh:mm:ss");
+        for(index; index < groupList.size();){
+            auto iter = groupList.at(index);
+            QDateTime date1 = QDateTime::fromString(iter.SendTime,"yyyy-MM-dd hh:mm:ss");
+            if(date < date1){
+                break;
+            }else{
+                index++;
+                bool ret = m_historicalUserList->checkUserIsExists(iter.GroupId);//判断是否已经存在了
+                if(!ret){
+                    m_historicalUserList->addNewUser(iter);
+                }
+            }
+        }
         auto id = it.SendUserId == AppCache::Instance()->m_userId ? it.RecvUserId:it.SendUserId;
         auto name = it.SendUserId == AppCache::Instance()->m_userId ? it.RecvUserName:it.SendUserName;
         bool ret = m_historicalUserList->checkUserIsExists(id);//判断是否已经存在了
         if(!ret){
             m_historicalUserList->addNewUser(it);
         }
+
     }
-    if(list.size() > 0){
-        auto id = list.last().SendUserId == AppCache::Instance()->m_userId ? list.last().RecvUserId:list.last().SendUserId;
-        m_historicalUserList->updateMsgInfo(id,list.last().Content,list.last().SendTime);
+    for(index; index < groupList.size();index++){
+        auto iter = groupList.at(index);
+        bool ret = m_historicalUserList->checkUserIsExists(iter.GroupId);//判断是否已经存在了
+        if(!ret){
+            m_historicalUserList->addNewUser(iter);
+        }
     }
+//    if(list.size() > 0){
+//        auto id = list.last().SendUserId == AppCache::Instance()->m_userId ? list.last().RecvUserId:list.last().SendUserId;
+//        m_historicalUserList->updateMsgInfo(id,list.last().Content,list.last().SendTime);
+//    }
 }
 
 void GlobalUiCenter::slotGetUserOrg(QJsonDocument json)
 {
     m_orgMainWidget->slotGetUserOrg(json);
     getUserHeader(AppCache::Instance()->m_userId,AppCache::Instance()->m_userLoginName);
-    drawHistoryLastMsg();
 
     m_groupWidget->setCurrentOrgDept(m_orgMainWidget->getCurrentOrgDept());
     m_groupWidget->setCurrentOrgUser(m_orgMainWidget->getCurrentOrgUser());
@@ -588,7 +659,7 @@ void GlobalUiCenter::slotRecvMsgNotify(MsgBody body)
 {
     auto list = body.MsgId.split("|");
     for(auto it : list){
-        if(it.isEmpty())
+        if(!it.isEmpty())
             getMsg(it);
     }
 }
@@ -598,7 +669,7 @@ void GlobalUiCenter::slotUpdateMsgStatus(MsgBody body)
     if(m_currentMessageInterface){
         m_currentMessageInterface->updateMsgReadStatus(body.MsgId,body.MsgStatus);
     }
-//    m_messageInterface->updateMsgReadStatus(body.MsgId,body.MsgStatus);
+    //    m_messageInterface->updateMsgReadStatus(body.MsgId,body.MsgStatus);
 }
 
 void GlobalUiCenter::slotGetOfflineNotify(MsgBody body)
@@ -619,6 +690,9 @@ void GlobalUiCenter::slotUpdateUserHeadImage(int userid, QString path)
     m_orgMainWidget->updateIcon(userid);
     m_historicalUserList->setUserHeadImage(userid);
     for(auto it : m_messageInterfaceMap){
+        it->updateHead(userid);
+    }
+    for(auto it : m_groupInterfaceMap){
         it->updateHead(userid);
     }
 }
@@ -845,7 +919,7 @@ void GlobalUiCenter::msgListWidgetItemClicked(int userId,QString userName)
             // 检查这是否为QPushButton实例
             if (qobject_cast<MessageInterface *>(widget)) {
                 widget->hide();
-//                m_messageInterface->removeItem(item); // 从布局中移除
+                //                m_messageInterface->removeItem(item); // 从布局中移除
             }
         }
     }
@@ -861,8 +935,8 @@ void GlobalUiCenter::msgListWidgetItemClicked(int userId,QString userName)
         GlobalCenter::getInstance()->setCurrentUser(userId,userName);
         m_currentMessageInterface = m_messageInterfaceMap[userId];
         m_currentMessageInterface->show();
-//        m_messageInterface->addWidget(m_currentMessageInterface);
+        //        m_messageInterface->addWidget(m_currentMessageInterface);
     }
 
-//    m_currentMessageInterface->listWidgetItemClicked(userId,userName);
+    //    m_currentMessageInterface->listWidgetItemClicked(userId,userName);
 }

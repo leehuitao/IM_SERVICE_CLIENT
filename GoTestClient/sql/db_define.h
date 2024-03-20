@@ -16,12 +16,16 @@
 #define InsertMsg "insert into HistoryMsg (MsgId,SendUserId,SendUserName,DstUserId,DstUserName,SendTime,MsgType,Msg,MsgStatus) "\
     "values ('%1',%2,'%3',%4,'%5','%6',%7,'%8',%9)"
 
-#define InsertGroupMsg "INSERT INTO HistoryGroupMsg (GroupId, SendUserId, SendUserName, Content, MsgId, GroupName, SendTime,MsgType) "\
-    "VALUES ('%1', %2, '%3', '%4', '%5', '%6', '%7',%8)"
+#define InsertGroupMsg "INSERT INTO HistoryGroupMsg (GroupId, SendUserId, SendUserName, Content, MsgId, GroupName, SendTime,MsgType,MsgStatus) "\
+    "VALUES ('%1', %2, '%3', '%4', '%5', '%6', '%7',%8,%9)"
 
 #define UpdateMsgStatusQuery "UPDATE HistoryMsg SET MsgStatus = %2 WHERE MsgId = '%1'"
 
+#define UpdateGroupMsgStatusQuery "UPDATE HistoryGroupMsg SET MsgStatus = %2 WHERE MsgId = '%1'"
+
 #define UpdateMsgType "SELECT * FROM HistoryMsg WHERE DstUserId == %1 and SendUserId == %2 and MsgStatus != 2;"
+
+#define SelectGroupMsgType "SELECT * FROM HistoryGroupMsg WHERE GroupId == '%1' and SendUserId != %2 and MsgStatus != 2;"
 
 #define SelectMsg "select * from HistoryMsg where (DstUserId = %1 and SendUserId = %2) or (DstUserId = %2 and SendUserId = %1) order by id DESC limit 20;"
 
@@ -44,7 +48,9 @@
     "ON (A.SendUserId = B.SenderUserId AND A.DstUserId = B.ReceiverUserId AND A.SendTime = B.LatestSendTime) ORDER BY SendTime DESC"
 
 
-
+#define SelectLastGroupMsg "SELECT * FROM ( SELECT id,GroupId,SendUserId,SendUserName,Content,MsgId, GroupName,SendTime,"\
+        "MsgType,MsgStatus,ROW_NUMBER( ) OVER ( PARTITION BY GroupId ORDER BY SendTime DESC ) AS rn"\
+        " FROM HistoryGroupMsg) t WHERE t.rn = 1;"
 
 struct HistoryMsgStruct{
     int             id;
@@ -69,6 +75,7 @@ struct HistoryGroupMsgStruct{
     QString         GroupName;
     QString         SendTime;
     int             MsgType;
+    int             MsgStatus;
 };
 
 typedef QList<HistoryMsgStruct> HistoryMsgList;

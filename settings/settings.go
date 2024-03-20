@@ -67,10 +67,11 @@ type RedisConfig struct {
 }
 
 type MongoConfig struct {
-	Host           string `mapstructure:"host"`
-	Port           int    `mapstructure:"port"`
-	DatabaseName   string `mapstructure:"databaseName"`
-	CollectionName string `mapstructure:"collectionName"`
+	Host               string `mapstructure:"host"`
+	Port               int    `mapstructure:"port"`
+	DatabaseName       string `mapstructure:"databaseName"`
+	CollectionMsg      string `mapstructure:"collectionMsg"`
+	CollectionGroupMsg string `mapstructure:"collectionGroupMsg"`
 }
 type MqttConfig struct {
 	Host string `mapstructure:"host"`

@@ -35,7 +35,7 @@ void Sqlite::insertGroupHistoryMsg(GroupBody body)
     QSqlQuery query;
     QString str = QString(InsertGroupMsg).arg(body.GroupId).arg(body.SendUserId).arg(body.SendUserName)
             .arg(body.Msg).arg(body.MsgId)
-            .arg(body.GroupName).arg(body.SendTime).arg(body.MsgType);
+            .arg(body.GroupName).arg(body.SendTime).arg(body.MsgType).arg(body.MsgStatus);
     qDebug()<<"str = "<<str;
     query.exec(str);
     //    qDebug()<<__FUNCTION__<<query.lastError();
@@ -47,7 +47,15 @@ void Sqlite::updateMsgStatus(QString msgId, int status)
     QString str = QString(UpdateMsgStatusQuery).arg(msgId).arg(status);
 //    qDebug()<<"str = "<<str;
     query.exec(str);
-//    qDebug()<<__FUNCTION__<<query.lastError();
+    //    qDebug()<<__FUNCTION__<<query.lastError();
+}
+
+void Sqlite::updateGroupMsgStatus(QString msgId, int status)
+{
+    QSqlQuery query;
+    QString str = QString(UpdateGroupMsgStatusQuery).arg(msgId).arg(status);
+//    qDebug()<<"str = "<<str;
+    query.exec(str);
 }
 
 int Sqlite::getUnreadNumber(int dstUserID,int myid)
@@ -57,6 +65,18 @@ int Sqlite::getUnreadNumber(int dstUserID,int myid)
 //    qDebug()<<"str = "<<str;
     query.exec(str);
 //    qDebug()<<__FUNCTION__<<query.lastError();
+    int number = 0;
+    while(query.next()){
+        number++;
+    }
+    return number;
+}
+
+int Sqlite::getUnreadNumber(QString groupId,int myid)
+{
+    QSqlQuery query;
+    QString str = QString(SelectGroupMsgType).arg(groupId).arg(myid);
+    query.exec(str);
     int number = 0;
     while(query.next()){
         number++;
@@ -140,6 +160,32 @@ HistoryMsgList Sqlite::selectHistoryLastMsg()
 //    qDebug()<<query.lastError()<<"str = "<<str;
     return list;
 
+}
+
+HistoryGroupMsgList Sqlite::selectHistoryLastGroupMsg()
+{
+    QSqlQuery query;
+    QString str = QString(SelectLastGroupMsg);
+    qDebug()<<str;
+    query.exec(str);
+    HistoryGroupMsgList list;
+    while(query.next()){
+        HistoryGroupMsgStruct msg;
+        msg.id = query.value(0).toInt();
+        msg.GroupId = query.value(1).toString();
+        msg.SendUserId = query.value(2).toInt();
+        msg.SendUserName = query.value(3).toString();
+        msg.Content = query.value(4).toString();
+        msg.MsgId = query.value(5).toString();
+        msg.GroupName = query.value(6).toString();
+        msg.SendTime = query.value(7).toString();
+        msg.MsgType = query.value(8).toInt();
+        msg.MsgStatus = query.value(9).toInt();
+        list.insert(0,msg);
+        qDebug()<<msg.Content;
+    }
+//    qDebug()<<query.lastError()<<"str = "<<str;
+    return list;
 }
 
 void Sqlite::createDafultTable()

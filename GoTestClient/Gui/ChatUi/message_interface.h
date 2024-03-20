@@ -37,6 +37,8 @@ public:
     void slotRecvMsg( MsgBody body);
     //更新消息状态
     void updateMsgReadStatus(QString msgId, int status);
+    //更新消息状态
+    void updateGroupMsgReadStatus(QString msgId, int status);
     //更新用户头像
     void updateHead(int userId);
 
@@ -74,6 +76,7 @@ private:
 
     HWND    m_mainWinId;
     QList<MsgBody> m_unreadMsgIdList;
+    QList<GroupBody> m_unreadGroupMsgIdList;
 };
 
 #endif // MESSAGE_INTERFACE_H

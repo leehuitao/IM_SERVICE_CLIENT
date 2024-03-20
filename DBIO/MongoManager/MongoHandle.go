@@ -21,7 +21,7 @@ func Insert(data *PackManager.MongoMsg) string {
 		id         primitive.ObjectID
 	)
 	//2.选择数据库里的表
-	collection = client.Database(databaseName).Collection(collectionName)
+	collection = client.Database(databaseName).Collection(collectionMsg)
 
 	//插入一条数据
 	if iResult, err = collection.InsertOne(context.TODO(), data); err != nil {
@@ -43,7 +43,7 @@ func Select(id string) *PackManager.MongoMsg {
 	)
 	lr := PackManager.MongoMsg{}
 
-	collection = client.Database(databaseName).Collection(collectionName)
+	collection = client.Database(databaseName).Collection(collectionMsg)
 	filter := bson.M{"MsgId": id}
 
 	//按照jobName字段进行过滤jobName="job10",翻页参数0-2
@@ -92,7 +92,7 @@ func SelectHistory(recvId int) []PackManager.MongoMsg {
 		cursor     *mongo.Cursor
 	)
 	var lr []PackManager.MongoMsg
-	collection = client.Database(databaseName).Collection(collectionName)
+	collection = client.Database(databaseName).Collection(collectionMsg)
 	filter := bson.M{"ReceiverUserId": recvId, "Status": 1}
 
 	//按照jobName字段进行过滤jobName="job10",翻页参数0-2
@@ -134,7 +134,129 @@ func Update(id string, status int) {
 	update := bson.M{"$set": bson.M{"Status": status}}
 
 	//2.选择数据库里的表
-	collection = client.Database(databaseName).Collection(collectionName)
+	collection = client.Database(databaseName).Collection(collectionMsg)
+
+	// 执行更新
+	iResult, _ = collection.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("MatchedCount %v document(s) and modified %v document(s)\n", iResult.MatchedCount, iResult.ModifiedCount)
+}
+func GroupInsert(data *PackManager.MongoGroupMsg) string {
+	var (
+		client     = GetMgoCli()
+		err        error
+		collection *mongo.Collection
+		iResult    *mongo.InsertOneResult
+		id         primitive.ObjectID
+	)
+	//2.选择数据库里的表
+	collection = client.Database(databaseName).Collection(collectionGroupMsg)
+
+	//插入一条数据
+	if iResult, err = collection.InsertOne(context.TODO(), data); err != nil {
+		fmt.Print(err)
+		return ""
+	}
+	//_id:默认生成一个全局唯一ID
+	id = iResult.InsertedID.(primitive.ObjectID)
+	//fmt.Println("自增ID", id.Hex())
+	return id.Hex()
+}
+
+func GroupSelect(id string, userId int) *PackManager.MongoGroupMsg {
+	var (
+		client     = GetMgoCli()
+		err        error
+		collection *mongo.Collection
+		cursor     *mongo.Cursor
+	)
+	lr := PackManager.MongoGroupMsg{}
+
+	collection = client.Database(databaseName).Collection(collectionGroupMsg)
+	filter := bson.M{"MsgId": id, "RecvId": userId}
+
+	//按照jobName字段进行过滤jobName="job10",翻页参数0-2
+	if cursor, err = collection.Find(context.TODO(), filter); err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	//延迟关闭游标
+	defer func() {
+		if err = cursor.Close(context.TODO()); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	for cursor.Next(context.TODO()) {
+		if err = cursor.Decode(&lr); err != nil {
+			if err == mongo.ErrNoDocuments {
+				fmt.Println("No more documents")
+				break // 已经到达游标的末尾
+			} else {
+				log.Fatal(err)
+			}
+		}
+
+		// 处理文档 lr
+		fmt.Println(lr)
+	}
+	return &lr
+}
+
+func GroupSelectHistory(recvId int) []PackManager.MongoGroupMsg {
+	var (
+		client     = GetMgoCli()
+		err        error
+		collection *mongo.Collection
+		cursor     *mongo.Cursor
+	)
+	var lr []PackManager.MongoGroupMsg
+	collection = client.Database(databaseName).Collection(collectionGroupMsg)
+	filter := bson.M{"RecvId": recvId, "MsgStatus": 1}
+
+	//按照jobName字段进行过滤jobName="job10",翻页参数0-2
+	if cursor, err = collection.Find(context.TODO(), filter); err != nil {
+		fmt.Println(err)
+		return lr
+	}
+	//延迟关闭游标
+	defer func() {
+		if err = cursor.Close(context.TODO()); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	//游标获取结果数据
+
+	for cursor.Next(context.TODO()) {
+		var result PackManager.MongoGroupMsg // 替换为您期望的数据结构类型
+		if cursor.Decode(&result) != nil {
+			fmt.Println(err)
+			continue
+		}
+		lr = append(lr, result)
+	}
+	return lr
+}
+
+func GroupUpdate(id string, userId int, status int) {
+	var (
+		client     = GetMgoCli()
+		err        error
+		collection *mongo.Collection
+		iResult    *mongo.UpdateResult
+	)
+	// 更新条件
+	filter := bson.M{"MsgId": id, "RecvId": userId}
+
+	// 更新内容
+	update := bson.M{"$set": bson.M{"MsgStatus": status}}
+
+	//2.选择数据库里的表
+	collection = client.Database(databaseName).Collection(collectionGroupMsg)
 
 	// 执行更新
 	iResult, _ = collection.UpdateOne(context.TODO(), filter, update)
@@ -154,10 +276,15 @@ func AutoDelete() {
 		//upsertedID model.LogRecord
 	)
 	//2.选择数据库 my_db里的某个表
-	collection = client.Database(databaseName).Collection(collectionName)
+	collection = client.Database(databaseName).Collection(collectionMsg)
 	filter := bson.M{"Status": "2"}
 	if uResult, err = collection.DeleteMany(context.TODO(), filter); err != nil {
 		LogService.Logger.Error(err.Error())
 	}
-	LogService.Logger.Info("清除通知表行数：" + strconv.Itoa(int(uResult.DeletedCount)))
+	LogService.Logger.Info("清除单人通知表行数：" + strconv.Itoa(int(uResult.DeletedCount)))
+	collection = client.Database(databaseName).Collection(collectionGroupMsg)
+	if uResult, err = collection.DeleteMany(context.TODO(), filter); err != nil {
+		LogService.Logger.Error(err.Error())
+	}
+	LogService.Logger.Info("清除群组通知表行数：" + strconv.Itoa(int(uResult.DeletedCount)))
 }

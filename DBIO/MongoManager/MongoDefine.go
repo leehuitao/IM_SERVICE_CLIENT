@@ -12,12 +12,14 @@ import (
 
 var mgoCli *mongo.Client
 var databaseName string
-var collectionName string
+var collectionMsg string
+var collectionGroupMsg string
 
 func InitEngine(config *settings.MongoConfig) {
 	var err error
 	databaseName = config.DatabaseName
-	collectionName = config.CollectionName
+	collectionMsg = config.CollectionMsg
+	collectionGroupMsg = config.CollectionGroupMsg
 	clientOptions := options.Client().ApplyURI("mongodb://" + config.Host + ":" + strconv.Itoa(config.Port)).
 		SetConnectTimeout(1 * time.Second).
 		SetServerSelectionTimeout(1 * time.Second). //设置超时时间

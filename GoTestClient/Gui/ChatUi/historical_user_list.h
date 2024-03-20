@@ -19,6 +19,8 @@ public:
 
     void addNewUser(int userId,QString userName);
 
+    void addNewUser(GroupBody body);
+
     void addNewUser(QString groupId,QString userName);
 
     void updateMsgInfo(int userId,const QString& msg,const QString& time);

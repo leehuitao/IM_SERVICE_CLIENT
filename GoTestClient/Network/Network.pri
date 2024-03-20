@@ -4,6 +4,8 @@ HEADERS += \
     $$PWD/LhtTcpClient/Handle/handle/create_group_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/download_chat_image_data_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_file_server_addr_handle.h \
+    $$PWD/LhtTcpClient/Handle/handle/get_group_msg_handle.h \
+    $$PWD/LhtTcpClient/Handle/handle/get_group_offline_msg_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_group_users_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_mqtt_addr_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/get_msg_handle.h \
@@ -26,8 +28,10 @@ HEADERS += \
     $$PWD/LhtTcpClient/Handle/handle/notify_video_start_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/notify_video_stop_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/online_user_list_handle.h \
+    $$PWD/LhtTcpClient/Handle/handle/send_group_msg_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/send_msg_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/update_connect_file_server_state_handle.h \
+    $$PWD/LhtTcpClient/Handle/handle/update_group_msg_state_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/update_msg_status_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/update_online_user_handle.h \
     $$PWD/LhtTcpClient/Handle/handle/upload_chat_image_data_handle.h \

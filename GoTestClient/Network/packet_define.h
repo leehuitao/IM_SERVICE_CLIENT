@@ -83,7 +83,7 @@
 #define ImageEnd "%$imgend"
 #define EmjHeader "%$emjstart"
 #define EmjEnd "%$emjend"
-#define ChatImagePath "./ChatImage/"
+#define ChatImagePath APP_RUNNING_PATH+"ChatImage/"
 #define ShakeRecv "对方发送了一个抖动"
 #define ShakeSend "您发送了一个抖动"
 

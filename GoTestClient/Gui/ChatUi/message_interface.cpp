@@ -115,7 +115,7 @@ void MessageInterface::addNewGroupMsg(const GroupBody &msg)
     if(GlobalCenter::getInstance()->currentGroupId() == msg.GroupId
             && msg.SendUserId != AppCache::Instance()->m_userId
             && msg.MsgStatus == 1){
-        updateGroupMsgReadStatus(msg.GroupId,2);
+        updateGroupMsgReadStatus(msg.MsgId,2);
         GroupBody body;
         body.MsgId = msg.MsgId;
         body.MsgStatus = 2;

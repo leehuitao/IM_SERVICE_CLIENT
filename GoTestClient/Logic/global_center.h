@@ -42,9 +42,11 @@ public:
     }
 
     int currentUserId(){
+        m_currentChoiseGroup.clear();
         return m_currentChoiseUserId;
     }
     QString currentGroupId(){
+        m_currentChoiseUserId = 0;
         return m_currentChoiseGroup;
     }
     QString currentUserName(){

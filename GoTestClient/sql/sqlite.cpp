@@ -128,6 +128,7 @@ HistoryGroupMsgList Sqlite::selectHistoryMsg(QString groupId)
         msg.GroupName = query.value(6).toString();
         msg.SendTime = query.value(7).toString();
         msg.MsgType = query.value(8).toInt();
+        msg.MsgStatus = query.value(9).toInt();
         list.insert(0,msg);
         qDebug()<<msg.Content;
     }

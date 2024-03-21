@@ -121,6 +121,9 @@ func (client *TcpClient) StartRead(conn net.Conn) {
 		// 读取数据
 		n, err := conn.Read(buffer[accumulatedSize:])
 		if n == 0 {
+			ClientManagerHandle.DelConn(client.Userid)                               //删除tcp链接
+			GlobalCache.GlobalUserLoginStatus.DelOnlineUser(client.Userid)           //在线人员列表删除
+			NoticeAllOnlineUserChangeStatus(client.Userid, PackManager.LogoffStatus) //通知所有人退出
 			fmt.Println("客户端已关闭，断开连接")
 			// 这里处理客户端关闭连接的逻辑
 			return

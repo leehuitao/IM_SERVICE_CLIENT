@@ -329,7 +329,7 @@ void MessageBoxItem::initGroupImageMsg(const GroupBody &msg, bool updateMsg)
         ui->self_image_label->setFixedHeight(temp.height());
         m_size = QSize(ui->self_image_label->width()+ 20,ui->self_image_label->height() + 40);
         ui->self_image_label->setPixmap(QPixmap::fromImage(temp));
-
+        ui->self_msg_state_lab->hide();
     }else if(m_groupMsgBody.SendUserId != AppCache::Instance()->m_userId){//是我接收的消息
         // 设置对齐方式
         setDisPlayWid(2);

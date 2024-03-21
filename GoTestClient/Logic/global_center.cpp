@@ -237,7 +237,28 @@ void GlobalCenter::slotCreateGroup(GroupBody body)
 
 void GlobalCenter::slotNewGroupMsg(GroupBody body)
 {
-    signNewGroupMsg(body);
+    if(body.Msg.contains(ImageEnd)){
+        auto fileName = body.Msg;
+        fileName.replace(ImageEnd,"");
+        fileName.replace(ImageHeader,"");
+        m_recvMd52groupMsg[body.SendUserId][fileName] = body;
+        auto md5 = createFileMd5(fileName);
+        FileBody fbody;
+        QFile file;
+        file.setFileName(fileName);
+        int size = file.size();
+        fbody.UserId = AppCache::Instance()->m_userId;
+        fbody.FileName = fileName;
+        fbody.SendUserId = body.SendUserId;
+        fbody.RecvUserId = AppCache::Instance()->m_userId;
+        fbody.FileMD5 = md5;
+        fbody.TotalSize = size;
+        fbody.CurrentSize = 0;
+        fbody.FileSeek = 0;
+        signDownloadChatImage(fbody);
+    }else{
+        signNewGroupMsg(body);
+    }
 }
 
 void GlobalCenter::slotGetOfflineGroupMsg(GroupBody body)
@@ -431,6 +452,12 @@ void GlobalCenter::slotRecvMsgImage(int userId, QString fileName)
         if(m_recvMd52msg[userId].find(fileName) != m_recvMd52msg[userId].end()){
             signRecvMsg(m_recvMd52msg[userId][fileName]);
             m_recvMd52msg[userId].remove(fileName);
+        }
+
+    }if(m_recvMd52groupMsg.find(userId) != m_recvMd52groupMsg.end() ){
+        if(m_recvMd52groupMsg[userId].find(fileName) != m_recvMd52groupMsg[userId].end()){
+            signNewGroupMsg(m_recvMd52groupMsg[userId][fileName]);
+            m_recvMd52groupMsg[userId].remove(fileName);
         }
 
     }else{

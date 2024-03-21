@@ -111,6 +111,7 @@ private:
     QMap<QString,GroupBody>           m_md52groupMsg;
 
     QMap<int,QMap<QString,MsgBody>>           m_recvMd52msg;
+    QMap<int,QMap<QString,GroupBody>>           m_recvMd52groupMsg;
     QList<int> m_allUserId;
     QList<int> m_allUserIdTemp;
 

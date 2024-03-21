@@ -15,6 +15,8 @@ public:
 
     void initDB();
 
+    void createDafultTable();
+
     void insertHistoryMsg(MsgBody body);
 
     void insertGroupHistoryMsg(GroupBody body);
@@ -42,7 +44,7 @@ private:
     QSqlDatabase m_database;
 
 private:
-    void createDafultTable();
+
 };
 
 #endif // SQLITE_H

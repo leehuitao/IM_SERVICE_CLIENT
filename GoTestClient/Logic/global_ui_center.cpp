@@ -10,6 +10,7 @@ GlobalUiCenter* GlobalUiCenter::_instance = new  GlobalUiCenter;
 void GlobalUiCenter::initUi()
 {
     m_sql.initDB();
+    m_sql.createDafultTable();
 
     m_setDialog = new SettingDialog;
 

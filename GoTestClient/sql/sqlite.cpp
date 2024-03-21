@@ -16,7 +16,7 @@ void Sqlite::initDB()
     if(m_database.lastError().type() != QSqlError::NoError){
         qDebug()<<"QSqlError = "<<m_database.lastError();
     }
-    createDafultTable();
+
 }
 //#define insertMsg "insert into HistoryMsg (MsgId,SendUserId,SendUserName,DstUserId,DstUserName,SendTime,MsgType,Msg,MsgStatus) "
 void Sqlite::insertHistoryMsg(MsgBody body)
@@ -194,5 +194,8 @@ void Sqlite::createDafultTable()
     QSqlQuery query;
     query.exec(CreateHistoryTable);
     qDebug()<<CreateHistoryTable;
+    qDebug()<<query.lastError();
+    query.exec(CreateHistoryGroupMsgTable);
+    qDebug()<<CreateHistoryGroupMsgTable;
     qDebug()<<query.lastError();
 }

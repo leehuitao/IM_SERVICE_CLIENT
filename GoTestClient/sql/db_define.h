@@ -13,6 +13,20 @@
     "Msg TEXT NOT NULL,                                    "\
     "MsgStatus integer NOT NULL                            "\
     ");"
+
+#define CreateHistoryGroupMsgTable "CREATE TABLE HistoryGroupMsg (" \
+"id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,  " \
+"GroupId text NOT NULL,                          " \
+"SendUserId INTEGER NOT NULL,                    " \
+"SendUserName TEXT NOT NULL,                     " \
+"Content TEXT NOT NULL,                          " \
+"MsgId text NOT NULL,                            " \
+"GroupName TEXT NOT NULL,                        " \
+"SendTime text NOT NULL,                         " \
+"MsgType integer NOT NULL,                       " \
+"MsgStatus integer NOT NULL                      " \
+");"
+
 #define InsertMsg "insert into HistoryMsg (MsgId,SendUserId,SendUserName,DstUserId,DstUserName,SendTime,MsgType,Msg,MsgStatus) "\
     "values ('%1',%2,'%3',%4,'%5','%6',%7,'%8',%9)"
 

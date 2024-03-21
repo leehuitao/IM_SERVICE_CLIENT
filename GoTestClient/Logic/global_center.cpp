@@ -401,6 +401,12 @@ void GlobalCenter::slotSendMsg(QString md5)
     }else{
         QLOG_ERROR()<<"image msg not found body";
     }
+    if(m_md52groupMsg.find(md5) != m_md52groupMsg.end() ){
+        signSendGroupMsg(m_md52groupMsg[md5],SendGroupMsg,0);
+        m_md52groupMsg.remove(md5);
+    }else{
+        QLOG_ERROR()<<"group image msg not found body";
+    }
 }
 
 void GlobalCenter::slotGetMqttServerAddr()
